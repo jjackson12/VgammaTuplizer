@@ -22,6 +22,7 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 #include "RecoEgamma/EgammaTools/interface/ConversionFinder.h"
+#include "DataFormats/EgammaCandidates/interface/ConversionFwd.h"
 //#include "RecoEgamma/EgammaTools/interface/EffectiveAreas.h"
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
 #include "DataFormats/MuonReco/interface/MuonCocktails.h"
@@ -91,7 +92,9 @@ class NtupleBranches {
 		std::vector<float>                   ph_pz                        ;
 		std::vector<float>                   ph_pt                        ;
 		std::vector<float>                   ph_et                        ;
-
+    
+    std::vector<float>                   ph_mvaValue                  ;
+    std::vector<float>                   ph_mvaCategory               ;
 		// Variables typically used for cut based photon ID
 		//std::vector<Float_t>               ph_full5x5_sigmaIetaIeta_    ;
 		//std::vector<Float_t>               ph_hOverE_                   ;

@@ -69,7 +69,11 @@ private:
   edm::EDGetTokenT<pat::MuonCollection>     		            muonToken_  	;	
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdFullInfoMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMvaValuesMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMvaCategoriesMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoTightIdMapToken_ ;
+  bool                                                      phoVerboseIdFlag_;
   edm::EDGetTokenT<edm::View<pat::Electron> >		            electronToken_	;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPId51MapToken_  ;

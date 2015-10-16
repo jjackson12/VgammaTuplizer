@@ -30,13 +30,16 @@ PhotonsNtuplizer::PhotonsNtuplizer(NtupleBranches*                              
                                             // edm::EDGetTokenT<edm::ValueMap<float> >              phoNeutralHadronIsolationToken, 
                                             // edm::EDGetTokenT<edm::ValueMap<float> >              phoPhotonIsolationToken, 
                                             */                                       
-	: CandidateNtuplizer       ( nBranches       )
-	, photonToken_             ( photonToken     )
-	, verticeToken_	           ( verticeToken    )
-	, rhoToken_	               ( rhoToken	       )    	
-	, photonLooseIdMapToken_   ( phoIDtokens[0]  )
-  , photonMediumIdMapToken_  ( phoIDtokens[1]  )
-  , photonTightIdMapToken_   ( phoIDtokens[2]  )
+	: CandidateNtuplizer                ( nBranches      )
+	, photonToken_                      ( photonToken    )
+	, verticeToken_	                    ( verticeToken   )
+	, rhoToken_	                        ( rhoToken	     )    	
+	, photonLooseIdMapToken_            ( phoIDtokens[0] )
+  , photonMediumIdMapToken_           ( phoIDtokens[1] )
+  , photonMediumIdFullInfoMapToken_   ( phoIDtokens[2] )
+  , photonMvaValuesMapToken_          ( phoIDtokens[3] )
+  , photonMvaCategorieMapToken_       ( phoIDtokens[4] )
+  , photonTightIdMapToken_            ( phoIDtokens[5] )
 
 {
 
@@ -59,13 +62,16 @@ PhotonsNtuplizer::~PhotonsNtuplizer( void )
 //===================================================================================================================
 void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
 	    
-   event.getByToken(photonToken_ , photons ); 
-   event.getByToken(verticeToken_  , vertices_  );
-   event.getByToken(rhoToken_	   , rho_       );
+   event.getByToken(photonToken_                     , photons                ); 
+   event.getByToken(verticeToken_                    , vertices_              );
+   event.getByToken(rhoToken_	                       , rho_                   );
    
-   event.getByToken(photonLooseIdMapToken_ , loose_id_decisions  );
-   event.getByToken(photonMediumIdMapToken_, medium_id_decisions );
-   event.getByToken(photonTightIdMapToken_ , tight_id_decisions  );
+   event.getByToken(photonLooseIdMapToken_           , loose_id_decisions     );
+   event.getByToken(photonMediumIdMapToken_          , medium_id_decisions    );
+   event.getByToken(photonMediumIdFullInfoMapToken_  , medium_id_cutflow_data );
+   event.getByToken(photonMvaValuesMapToken_         , mvaValues              );
+   event.getByToken(photonMvaCategoriesMapToken_     , mvaCategories          );
+   event.getByToken(photonTightIdMapToken_           , tight_id_decisions     );
   
    /*   Vertex stuff -- need this?
      // Find the first vertex in the collection that passes good quality criteria
