@@ -3,6 +3,7 @@
 #include "../interface/JetsNtuplizer.h"
 #include "../interface/GenJetsNtuplizer.h"
 #include "../interface/MuonsNtuplizer.h"
+#include "../interface/PhotonsNtuplizer.h"
 #include "../interface/ElectronsNtuplizer.h"
 #include "../interface/TausNtuplizer.h"
 #include "../interface/METsNtuplizer.h"
@@ -39,10 +40,16 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	
 	flavourToken_	      	    (consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
+	photonToken_	      	    (consumes<edm::View<reco::Photon> >(iConfig.getParameter<edm::InputTag>("photons"))),
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
+
+	phoLooseIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("phoLooseIdMap"))),
+	phoMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("phoMediumIdMap"))),
+	phoTightIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("phoTightIdMap"))),
+
 	electronToken_	      	    (consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
 	eleHEEPIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"))),
-        eleHEEPId51MapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
+  eleHEEPId51MapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPId51Map"))),
 	eleVetoIdMapToken_    	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleVetoIdMap"))),
 	eleLooseIdMapToken_   	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"))),
 	eleMediumIdMapToken_  	    (consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"))),
@@ -185,6 +192,19 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					      runFlags     );
   }
 						      
+  if (runFlags["doPhotons"]) {
+    
+    std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > phoIdTokens;
+    phoIdTokens.push_back(phoLooseIdMapToken_ );
+    phoIdTokens.push_back(phoMediumIdMapToken_);
+    phoIdTokens.push_back(phoTightIdMapToken_ );
+    
+    nTuplizers_["photons"] = new PhotonsNtuplizer( nBranches_, 
+                                                   photonToken_ , 
+                                                   vtxToken_    , 
+                                                   rhoToken_    , 
+                                                   phoIdTokens   );
+  }    
   if (runFlags["doElectrons"]) {
     
     std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > eleIdTokens;

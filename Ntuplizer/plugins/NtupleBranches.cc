@@ -48,6 +48,24 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     } //doGenEvent
   } //runOnMC
   
+  if ( runFlags["doPhotons"] ){
+    /** photons */
+    tree_->Branch( "ph_N"  		            , &ph_N	               );
+    tree_->Branch( "ph_pdgId"  		        , &ph_pdgId            );
+    tree_->Branch( "ph_charge"		        , &ph_charge           );
+    tree_->Branch( "ph_e" 		            , &ph_e	               );
+    tree_->Branch( "ph_eta"		            , &ph_eta 	           );
+    tree_->Branch( "ph_phi"		            , &ph_phi 	           );
+    tree_->Branch( "ph_mass"		          , &ph_mass	           );
+    tree_->Branch( "ph_pt"		            , &ph_pt  	           );
+    tree_->Branch( "ph_et"		            , &ph_et  	           );
+    tree_->Branch( "ph_superCluster_eta"  , &ph_superCluster_eta );
+    tree_->Branch( "ph_passLooseId"       , &ph_passLooseId      );
+    tree_->Branch( "ph_passMediumId"      , &ph_passMediumId     );
+    tree_->Branch( "ph_passTightId"       , &ph_passTightId      );
+  
+  } ////doPhotons
+  
   if ( runFlags["doElectrons"] ){
     /** electrons */
     tree_->Branch( "el_N"  		     , &el_N	            );
@@ -607,6 +625,24 @@ void NtupleBranches::reset( void ){
   PDF_x.clear();	
   PDF_xPDF.clear();
     
+  
+  /** photons */
+  ph_N = 0;
+  ph_pdgId.clear();
+  ph_charge.clear();
+  ph_e.clear();
+  ph_eta.clear();
+  ph_phi.clear();
+  ph_mass.clear();
+  ph_pt.clear();
+  ph_et.clear();
+  ph_superCluster_eta.clear();
+  ph_passLooseId.clear();
+  ph_passMediumId.clear();
+  ph_passTightId.clear();
+
+
+
   /** electrons */
   el_N        = 0;
   el_pdgId.clear();

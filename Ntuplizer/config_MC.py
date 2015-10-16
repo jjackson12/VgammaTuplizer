@@ -24,8 +24,7 @@ options.maxEvents = -1
 #data file
 
 #options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
-#mc file
-options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
+options.inputFiles = 'file:mcconfigurations/M_2000.root'
 
 
 options.parseArguments()
@@ -44,6 +43,33 @@ process.source = cms.Source("PoolSource",
 
 ######## Sequence settings ##########
 
+<<<<<<< HEAD:Ntuplizer/config_MC.py
+=======
+
+#! Add AK8 gen jet collection with pruned and softdrop mass
+addAK8GenJets = True
+# run flags
+runOnMC = True
+runOnAOD = False #do not switch it on since the step does not work for the moment
+useJSON = False
+JSONfile = 'goldenJSON_PromptReco.txt'
+#JSONfile = 'goldenJSON_reMiniAOD.txt'
+doGenParticles = True
+doGenJets = True
+doGenEvent = True
+doPileUp = True
+doPhotons = True
+doElectrons = True
+doMuons = True
+doTaus = False
+doAK8Jets = True
+doAK4Jets = True
+doVertices = True
+doTriggerDecisions = True
+doTriggerObjects = True
+doHltFilters = True
+
+>>>>>>> DevelopmentBranch:Ntuplizer/config.py
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
 # For the RunIISpring15DR74 MC campaing, the process name in PAT.
 # For Run2015B PromptReco Data, the process name is RECO.
@@ -295,6 +321,7 @@ bTagParameters = dict(
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
     svSource = cms.InputTag('slimmedSecondaryVertices'),
+    phSource = cms.InputTag('slimmedPhotons'),
     elSource = cms.InputTag('slimmedElectrons'),
     muSource = cms.InputTag('slimmedMuons'),
     btagDiscriminators = bTagDiscriminators
@@ -672,6 +699,7 @@ if config["CORRMETONTHEFLY"]:
                                                                                       
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
+<<<<<<< HEAD:Ntuplizer/config_MC.py
     runOnMC	      = cms.bool(config["RUNONMC"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenJets	      = cms.bool(config["DOGENJETS"]),
@@ -692,15 +720,45 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
     doBoostedTaus     = cms.bool(config["DOSEMILEPTONICTAUSBOOSTED"]),
+    runOnMC = cms.bool(runOnMC),
+    doGenParticles = cms.bool(doGenParticles),
+    doGenJets = cms.bool(doGenJets),
+    doGenEvent = cms.bool(doGenEvent),
+    doPileUp = cms.bool(doPileUp),
+    doPhotons = cms.bool(doPhotons),
+    doElectrons = cms.bool(doElectrons),
+    doMuons = cms.bool(doMuons),
+    doTaus = cms.bool(doTaus),
+    doAK8Jets = cms.bool(doAK8Jets),
+    doAK4Jets = cms.bool(doAK4Jets),
+    doVertices = cms.bool(doVertices),
+    doTriggerDecisions = cms.bool(doTriggerDecisions),
+    doTriggerObjects = cms.bool(doTriggerObjects),
+    doHltFilters = cms.bool(doHltFilters),
+    doMissingEt = cms.bool(doMissingEt),
+    doHbbTag = cms.bool(doBtagging),
+    doPrunedSubjets = cms.bool(doAK8prunedReclustering),
+    doTrimming = cms.bool(doAK10trimmedReclustering),
+    #doTausBoosted = cms.bool(doSemileptonicTausBoosted),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
+    photons = cms.InputTag("slimmedPhotons"),
+    phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
+    phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
+    phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight")
+    #phoHEEPId51Map = cms.InputTag("egmGsfPhotonIDs:heepPhotonID-HEEPV51"),
+    #phoHEEPIdMap = cms.InputTag("egmGsfPhotonIDs:heepPhotonID-HEEPV60"),
+    #phoVetoIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-veto"),
+    #phoLooseIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
+    #phoMediumIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
+    #phoTightIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight"),
     electrons = cms.InputTag("slimmedElectrons"),
     eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
     eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
     eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose"),
     eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
-    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight"),
+    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU2hbx25-V2-standalone-tight"),
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
