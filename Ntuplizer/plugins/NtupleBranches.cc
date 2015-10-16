@@ -97,13 +97,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "el_hOverE"                                         , &el_hOverE                                     );
 		tree_->Branch( "el_relIsoWithDBeta"                                , &el_relIsoWithDBeta                            );
 		tree_->Branch( "el_ooEmooP"                                        , &el_ooEmooP                                    );
-		tree_->Branch( "el_expectedMissingInnerHits"                       , &el_expectedMissingInnerHits                   );
+    tree_->Branch( "el_expectedMissingInnerHits", &el_expectedMissingInnerHits );
 
 		tree_->Branch( "el_d0"                                             , &el_d0                                         );
 		tree_->Branch( "el_dz"                                             , &el_dz                                         );
 
 		tree_->Branch( "el_dr03EcalRecHitSumEt"                            , &el_dr03EcalRecHitSumEt                        );
-		tree_->Branch( "el_dr03HcalDepth1TowerSumEt"                       , &el_dr03HcalDepth1TowerSumEt                   );
+    tree_->Branch( "el_dr03HcalDepth1TowerSumEt", &el_dr03HcalDepth1TowerSumEt );
 		tree_->Branch( "el_rho"                                            , &el_rho                                        );
 		tree_->Branch( "el_ecalDriven"                                     , &el_ecalDriven                                 );
 		tree_->Branch( "el_dEtaInSeed"                                     , &el_dEtaInSeed                                 );
@@ -169,9 +169,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "mu_bestTrack_pt"                                   , &mu_bestTrack_pt                                );
 		tree_->Branch( "mu_bestTrack_ptErr"                                , &mu_bestTrack_ptErr                             );
 
-		tree_->Branch( "mu_pfRhoCorrRelIso03Boost"                         , &mu_pfRhoCorrRelIso03Boost                      );
-		tree_->Branch( "mu_pfRhoCorrRelIso04Boost"                         , &mu_pfRhoCorrRelIso04Boost                      );
-		tree_->Branch( "mu_pfDeltaCorrRelIsoBoost"                         , &mu_pfDeltaCorrRelIsoBoost                      );
+    tree_->Branch( "mu_pfRhoCorrRelIso03Boost", &mu_pfRhoCorrRelIso03Boost );
+    tree_->Branch( "mu_pfRhoCorrRelIso04Boost", &mu_pfRhoCorrRelIso04Boost );
+    tree_->Branch( "mu_pfDeltaCorrRelIsoBoost", &mu_pfDeltaCorrRelIsoBoost );
 		tree_->Branch( "mu_pfRelIsoBoost"                                  , &mu_pfRelIsoBoost                               );
 		tree_->Branch( "mu_photonIsoBoost"                                 , &mu_photonIsoBoost                              );
 		tree_->Branch( "mu_neutralHadIsoBoost"                             , &mu_neutralHadIsoBoost                          );

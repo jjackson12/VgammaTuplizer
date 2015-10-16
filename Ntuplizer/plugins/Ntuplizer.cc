@@ -23,17 +23,6 @@
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 
-	vtxToken_                         (consumes<reco::VertexCollection>                (iConfig.getParameter<edm::InputTag>("vertices")))                                   ,
-	rhoToken_                         (consumes<double>                                (iConfig.getParameter<edm::InputTag>("rho")))                                        ,
-	puinfoToken_                      (consumes<std::vector<PileupSummaryInfo> >       (iConfig.getParameter<edm::InputTag>("PUInfo")))                                     ,
-	geneventToken_                    (consumes<GenEventInfoProduct>                   (iConfig.getParameter<edm::InputTag>("genEventInfo")))                               ,     
-	genparticleToken_                 (consumes<reco::GenParticleCollection>           (iConfig.getParameter<edm::InputTag>("genparticles")))                               ,
-
-	jetToken_                         (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("jets")))                                       ,
-	fatjetToken_                      (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("fatjets")))                                    ,
-	prunedjetToken_                   (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("prunedjets")))                                 ,
-	softdropjetToken_                 (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("softdropjets")))                               ,
-	trimmedjetToken_                  (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("trimmedjets")))                                ,
 	puppijetToken_                    (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("puppijets")))                                  ,
 	genJetToken_                      (consumes<reco::GenJetCollection>                (iConfig.getParameter<edm::InputTag>("genJets")))                                    ,
 	genJetAK8Token_                   (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("genJetsAK8")))                                 ,

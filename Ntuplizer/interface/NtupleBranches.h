@@ -38,7 +38,8 @@
 /*here we declare the input and output variables*/
 
 class NtupleBranches {
-	public:
+
+public:
 		NtupleBranches( std::map< std::string, bool >& runFlags, TTree* tree = 0);
 		~NtupleBranches( void );
 
@@ -51,7 +52,7 @@ class NtupleBranches {
 		/* output tree variables*/
 
 		/** genParticles */
-		int                                  genParticle_N                ;
+  int                             genParticle_N;
 		std::vector<float>                   genParticle_pt               ;
 		std::vector<float>                   genParticle_px               ;
 		std::vector<float>                   genParticle_py               ;
@@ -156,7 +157,7 @@ class NtupleBranches {
 		std::vector<float>                   el_hOverE                    ;
 		std::vector<float>                   el_relIsoWithDBeta           ;
 		std::vector<float>                   el_ooEmooP                   ;
-		std::vector<int>                     el_expectedMissingInnerHits  ;
+  std::vector<int>	      el_expectedMissingInnerHits;
                                          
 		std::vector<float>                   el_d0                        ;
 		std::vector<float>                   el_dz                        ;
@@ -179,13 +180,13 @@ class NtupleBranches {
 		std::vector<int  >                   el_isHeepElectron            ;
 		std::vector<int  >                   el_isHeep51Electron          ;
 		std::vector<int  >                   el_isLooseElectron           ;
+ 
 		std::vector<int>                     el_isVetoElectronBoosted     ;
-                                         
+  std::vector<int>	      el_isMediumElectronBoosted  ;
+  std::vector<int>	      el_isTightElectronBoosted	  ;    
 		std::vector<int  >                   el_isHeepElectronBoosted     ;
 		std::vector<int  >                   el_isHeep51ElectronBoosted   ;
 		std::vector<int  >                   el_isLooseElectronBoosted    ;
-		std::vector<int>                     el_isMediumElectronBoosted   ;
-		std::vector<int>                     el_isTightElectronBoosted    ;    
                                          
 		std::vector<float>                   el_SemileptonicPFIso         ;//  Isolations for semileptonic tau channel  
 		std::vector<float>                   el_SemileptonicCorrPFIso     ;// the simple PF one and the corrected one for the tau presence
@@ -330,26 +331,28 @@ class NtupleBranches {
 		std::vector<float>                   tau_againstMuonMediumMVA                        ;
 		std::vector<float>                   tau_againstMuonTightMVA                         ;
 
-		/* /\*----------------------Tau tracks---------------------------*\/ */
+/* /\*----------------------Tau tracks---------------------------*\/ */
 
-		/*     std::vector<int>    nCharCand              ; */
-		/*     std::vector<int>    nNeuCand               ; */
-		/*     std::vector<int>    nGamCand               ; */
-		/*     std::vector<int>    decayMode              ; */
-		/*     std::vector<float>  leadTrack_dxy          ; */
-		/*     std::vector<float>  leadTrack_dxySig       ; */
-		/*     std::vector<float>  secVtxX                ; */
-		/*     std::vector<float>  secVtxY                ; */
-		/*     std::vector<float>  secVtxZ                ; */
-		/*     std::vector<float>  flightLengthX          ; */
-		/*     std::vector<float>  flightLengthY          ; */
-		/*     std::vector<float>  flightLengthZ          ; */
-		/*     std::vector<float>  flightLength           ; */
-		/*     std::vector<float>  flightLengthSig        ; */
+/*     std::vector<int>    nCharCand              ; */
+/*     std::vector<int>    nNeuCand               ; */
+/*     std::vector<int>    nGamCand               ; */
+/*     std::vector<int>    decayMode              ; */
+/*     std::vector<float>  leadTrack_dxy          ; */
+/*     std::vector<float>  leadTrack_dxySig       ; */
+/*     std::vector<float>  secVtxX                ; */
+/*     std::vector<float>  secVtxY                ; */
+/*     std::vector<float>  secVtxZ                ; */
+/*     std::vector<float>  flightLengthX          ; */
+/*     std::vector<float>  flightLengthY          ; */
+/*     std::vector<float>  flightLengthZ          ; */
+/*     std::vector<float>  flightLength           ; */
+/*     std::vector<float>  flightLengthSig        ; */
 
 
 		/** energy density */
-		float                                rho                              ;
+  float                             rho;
+
+
 
 		/** AK4 jets */
 		int                                 jetAK4_N                          ;
@@ -385,21 +388,20 @@ class NtupleBranches {
 		std::vector<int>                    jetAK4_charge                     ;
 		std::vector<int>                    jetAK4_partonFlavour              ;
 		std::vector<int>                    jetAK4_hadronFlavour              ;
-    std::vector<int>                    jetAK4_genParton_pdgID            ;
+  std::vector<int>                jetAK4_genParton_pdgID;
     std::vector<int>                    jetAK4_nbHadrons                  ;
     std::vector<int>                    jetAK4_ncHadrons                  ;
-		//std::vector<float>                jetAK4_ssv                        ;
+//std::vector<float>              jetAK4_ssv           ;
 		std::vector<float>                  jetAK4_cisv                       ;         
-		//std::vector<float>                jetAK4_tchp                       ;
-		//std::vector<float>                jetAK4_tche                       ;
-		//std::vector<float>                jetAK4_jp                         ;
-		//std::vector<float>                jetAK4_jbp                        ;
+//std::vector<float>  	          jetAK4_tchp 	       ;
+//std::vector<float>  	          jetAK4_tche 	       ;
+//std::vector<float>  	          jetAK4_jp	       ;
+//std::vector<float>  	          jetAK4_jbp  	       ;
 		std::vector<float>                  jetAK4_vtxMass                    ;
 		std::vector<float>                  jetAK4_vtxNtracks                 ;
 		std::vector<float>                  jetAK4_vtx3DVal                   ;
 		std::vector<float>                  jetAK4_vtx3DSig                   ; 
-		//std::vector<int  >                jetAK4_nSVs                       ;
-
+//std::vector<int  >              jetAK4_nSVs          ;
 
 
 
@@ -437,16 +439,16 @@ class NtupleBranches {
 		std::vector<int  >                  jetAK8_charge                     ;
     std::vector<int>                    jetAK8_partonFlavour              ;
     std::vector<int>                    jetAK8_hadronFlavour              ;
-    std::vector<int>                    jetAK8_genParton_pdgID            ;
+  std::vector<int>            jetAK8_genParton_pdgID;
     std::vector<int>                    jetAK8_nbHadrons                  ;
     std::vector<int>                    jetAK8_ncHadrons                  ;
 		std::vector<float>                  jetAK8_Hbbtag                     ;
-		//std::vector<float>                jetAK8_ssv                        ;
+//std::vector<float>          jetAK8_ssv               ;
 		std::vector<float>                  jetAK8_csv                        ;    
-		//std::vector<float>                jetAK8_tchp                       ;
-		//std::vector<float>                jetAK8_tche                       ;
-		//std::vector<float>                jetAK8_jp                         ;
-		//std::vector<float>                jetAK8_jbp                        ;
+//std::vector<float>          jetAK8_tchp              ;
+//std::vector<float>          jetAK8_tche              ;
+//std::vector<float>          jetAK8_jp                ;
+//std::vector<float>          jetAK8_jbp               ;
 		std::vector<float>                  jetAK8_tau1                       ;
 		std::vector<float>                  jetAK8_tau2                       ;
 		std::vector<float>                  jetAK8_tau3                       ;    
@@ -516,14 +518,14 @@ class NtupleBranches {
 		std::vector< std::vector<float> >   subjetAK8_pruned_phi              ;
 		std::vector< std::vector<float> >   subjetAK8_pruned_e                ;
 		std::vector< std::vector<int  > >   subjetAK8_pruned_charge           ;
-		std::vector< std::vector<int  > >   subjetAK8_pruned_partonFlavour    ;
-		std::vector< std::vector<int  > >   subjetAK8_pruned_hadronFlavour    ;
-		//std::vector< std::vector<float> > subjetAK8_pruned_ssv              ;
+  std::vector< std::vector<int  > > subjetAK8_pruned_partonFlavour;
+  std::vector< std::vector<int  > > subjetAK8_pruned_hadronFlavour;
+//std::vector< std::vector<float> > subjetAK8_pruned_ssv    ;
 		std::vector< std::vector<float> >   subjetAK8_pruned_csv              ;    
-		//std::vector< std::vector<float> > subjetAK8_pruned_tchp             ;
-		//std::vector< std::vector<float> > subjetAK8_pruned_tche             ;
-		//std::vector< std::vector<float> > subjetAK8_pruned_jp               ;
-		//std::vector< std::vector<float> > subjetAK8_pruned_jbp              ;
+//std::vector< std::vector<float> > subjetAK8_pruned_tchp   ;
+//std::vector< std::vector<float> > subjetAK8_pruned_tche   ;
+//std::vector< std::vector<float> > subjetAK8_pruned_jp     ;
+//std::vector< std::vector<float> > subjetAK8_pruned_jbp    ;
 
 		/** softdrop AK8 subjets */
 		std::vector<int>                    subjetAK8_softdrop_N              ;
@@ -533,14 +535,14 @@ class NtupleBranches {
 		std::vector< std::vector<float> >   subjetAK8_softdrop_phi            ;
 		std::vector< std::vector<float> >   subjetAK8_softdrop_e              ;
 		std::vector< std::vector<int  > >   subjetAK8_softdrop_charge         ;
-		std::vector< std::vector<int  > >   subjetAK8_softdrop_partonFlavour  ;
-		std::vector< std::vector<int  > >   subjetAK8_softdrop_hadronFlavour  ;
-		//std::vector< std::vector<float> > subjetAK8_softdrop_ssv            ;
+  std::vector< std::vector<int  > > subjetAK8_softdrop_partonFlavour;
+  std::vector< std::vector<int  > > subjetAK8_softdrop_hadronFlavour;
+//std::vector< std::vector<float> > subjetAK8_softdrop_ssv    ;
 		std::vector< std::vector<float> >   subjetAK8_softdrop_csv            ;
-		//std::vector< std::vector<float> > subjetAK8_softdrop_tchp           ;
-		//std::vector< std::vector<float> > subjetAK8_softdrop_tche           ;
-		//std::vector< std::vector<float> > subjetAK8_softdrop_jp             ;
-		//std::vector< std::vector<float> > subjetAK8_softdrop_jbp            ;
+//std::vector< std::vector<float> > subjetAK8_softdrop_tchp   ;
+//std::vector< std::vector<float> > subjetAK8_softdrop_tche   ;
+//std::vector< std::vector<float> > subjetAK8_softdrop_jp     ;
+//std::vector< std::vector<float> > subjetAK8_softdrop_jbp    ;
 
 		/** AK4 genJets*/
 		int                                 genJetAK4_N                       ;
@@ -555,6 +557,7 @@ class NtupleBranches {
 
 		/*-------------------------AK8 genJets---------------------------*/   
 		int                                 genJetAK8_N                       ;
+
 		std::vector<float>                  genJetAK8_pt                      ;
 		std::vector<float>                  genJetAK8_eta                     ;
 		std::vector<float>                  genJetAK8_mass                    ;
@@ -572,24 +575,25 @@ class NtupleBranches {
 		std::vector<float>                  triggerObject_phi                 ;
 		std::vector<float>                  triggerObject_mass                ;
 		std::vector< std::vector<float> >   triggerObject_filterIDs           ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
-		std::vector< std::vector<int> >     triggerObject_firedTrigger        ; // as defined in plugins/TriggersNtuplizer.cc
+  std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
+
 
 		/** HLT filter decisions */
-		bool                                passFilter_HBHE_                  ;
-		bool                                passFilter_HBHELoose_             ;
-		bool                                passFilter_HBHETight_             ;
-		bool                                passFilter_CSCHalo_               ;
-		bool                                passFilter_HCALlaser_             ;
-		bool                                passFilter_ECALDeadCell_          ;
-		bool                                passFilter_GoodVtx_               ;
-		bool                                passFilter_TrkFailure_            ;
-		bool                                passFilter_EEBadSc_               ;
-		bool                                passFilter_ECALlaser_             ;
-		bool                                passFilter_TrkPOG_                ;
-		bool                                passFilter_TrkPOG_manystrip_      ;
-		bool                                passFilter_TrkPOG_toomanystrip_   ;
-		bool                                passFilter_TrkPOG_logError_       ;
-		bool                                passFilter_METFilters_            ;
+  bool passFilter_HBHE_;
+  bool passFilter_HBHELoose_;
+  bool passFilter_HBHETight_;
+  bool passFilter_CSCHalo_;
+  bool passFilter_HCALlaser_;
+  bool passFilter_ECALDeadCell_;
+  bool passFilter_GoodVtx_;
+  bool passFilter_TrkFailure_;
+  bool passFilter_EEBadSc_;
+  bool passFilter_ECALlaser_;
+  bool passFilter_TrkPOG_;
+  bool passFilter_TrkPOG_manystrip_;
+  bool passFilter_TrkPOG_toomanystrip_;
+  bool passFilter_TrkPOG_logError_;
+  bool passFilter_METFilters_;
 
 		/** MET */
 		std::vector<float>                  METraw_et                         ;   
@@ -621,7 +625,7 @@ class NtupleBranches {
 		std::vector<int  >                  nPuVtx                            ;// the number of pileup interactions that have been added to the event in the current bunch crossing
 		std::vector<int  >                  bX                                ;// to which bunch crossing do these interaction belong?  
 
-	private:
+private:
 		TTree* tree_;
 
 };
