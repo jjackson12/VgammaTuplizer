@@ -232,7 +232,7 @@ class NtupleBranches {
 		std::vector<int  >                   mu_matchedStations           ;
 		std::vector<int  >                   mu_pixelHits                 ;
 		std::vector<int  >                   mu_globalHits                ;
-                                                                      ;
+                                                                      
 		std::vector<float>                   mu_SemileptonicPFIso         ;//  Isolations for semileptonic tau channel  
 		std::vector<float>                   mu_SemileptonicCorrPFIso     ;// the simple PF one and the corrected one for the tau presence
 
