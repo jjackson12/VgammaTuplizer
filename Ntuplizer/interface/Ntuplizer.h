@@ -65,27 +65,27 @@ private:
 
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;
 
-  edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
-  edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
   edm::EDGetToken                                   		    photonToken_	;
+  edm::EDGetTokenT<pat::MuonCollection>     		            muonToken_  	;	
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdFullInfoMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMvaValuesMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMvaCategoriesMapToken_;
+  //edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdFullInfoMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<float> >                    phoMvaValuesMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<int> >                    phoMvaCategoriesMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoTightIdMapToken_ ;
   bool                                                      phoVerboseIdFlag_;
+  edm::EDGetTokenT<edm::View<pat::Electron> >		            electronToken_	;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPId51MapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleTightIdMapToken_ ;
-  edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
-  edm::EDGetTokenT<pat::TauCollection> 	    		    tauEleTauToken_	;
-  edm::EDGetTokenT<pat::TauCollection> 	    		    tauMuTauToken_	;
+  edm::EDGetTokenT<pat::TauCollection> 	    		            tauToken_		;
+  edm::EDGetTokenT<pat::TauCollection> 	    		            tauEleTauToken_	;
+  edm::EDGetTokenT<pat::TauCollection> 	    		            tauMuTauToken_	;
 
-  edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		            metToken_		;
   edm::EDGetTokenT<pat::JetCollection>                      jetForMetCorrToken_ ;
   
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_       ;
