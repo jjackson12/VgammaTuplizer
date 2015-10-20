@@ -5,10 +5,11 @@ config = dict()
 #--------- general ----------#
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "Cert_246908-257599_13TeV_PromptReco_Collisions15_25ns_JSON.txt"
+config["JSONFILE"] = "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258714_13TeV_PromptReco_Collisions15_25ns_JSON.txt"
 config["BUNCHSPACING"] = 25
 
 #--------- basic sequences ----------#
+config["DOPHOTONS"] = True
 config["DOGENPARTICLES"] = False
 config["DOGENJETS"] = False
 config["DOGENEVENT"] = False

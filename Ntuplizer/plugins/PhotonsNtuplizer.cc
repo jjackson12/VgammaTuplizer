@@ -23,9 +23,9 @@ PhotonsNtuplizer::PhotonsNtuplizer(NtupleBranches*                              
                                    edm::EDGetToken                                        photonToken  ,
                                    edm::EDGetTokenT<reco::VertexCollection>               verticeToken ,
                                    edm::EDGetTokenT<double>                               rhoToken     ,
-                                   std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > >  phoIDtokens,
-                                   std::vector<edm::EDGetTokenT<edm::ValueMap<float> > > phoIDtokens1,
-                                   std::vector<edm::EDGetTokenT<edm::ValueMap<int> > > phoIDtokens2
+                                   std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > >  phoIDtokens  ,
+                                   std::vector<edm::EDGetTokenT<edm::ValueMap<float> > >  phoIDtokens1 ,
+                                   std::vector<edm::EDGetTokenT<edm::ValueMap<int> > >    phoIDtokens2
                                    
                                    )
 /* Stuff for cut based id as in SimplePhotonNtupler example
@@ -43,7 +43,7 @@ PhotonsNtuplizer::PhotonsNtuplizer(NtupleBranches*                              
 //, photonMediumIdFullInfoMapToken_   ( phoIDtokens[2] )
 , photonTightIdMapToken_            ( phoIDtokens[2] )
 , photonMvaValuesMapToken_          ( phoIDtokens1[0] )
-, photonMvaCategoriesMapToken_       ( phoIDtokens2[0] )
+, photonMvaCategoriesMapToken_      ( phoIDtokens2[0] )
 
 {
     
@@ -68,7 +68,7 @@ void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     
     event.getByToken(photonToken_                     , photons                );
     event.getByToken(verticeToken_                    , vertices_              );
-    event.getByToken(rhoToken_	                       , rho_                   );
+    event.getByToken(rhoToken_	                      , rho_                   );
     
     event.getByToken(photonLooseIdMapToken_           , loose_id_decisions     );
     event.getByToken(photonMediumIdMapToken_          , medium_id_decisions    );
