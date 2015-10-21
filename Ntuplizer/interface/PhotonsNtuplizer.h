@@ -48,9 +48,9 @@ private:
     edm::Handle<edm::View<pat::Photon> >                    photons                          ;
     edm::Handle<reco::VertexCollection>                      vertices_                     ;
     edm::Handle<double>                                      rho_	                          ;
-    edm::Handle<edm::ValueMap<bool> >                        loose_id_decisions               ;
+    //edm::Handle<edm::ValueMap<bool> >                        loose_id_decisions               ;
     edm::Handle<edm::ValueMap<bool> >                        medium_id_decisions              ;
-    edm::Handle<edm::ValueMap<bool> >                        tight_id_decisions               ;
+    //edm::Handle<edm::ValueMap<bool> >                        tight_id_decisions               ;
     
     edm::Handle<edm::ValueMap<vid::CutFlowResult> >          medium_id_cutflow_data           ;
     edm::Handle<edm::ValueMap<float> >                       mvaValues                        ;

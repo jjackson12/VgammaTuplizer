@@ -60,9 +60,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "ph_pt"                                             , &ph_pt                                         );
 		tree_->Branch( "ph_et"                                             , &ph_et                                         );
 		tree_->Branch( "ph_superCluster_eta"                               , &ph_superCluster_eta                           );
-		tree_->Branch( "ph_passLooseId"                                    , &ph_passLooseId                                );
+		// tree_->Branch( "ph_passLooseId"                                    , &ph_passLooseId                                );
 		tree_->Branch( "ph_passMediumId"                                   , &ph_passMediumId                               );
-		tree_->Branch( "ph_passTightId"                                    , &ph_passTightId                                );
+		// tree_->Branch( "ph_passTightId"                                    , &ph_passTightId                                );
 		tree_->Branch( "ph_mvaVal"                                         , &ph_mvaValue                                   );
 		tree_->Branch( "ph_mvaCat"                                         , &ph_mvaCategory                                );
 
@@ -639,9 +639,9 @@ void NtupleBranches::reset( void ){
 	ph_pt.clear();
 	ph_et.clear();
 	ph_superCluster_eta.clear();
-	ph_passLooseId.clear();
+	// ph_passLooseId.clear();
 	ph_passMediumId.clear();
-	ph_passTightId.clear();
+	// ph_passTightId.clear();
   ph_mvaValue.clear();
   ph_mvaCategory.clear();
 
