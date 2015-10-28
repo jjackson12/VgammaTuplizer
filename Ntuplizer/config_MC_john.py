@@ -11,9 +11,8 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
-
-				   
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
+           
 ####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -26,7 +25,10 @@ options.maxEvents = 100
 
 #data file
 
-options.inputFiles = 'root://eoscms.cern.ch//store/data/Run2015D/SinglePhoton/MINIAOD/PromptReco-v4/000/258/177/00000/FC29564D-0F6D-E511-9A7D-02163E0146F2.root'
+#options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
+#mc file
+
+options.inputFiles = 'file:/shome/jngadiub/EXOVVAnalysisRunII/CMSSW_7_4_7_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/test/RSGravToWWToLNQQ_kMpl01_M-1000_TuneCUETP8M1_13TeV-pythia8.root'
 
 
 options.parseArguments()
@@ -78,7 +80,7 @@ if config["RUNONMC"]:
    process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v2')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(config["RUNONMC"]):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v4')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_v2')
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -505,7 +507,7 @@ if config["DOMETRECLUSTERING"]:
   process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
   process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
   # TODO check why this isn't in MC but is in data
-  process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
+  # process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
   
   if config["RUNONMC"]:
     process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
@@ -608,10 +610,8 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 JECprefix = "Summer15_50nsV5"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
+if config["BUNCHSPACING"] == 25: #TODO check what's going on with the data config file here
    JECprefix = "Summer15_25nsV2"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV5"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:

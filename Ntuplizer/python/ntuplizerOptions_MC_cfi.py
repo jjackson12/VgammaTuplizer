@@ -9,7 +9,8 @@ config["JSONFILE"] = 'goldenJSON_PromptReco.txt'
 config["BUNCHSPACING"] = 25
 
 #--------- basic sequences ----------#
-config["DOGENPARTICLES"] = True
+config["DOPHOTONS"] = True
+config["DOGENPARTICLES"] = False
 config["DOGENJETS"] = False
 config["DOGENEVENT"] = True
 config["DOPILEUP"] = True
