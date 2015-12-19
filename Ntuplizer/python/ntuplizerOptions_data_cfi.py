@@ -5,7 +5,7 @@ config = dict()
 #--------- general ----------#
 config["RUNONMC"] = False
 config["USEJSON"] = True
-config["JSONFILE"] = "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258714_13TeV_PromptReco_Collisions15_25ns_JSON.txt"
+config["JSONFILE"] = "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt"
 config["BUNCHSPACING"] = 25
 
 #--------- basic sequences ----------#
@@ -40,4 +40,4 @@ config["DOMETRECLUSTERING"] = False
 #--------- JEC ----------#
 config["CORRJETSONTHEFLY"] = True
 config["CORRMETONTHEFLY"] = True
-config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
+config["GETJECFROMDBFILE"] = True # If not yet in global tag, but db file available

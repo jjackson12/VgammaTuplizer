@@ -10,8 +10,8 @@ config["BUNCHSPACING"] = 25
 
 #--------- basic sequences ----------#
 config["DOPHOTONS"] = True
-config["DOGENPARTICLES"] = False
-config["DOGENJETS"] = False
+config["DOGENPARTICLES"] = True
+config["DOGENJETS"] = True
 config["DOGENEVENT"] = True
 config["DOPILEUP"] = True
 config["DOELECTRONS"] = True
@@ -40,4 +40,4 @@ config["DOMETRECLUSTERING"] = False
 #--------- JEC ----------#
 config["CORRJETSONTHEFLY"] = True
 config["CORRMETONTHEFLY"] = True
-config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
+config["GETJECFROMDBFILE"] = True # If not yet in global tag, but db file available
