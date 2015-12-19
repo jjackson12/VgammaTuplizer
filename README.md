@@ -1,14 +1,19 @@
 # EXOVVNtuplizerRunII
 
 
-## installation instructions for CMSSW_7_4_14
+## Instructions for CMSSW_7_4_15
 
 ```
-export SCRAM_ARCH=slc6_amd64_gcc491
-cmsrel CMSSW_7_4_14
-cd CMSSW_7_4_14/src
+cmsrel CMSSW_7_4_15
+cd CMSSW_7_4_15/src
 cmsenv
 git cms-init
+```
+
+To get the 7_4_X (X>12) photon ID:
+```
+git cms-merge-topic ikrav:egm_id_7.4.12_v1
+scram b -j10
 ```
 
 For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
@@ -26,4 +31,4 @@ scram b distclean
 scram b -j8
 cd EXOVVNtuplizerRunII/Ntuplizer
 ```
-
+Tested on lxplus.
