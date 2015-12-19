@@ -12,21 +12,23 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
-				   
+           
 ####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = -1
+
+options.maxEvents = 200
+
 
 #data file
 
 #options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
 #mc file
 
-options.inputFiles = 'file:mcconfigurations/M_2000.root'
+options.inputFiles = 'root://eoscms.cern.ch//store/mc/RunIISpring15DR74/GGJets_M-1000To2000_Pt-50_13TeV-sherpa/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/6E03DD41-B82F-E511-971A-02163E013645.root'
 
 
 options.parseArguments()
@@ -44,8 +46,6 @@ process.source = cms.Source("PoolSource",
                             )                     
 
 ######## Sequence settings ##########
-
-doPhotons = True
 
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2015#ETmiss_filters
 # For the RunIISpring15DR74 MC campaing, the process name in PAT.
@@ -68,7 +68,8 @@ process.MessageLogger.categories.append('Ntuple')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+
+process.MessageLogger.cerr.FwkReport.reportEvery = 5
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -132,6 +133,7 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
 process.ak8CHSJetsPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = fatjet_ptmin )
 process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = fatjet_ptmin, beta = betapar  )
 
+
 if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
@@ -154,33 +156,32 @@ if config["GETJECFROMDBFILE"]:
             toGet = cms.VPSet(
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_MC_AK4PFchs'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK4PFchs'),
                  label  = cms.untracked.string('AK4PFchs')
                  ),
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_MC_AK8PFchs'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFchs'),
                  label  = cms.untracked.string('AK8PFchs')
                  ),
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_MC_AK8PFPuppi'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFPuppi'),
                  label  = cms.untracked.string('AK8PFPuppi')
                  ),
             ),
-            connect = cms.string('sqlite:JEC/Summer15_50nsV5_MC.db')
+            connect = cms.string('sqlite:JEC/Summer15_25nsV6_MC.db')
             )
   if not config["RUNONMC"]:
-    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK4PFchs')
-    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFchs')
-    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_50nsV5_DATA_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Summer15_50nsV5_DATA.db')
+    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK4PFchs')
+    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFchs')
+    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFPuppi')
+    process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_DATA.db')
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
 
 ####### Add AK8 GenJets ##########
-
 if config["ADDAK8GENJETS"]:
 
   from RecoJets.Configuration.RecoGenJets_cff import ak8GenJets
@@ -395,7 +396,7 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
 	    producer.getJetMCFlavour = False
 
 ################# Recluster jets with b-tagging ######################
-if config["DOAK8RECLUSTERING"]:  
+if config["DOAK8RECLUSTERING"]: 
     recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsSoftDrop', genjets_name = lambda s: s.replace('CHS', 'Gen'))
     recluster_addBtagging(process, 'ak8CHSJets', 'ak8CHSJetsPruned', genjets_name = lambda s: s.replace('CHS', 'Gen'))
     process.ak8PFJetsCHSPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
@@ -431,7 +432,7 @@ if config["DOAK8RECLUSTERING"]:
     #process.patJetsAk8CHSJetsSoftDropSubjets.addBTagInfo = True
 
 ################# Recluster trimmed jets ######################
-if config["DOAK10TRIMMEDRECLUSTERING"]:			       
+if config["DOAK10TRIMMEDRECLUSTERING"]:	
     recluster_addBtagging(process, 'ak8CHSJets', 'ak10CHSJetsTrimmed', genjets_name = lambda s: s.replace('CHS', 'Gen'), verbose = False, btagging = False, subjets = False)
     process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
     
@@ -471,6 +472,7 @@ if config["DOAK8PUPPIRECLUSTERING"]:
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
     process.patJetsAk8PuppiJets.addTagInfos = True
 
+
 # ###### Recluster MET ##########
 if config["DOMETRECLUSTERING"]:
 
@@ -504,7 +506,8 @@ if config["DOMETRECLUSTERING"]:
                            )
   process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
   process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
-  #process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
+  # TODO check why this isn't in MC but is in data
+  # process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
   
   if config["RUNONMC"]:
     process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
@@ -513,12 +516,13 @@ if config["DOMETRECLUSTERING"]:
     process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
     process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
     process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-        
+			           
 ####### Adding HEEP id ##########
 
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 
 dataFormat=DataFormat.MiniAOD
+
 switchOnVIDElectronIdProducer(process,dataFormat)
 
 process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
@@ -526,25 +530,33 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 # define which IDs we want to produce
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
-my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
+my_id_modules_el = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
 
 #add them to the VID producer
-for idmod in my_id_modules:
+for idmod in my_id_modules_el:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+
+switchOnVIDPhotonIdProducer(process,dataFormat)
+process.egmPhotonIDSequence = cms.Sequence(process.egmPhotonIDSequence)
+
+my_id_modules_ph = ['RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring15_25ns_nonTrig_V2_cff']
+
+for idmod in my_id_modules_ph:
+    setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection)
 
 ####### Event filters ###########
 
 ##___________________________HCAL_Noise_Filter________________________________||
 if config["DOHLTFILTERS"] and not(config["RUNONMC"]):
   process.load('CommonTools.RecoAlgos.HBHENoiseFilterResultProducer_cfi')
-  #process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
+  process.HBHENoiseFilterResultProducer.minZeros = cms.int32(99999)
 
-  #process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
-  #   inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResultRun2Loose'),
-  #   reverseDecision = cms.bool(False)
-  #)
+  process.ApplyBaselineHBHENoiseFilter = cms.EDFilter('BooleanFlagFilter',
+     inputLabel = cms.InputTag('HBHENoiseFilterResultProducer','HBHENoiseFilterResult'),
+     reverseDecision = cms.bool(False)
+  )
 
 ####### Ntuplizer initialization ##########
 jetsAK4 = "slimmedJets"
@@ -579,9 +591,6 @@ if config["DOAK10TRIMMEDRECLUSTERING"]:
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if config["DOAK8PUPPIRECLUSTERING"]:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
-   
-if config["DOMETRECLUSTERING"]:
-  METS = "mySlimmedMETs"
 
 if config["DOSEMILEPTONICTAUSBOOSTED"]:
   TAUS = "slimmedTaus"
@@ -600,11 +609,9 @@ jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
-JECprefix = "Summer15_50nsV5"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV2"
-elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV5"
+JECprefix = "Summer15_25nsV6"
+if config["BUNCHSPACING"] == 25: #TODO check what's going on with the data config file here
+   JECprefix = "Summer15_25nsV6"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
@@ -658,12 +665,12 @@ if config["CORRMETONTHEFLY"]:
        ]
    else:       					       
      jecLevelsForMET = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
-       ]	
-      			    
+        'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+        'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+        'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+   'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+       ]  
+              
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
 #process.goodSlimmedJets = cms.EDFilter("PFJetIDSelectionFunctorFilter",
 #                        filterParams = pfJetIDSelector.clone(),
@@ -676,17 +683,19 @@ if config["CORRMETONTHEFLY"]:
                                                                                       
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
+    doPhotons     = cms.bool(config["DOPHOTONS"]),
+
     runOnMC	      = cms.bool(config["RUNONMC"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
-    doGenJets	      = cms.bool(config["DOGENJETS"]),
-    doGenEvent	      = cms.bool(config["DOGENEVENT"]),
-    doPileUp	      = cms.bool(config["DOPILEUP"]),
+    doGenJets        = cms.bool(config["DOGENJETS"]),
+    doGenEvent        = cms.bool(config["DOGENEVENT"]),
+    doPileUp        = cms.bool(config["DOPILEUP"]),
     doElectrons       = cms.bool(config["DOELECTRONS"]),
-    doMuons	      = cms.bool(config["DOMUONS"]),
-    doTaus	      = cms.bool(config["DOTAUS"]),
-    doAK8Jets	      = cms.bool(config["DOAK8JETS"]),
-    doAK4Jets	      = cms.bool(config["DOAK4JETS"]),
-    doVertices	      = cms.bool(config["DOVERTICES"]),
+    doMuons        = cms.bool(config["DOMUONS"]),
+    doTaus        = cms.bool(config["DOTAUS"]),
+    doAK8Jets        = cms.bool(config["DOAK8JETS"]),
+    doAK4Jets        = cms.bool(config["DOAK4JETS"]),
+    doVertices        = cms.bool(config["DOVERTICES"]),
     doTriggerDecisions= cms.bool(config["DOTRIGGERDECISIONS"]),
     doTriggerObjects  = cms.bool(config["DOTRIGGEROBJECTS"]),
     doHltFilters      = cms.bool(config["DOHLTFILTERS"]),
@@ -696,20 +705,16 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPIRECLUSTERING"]),
     doBoostedTaus     = cms.bool(config["DOSEMILEPTONICTAUSBOOSTED"]),
-    # TODO : make this consistent with what UZH has done with the other config parameters
-    doPhotons = cms.bool(doPhotons),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     photons = cms.InputTag("slimmedPhotons"),
-    phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
-    phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
-    phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight")
-    #phoHEEPId51Map = cms.InputTag("egmGsfPhotonIDs:heepPhotonID-HEEPV51"),
-    #phoHEEPIdMap = cms.InputTag("egmGsfPhotonIDs:heepPhotonID-HEEPV60"),
-    #phoVetoIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-veto"),
-    #phoLooseIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-loose"),
-    #phoMediumIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-medium"),
-    #phoTightIdMap = cms.InputTag("egmGsfPhotonIDs:cutBasedPhotonID-PHYS14-PU20bx25-V2-standalone-tight"),
+    # TODO: implement the 25ns version of these cut-based photonID maps when they become available
+    #phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-loose"),
+    phoMediumIdMap = cms.InputTag("egmPhotonIDs:mvaPhoID-Spring15-25ns-nonTrig-V2-wp90"),
+    phoIdVerbose = cms.bool(False),
+    phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Values"),
+    phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Categories"),
+    #phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-tight"),
     electrons = cms.InputTag("slimmedElectrons"),
     eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
@@ -720,7 +725,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
-    jets = cms.InputTag( jetsAK4 ),
+    jets = cms.InputTag(jetsAK4),
     fatjets = cms.InputTag(jetsAK8),
     prunedjets = cms.InputTag(jetsAK8pruned),
     softdropjets = cms.InputTag(jetsAK8softdrop),
@@ -775,3 +780,4 @@ process.p = cms.Path()
 if config["DOHLTFILTERS"] and (not config["RUNONMC"]) and config["JSONFILE"].find('reMiniAOD') != -1:
   process.p += process.HBHENoiseFilterResultProducer
 process.p += process.ntuplizer
+
