@@ -83,6 +83,10 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos ||
        trigName.find("HLT_IsoMu17_eta2p1_MediumIsoPFTau") != std::string::npos ||
        trigName.find("HLT_IsoMu20_eta2p1_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_Photon175") != std::string::npos ||
+       trigName.find("HLT_Photon165_HE10") != std::string::npos ||
+       trigName.find("HLT_Photon165_R9Id90_HE10_IsoM") != std::string::npos ||
+       trigName.find("Photon90_CaloIdL_PFHT500") != std::string::npos ||
        trigName.find("HLT_LooseIsoPFTau50") != std::string::npos
    ) return true;
    else
@@ -151,6 +155,12 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
   			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
   			   if( pathNamesLast[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
+  			   if( pathNamesLast[h] == "HLT_PFHT800_v1") vfiredTrigger.push_back( 15 );
+  			   if( pathNamesLast[h] == "HLT_PFHT800_v2") vfiredTrigger.push_back( 16 );
+  			   if( pathNamesLast[h] == "HLT_Photon175_v3") vfiredTrigger.push_back( 17 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_HE10_v3") vfiredTrigger.push_back( 18 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_R9Id90_HE10_IsoM_v2") vfiredTrigger.push_back( 19 );
+  			   if( pathNamesLast[h] == "Photon90_CaloIdL_PFHT500") vfiredTrigger.push_back( 20 );
   			   // else vfiredTrigger.push_back( -99 );
   			}
 			
