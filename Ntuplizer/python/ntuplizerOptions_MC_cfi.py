@@ -27,10 +27,10 @@ config["DOMISSINGET"] = True
 config["DOSEMILEPTONICTAUSBOOSTED"] = False
 
 #--------- AK8 jets reclustering ----------#
-config["ADDAK8GENJETS"] = False #! Add AK8 gen jet collection with pruned and softdrop mass
-config["DOAK8RECLUSTERING"] = False
-config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-config["DOAK8PUPPIRECLUSTERING"] = False #ATLAS sequence
+config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
+config["DOAK8RECLUSTERING"] = True
+config["DOAK8PRUNEDRECLUSTERING"] = True #! To add pruned jet and pruned subjet collection (not in MINIAOD)
+config["DOAK8PUPPIRECLUSTERING"] = True #ATLAS sequence
 config["DOAK10TRIMMEDRECLUSTERING"] = False
 config["DOHBBTAG"] = False #Higgs-tagger
 

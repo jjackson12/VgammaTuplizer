@@ -177,6 +177,11 @@ if config["GETJECFROMDBFILE"]:
     process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFchs')
     process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFPuppi')
     process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_DATA.db')
+  elif config["RUNONMC"]:
+    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK4PFchs')
+    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFchs')
+    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFPuppi')
+    process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_MC.db')
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -299,7 +304,7 @@ bTagParameters = dict(
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
     svSource = cms.InputTag('slimmedSecondaryVertices'),
-    phSource = cms.InputTag('slimmedPhotons'),
+    #phSource = cms.InputTag('slimmedPhotons'),
     elSource = cms.InputTag('slimmedElectrons'),
     muSource = cms.InputTag('slimmedMuons'),
     btagDiscriminators = bTagDiscriminators
@@ -507,7 +512,7 @@ if config["DOMETRECLUSTERING"]:
   process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
   process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
   # TODO check why this isn't in MC but is in data
-  # process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
+  process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
   
   if config["RUNONMC"]:
     process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
@@ -532,7 +537,7 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
 my_id_modules_el = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
-                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff']
+                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
 
 #add them to the VID producer
 for idmod in my_id_modules_el:
@@ -610,7 +615,9 @@ jecLevelsAK8Puppi = []
 jecLevelsForMET = []
 
 JECprefix = "Summer15_25nsV6"
-if config["BUNCHSPACING"] == 25: #TODO check what's going on with the data config file here
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
+   JECprefix = "Summer15_25nsV6"
+elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
    JECprefix = "Summer15_25nsV6"
 
 if config["CORRJETSONTHEFLY"]:
@@ -718,10 +725,10 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     electrons = cms.InputTag("slimmedElectrons"),
     eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
-    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
-    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-loose"),
-    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-medium"),
-    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-tight"),
+    eleVetoIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
+    eleLooseIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
+    eleMediumIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
+    eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
     taus = cms.InputTag(TAUS),
     tausMuTau = cms.InputTag(MUTAUS),
     tausEleTau = cms.InputTag(ELETAUS),
