@@ -42,6 +42,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronHEEPIdMapToken_  ( eleIDtokens[4] )
         , electronHEEPId51MapToken_( eleIDtokens[5] )
 	, eletauToken_		   ( eletauToken    )
+	, doElectronIsoVars_   	   ( runFlags["doElectronIsoVars"]  )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
 
@@ -154,52 +155,53 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     
     /*======= ISO ==========*/
     double rho = *(rho_.product()); 
-    
-    double Aeff04 = 0.5;
-    if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff04 = 0.208;
-    if ( fabs(ele.superCluster()->eta()) > 1.0 && fabs(ele.superCluster()->eta()) < 1.479 ) Aeff04 = 0.209;
-    if ( fabs(ele.superCluster()->eta()) > 1.479 && fabs(ele.superCluster()->eta()) < 2.0 ) Aeff04 = 0.115;
-    if ( fabs(ele.superCluster()->eta()) > 2.0 && fabs(ele.superCluster()->eta()) < 2.2 ) Aeff04 = 0.143;
-    if ( fabs(ele.superCluster()->eta()) > 2.2 && fabs(ele.superCluster()->eta()) < 2.3 ) Aeff04 = 0.183;
-    if ( fabs(ele.superCluster()->eta()) > 2.3 && fabs(ele.superCluster()->eta()) < 2.4 ) Aeff04 = 0.194;
-    if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff04 = 0.261;
+    if ( doElectronIsoVars_ ) {
+      
+      double Aeff04 = 0.5;
+      if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff04 = 0.208;
+      if ( fabs(ele.superCluster()->eta()) > 1.0 && fabs(ele.superCluster()->eta()) < 1.479 ) Aeff04 = 0.209;
+      if ( fabs(ele.superCluster()->eta()) > 1.479 && fabs(ele.superCluster()->eta()) < 2.0 ) Aeff04 = 0.115;
+      if ( fabs(ele.superCluster()->eta()) > 2.0 && fabs(ele.superCluster()->eta()) < 2.2 ) Aeff04 = 0.143;
+      if ( fabs(ele.superCluster()->eta()) > 2.2 && fabs(ele.superCluster()->eta()) < 2.3 ) Aeff04 = 0.183;
+      if ( fabs(ele.superCluster()->eta()) > 2.3 && fabs(ele.superCluster()->eta()) < 2.4 ) Aeff04 = 0.194;
+      if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff04 = 0.261;
 
-    double Aeff03 = 0.5;
-    if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff03 = 0.13;
-    if ( fabs(ele.superCluster()->eta()) > 1.0 && fabs(ele.superCluster()->eta()) < 1.479 ) Aeff03 = 0.14;
-    if ( fabs(ele.superCluster()->eta()) > 1.479 && fabs(ele.superCluster()->eta()) < 2.0 ) Aeff03 = 0.07;
-    if ( fabs(ele.superCluster()->eta()) > 2.0 && fabs(ele.superCluster()->eta()) < 2.2 ) Aeff03 = 0.09;
-    if ( fabs(ele.superCluster()->eta()) > 2.2 && fabs(ele.superCluster()->eta()) < 2.3 ) Aeff03 = 0.11;
-    if ( fabs(ele.superCluster()->eta()) > 2.3 && fabs(ele.superCluster()->eta()) < 2.4 ) Aeff03 = 0.11;
-    if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff03 = 0.14;
+      double Aeff03 = 0.5;
+      if ( fabs(ele.superCluster()->eta()) < 1.0 ) Aeff03 = 0.13;
+      if ( fabs(ele.superCluster()->eta()) > 1.0 && fabs(ele.superCluster()->eta()) < 1.479 ) Aeff03 = 0.14;
+      if ( fabs(ele.superCluster()->eta()) > 1.479 && fabs(ele.superCluster()->eta()) < 2.0 ) Aeff03 = 0.07;
+      if ( fabs(ele.superCluster()->eta()) > 2.0 && fabs(ele.superCluster()->eta()) < 2.2 ) Aeff03 = 0.09;
+      if ( fabs(ele.superCluster()->eta()) > 2.2 && fabs(ele.superCluster()->eta()) < 2.3 ) Aeff03 = 0.11;
+      if ( fabs(ele.superCluster()->eta()) > 2.3 && fabs(ele.superCluster()->eta()) < 2.4 ) Aeff03 = 0.11;
+      if ( fabs(ele.superCluster()->eta()) > 2.4 ) Aeff03 = 0.14;
 
-    float  DeltaCorrectedIso = (ele.chargedHadronIso() + std::max(0., ele.neutralHadronIso() + ele.photonIso() - 0.5*ele.puChargedHadronIso()))/ele.pt();
-    float  RhoCorrectedIso04 = ele.chargedHadronIso() + std::max(ele.neutralHadronIso() + ele.photonIso() - rho*Aeff04, 0.);
-    float  RhoCorrectedIso03 = ele.chargedHadronIso() + std::max(ele.neutralHadronIso() + ele.photonIso() - rho*Aeff03, 0.);
+      float  DeltaCorrectedIso = (ele.chargedHadronIso() + std::max(0., ele.neutralHadronIso() + ele.photonIso() - 0.5*ele.puChargedHadronIso()))/ele.pt();
+      float  RhoCorrectedIso04 = ele.chargedHadronIso() + std::max(ele.neutralHadronIso() + ele.photonIso() - rho*Aeff04, 0.);
+      float  RhoCorrectedIso03 = ele.chargedHadronIso() + std::max(ele.neutralHadronIso() + ele.photonIso() - rho*Aeff03, 0.);
 
-    nBranches_->el_pfDeltaCorrRelIso	    .push_back(DeltaCorrectedIso);
-    nBranches_->el_pfRhoCorrRelIso04	    .push_back(RhoCorrectedIso04);
-    nBranches_->el_pfRhoCorrRelIso03	    .push_back(RhoCorrectedIso03);
-    nBranches_->el_pfRelIso		    .push_back((ele.chargedHadronIso() + ele.neutralHadronIso()+ ele.photonIso())/ele.pt());
-    nBranches_->el_photonIso		    .push_back(ele.photonIso());
-    nBranches_->el_neutralHadIso	    .push_back(ele.neutralHadronIso());
-    nBranches_->el_chargedHadIso	    .push_back(ele.chargedHadronIso());
-    nBranches_->el_trackIso		    .push_back(ele.trackIso());
-    
-    float  DeltaCorrectedIsoBoost = (ele.userIsolation(pat::PfChargedHadronIso) + std::max(0., ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - 0.5*ele.userIsolation(pat::PfPUChargedHadronIso)))/ele.pt();
-    float  RhoCorrectedIso04Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff04, 0.);
-    float  RhoCorrectedIso03Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff03, 0.);   
-    
-    nBranches_->el_pfDeltaCorrRelIsoBoost.push_back(DeltaCorrectedIsoBoost);
-    nBranches_->el_pfRhoCorrRelIso04Boost.push_back(RhoCorrectedIso04Boost);
-    nBranches_->el_pfRhoCorrRelIso03Boost.push_back(RhoCorrectedIso03Boost);
-    nBranches_->el_pfRelIsoBoost	  .push_back((ele.userIsolation(pat::PfChargedHadronIso) + ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso))/ele.pt());   
-    nBranches_->el_photonIsoBoost        .push_back(ele.userIsolation(pat::PfGammaIso));
-    nBranches_->el_neutralHadIsoBoost    .push_back(ele.userIsolation(pat::PfNeutralHadronIso));
-    nBranches_->el_chargedHadIsoBoost    .push_back(ele.userIsolation(pat::PfChargedHadronIso));
-    nBranches_->el_SemileptonicPFIso	  .push_back(RhoCorrectedIso03);// /ele.pt()							     );
-    if ( doBoostedTaus_ )  nBranches_->el_SemileptonicCorrPFIso .push_back( ElectronCorrPFIso(ele, Aeff03, rho , taus_ ));// /ele.pt()
-     
+      nBranches_->el_pfDeltaCorrRelIso	    .push_back(DeltaCorrectedIso);
+      nBranches_->el_pfRhoCorrRelIso04	    .push_back(RhoCorrectedIso04);
+      nBranches_->el_pfRhoCorrRelIso03	    .push_back(RhoCorrectedIso03);
+      nBranches_->el_pfRelIso		    .push_back((ele.chargedHadronIso() + ele.neutralHadronIso()+ ele.photonIso())/ele.pt());
+      nBranches_->el_photonIso		    .push_back(ele.photonIso());
+      nBranches_->el_neutralHadIso	    .push_back(ele.neutralHadronIso());
+      nBranches_->el_chargedHadIso	    .push_back(ele.chargedHadronIso());
+      nBranches_->el_trackIso		    .push_back(ele.trackIso());
+      
+      float  DeltaCorrectedIsoBoost = (ele.userIsolation(pat::PfChargedHadronIso) + std::max(0., ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - 0.5*ele.userIsolation(pat::PfPUChargedHadronIso)))/ele.pt();
+      float  RhoCorrectedIso04Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff04, 0.);
+      float  RhoCorrectedIso03Boost = ele.userIsolation(pat::PfChargedHadronIso) + std::max(ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso) - rho*Aeff03, 0.);   
+      
+      nBranches_->el_pfDeltaCorrRelIsoBoost.push_back(DeltaCorrectedIsoBoost);
+      nBranches_->el_pfRhoCorrRelIso04Boost.push_back(RhoCorrectedIso04Boost);
+      nBranches_->el_pfRhoCorrRelIso03Boost.push_back(RhoCorrectedIso03Boost);
+      nBranches_->el_pfRelIsoBoost	  .push_back((ele.userIsolation(pat::PfChargedHadronIso) + ele.userIsolation(pat::PfNeutralHadronIso) + ele.userIsolation(pat::PfGammaIso))/ele.pt());   
+      nBranches_->el_photonIsoBoost        .push_back(ele.userIsolation(pat::PfGammaIso));
+      nBranches_->el_neutralHadIsoBoost    .push_back(ele.userIsolation(pat::PfNeutralHadronIso));
+      nBranches_->el_chargedHadIsoBoost    .push_back(ele.userIsolation(pat::PfChargedHadronIso));
+      nBranches_->el_SemileptonicPFIso	  .push_back(RhoCorrectedIso03);// /ele.pt()							     );
+      if ( doBoostedTaus_ )  nBranches_->el_SemileptonicCorrPFIso .push_back( ElectronCorrPFIso(ele, Aeff03, rho , taus_ ));// /ele.pt()
+    } 
     /*======= IDs ==========*/   	    
     float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
     nBranches_->el_et                      .push_back(et);

@@ -12,7 +12,7 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
-           
+
 ####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -98,7 +98,7 @@ fatjet_ptmin = 100.0
 from RecoJets.Configuration.RecoPFJets_cff import *
 from RecoJets.JetProducers.AnomalousCellParameters_cfi import *
 from RecoJets.JetProducers.PFJetParameters_cfi import *
-                                                                                                          
+
 process.chs = cms.EDFilter("CandPtrSelector",
   src = cms.InputTag('packedPFCandidates'),
   cut = cms.string('fromPV')
@@ -687,7 +687,7 @@ if config["CORRMETONTHEFLY"]:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-                                                                                      
+
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPhotons     = cms.bool(config["DOPHOTONS"]),
@@ -698,7 +698,9 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doGenEvent        = cms.bool(config["DOGENEVENT"]),
     doPileUp        = cms.bool(config["DOPILEUP"]),
     doElectrons       = cms.bool(config["DOELECTRONS"]),
+    doElectronIsoVars   = cms.bool(config["DOELECTRONISOVARS"]),
     doMuons        = cms.bool(config["DOMUONS"]),
+    doMuonIsoVars   = cms.bool(config["DOMUONISOVARS"]),
     doTaus        = cms.bool(config["DOTAUS"]),
     doAK8Jets        = cms.bool(config["DOAK8JETS"]),
     doAK4Jets        = cms.bool(config["DOAK4JETS"]),

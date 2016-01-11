@@ -27,6 +27,7 @@ private:
    edm::Handle<reco::VertexCollection> 	    vertices_    ;
    edm::Handle<double> 			    rho_         ;
    edm::Handle<pat::TauCollection> 	    taus_        ;
+   bool doMuonIsoVars_;
    bool doBoostedTaus_;
 
 };

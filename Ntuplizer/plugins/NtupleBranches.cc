@@ -81,14 +81,16 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "el_et"                                             , &el_et                                         );
 		tree_->Branch( "el_superCluster_eta"                               , &el_superCluster_eta                           );
 
-		tree_->Branch( "el_pfRhoCorrRelIso03"                              , &el_pfRhoCorrRelIso03                          );
-		tree_->Branch( "el_pfRhoCorrRelIso04"                              , &el_pfRhoCorrRelIso04                          );
-		tree_->Branch( "el_pfDeltaCorrRelIso"                              , &el_pfDeltaCorrRelIso                          );
-		tree_->Branch( "el_pfRelIso"                                       , &el_pfRelIso                                   );
-		tree_->Branch( "el_photonIso"                                      , &el_photonIso                                  );
-		tree_->Branch( "el_neutralHadIso"                                  , &el_neutralHadIso                              );
-		tree_->Branch( "el_chargedHadIso"                                  , &el_chargedHadIso                              );
-		tree_->Branch( "el_trackIso"                                       , &el_trackIso                                   );
+    if (runFlags["doElectronIsoVars"] ) {
+		  tree_->Branch( "el_pfRhoCorrRelIso03"                              , &el_pfRhoCorrRelIso03                          );
+		  tree_->Branch( "el_pfRhoCorrRelIso04"                              , &el_pfRhoCorrRelIso04                          );
+		  tree_->Branch( "el_pfDeltaCorrRelIso"                              , &el_pfDeltaCorrRelIso                          );
+		  tree_->Branch( "el_pfRelIso"                                       , &el_pfRelIso                                   );
+		  tree_->Branch( "el_photonIso"                                      , &el_photonIso                                  );
+		  tree_->Branch( "el_neutralHadIso"                                  , &el_neutralHadIso                              );
+		  tree_->Branch( "el_chargedHadIso"                                  , &el_chargedHadIso                              );
+		  tree_->Branch( "el_trackIso"                                       , &el_trackIso                                   );
+    }
 
 		tree_->Branch( "el_passConversionVeto"                             , &el_passConversionVeto                         );
 		tree_->Branch( "el_full5x5_sigmaIetaIeta"                          , &el_full5x5_sigmaIetaIeta                      );
@@ -128,16 +130,18 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "el_isHeep51ElectronBoosted"                        , &el_isHeep51ElectronBoosted                    );
 		tree_->Branch( "el_isLooseElectronBoosted"                         , &el_isLooseElectronBoosted                     );
 
-		tree_->Branch( "el_pfRhoCorrRelIso03Boost"                         , &el_pfRhoCorrRelIso03Boost                     );
-		tree_->Branch( "el_pfRhoCorrRelIso04Boost"                         , &el_pfRhoCorrRelIso04Boost                     );
-		tree_->Branch( "el_pfDeltaCorrRelIsoBoost"                         , &el_pfDeltaCorrRelIsoBoost                     );
-		tree_->Branch( "el_pfRelIsoBoost"                                  , &el_pfRelIsoBoost                              );
-		tree_->Branch( "el_photonIsoBoost"                                 , &el_photonIsoBoost                             );
-		tree_->Branch( "el_neutralHadIsoBoost"                             , &el_neutralHadIsoBoost                         );
-		tree_->Branch( "el_chargedHadIsoBoost"                             , &el_chargedHadIsoBoost                         );
+    if ( runFlags["doElectronIsoVars"] ) {
+		  tree_->Branch( "el_pfRhoCorrRelIso03Boost"                         , &el_pfRhoCorrRelIso03Boost                     );
+		  tree_->Branch( "el_pfRhoCorrRelIso04Boost"                         , &el_pfRhoCorrRelIso04Boost                     );
+		  tree_->Branch( "el_pfDeltaCorrRelIsoBoost"                         , &el_pfDeltaCorrRelIsoBoost                     );
+		  tree_->Branch( "el_pfRelIsoBoost"                                  , &el_pfRelIsoBoost                              );
+		  tree_->Branch( "el_photonIsoBoost"                                 , &el_photonIsoBoost                             );
+		  tree_->Branch( "el_neutralHadIsoBoost"                             , &el_neutralHadIsoBoost                         );
+		  tree_->Branch( "el_chargedHadIsoBoost"                             , &el_chargedHadIsoBoost                         );
 
-		tree_->Branch( "el_SemileptonicPFIso"                              , &el_SemileptonicPFIso                          );
-		tree_->Branch( "el_SemileptonicCorrPFIso"                          , &el_SemileptonicCorrPFIso                      );
+		  tree_->Branch( "el_SemileptonicPFIso"                              , &el_SemileptonicPFIso                          );
+		  tree_->Branch( "el_SemileptonicCorrPFIso"                          , &el_SemileptonicCorrPFIso                      );
+    }
 	} //doElectrons
 
 	if ( runFlags["doMuons"] ){
@@ -157,25 +161,30 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "mu_isPFMuon"                                       , &mu_isPFMuon                                    );
 		tree_->Branch( "mu_isSoftMuon"                                     , &mu_isSoftMuon                                  );
 
-		tree_->Branch( "mu_pfRhoCorrRelIso03"                              , &mu_pfRhoCorrRelIso03                           );
-		tree_->Branch( "mu_pfRhoCorrRelIso04"                              , &mu_pfRhoCorrRelIso04                           );
-		tree_->Branch( "mu_pfDeltaCorrRelIso"                              , &mu_pfDeltaCorrRelIso                           );
-		tree_->Branch( "mu_pfRelIso"                                       , &mu_pfRelIso                                    );
-		tree_->Branch( "mu_photonIso"                                      , &mu_photonIso                                   );
-		tree_->Branch( "mu_neutralHadIso"                                  , &mu_neutralHadIso                               );
-		tree_->Branch( "mu_chargedHadIso"                                  , &mu_chargedHadIso                               );
-		tree_->Branch( "mu_trackIso"                                       , &mu_trackIso                                    );
+
+    if ( runFlags["doMuonIsoVars"] ) {
+		  tree_->Branch( "mu_pfRhoCorrRelIso03"                              , &mu_pfRhoCorrRelIso03                           );
+		  tree_->Branch( "mu_pfRhoCorrRelIso04"                              , &mu_pfRhoCorrRelIso04                           );
+		  tree_->Branch( "mu_pfDeltaCorrRelIso"                              , &mu_pfDeltaCorrRelIso                           );
+		  tree_->Branch( "mu_pfRelIso"                                       , &mu_pfRelIso                                    );
+		  tree_->Branch( "mu_photonIso"                                      , &mu_photonIso                                   );
+		  tree_->Branch( "mu_neutralHadIso"                                  , &mu_neutralHadIso                               );
+		  tree_->Branch( "mu_chargedHadIso"                                  , &mu_chargedHadIso                               );
+		  tree_->Branch( "mu_trackIso"                                       , &mu_trackIso                                    );
+    }
 		tree_->Branch( "mu_d0"                                             , &mu_d0                                          );
 		tree_->Branch( "mu_bestTrack_pt"                                   , &mu_bestTrack_pt                                );
 		tree_->Branch( "mu_bestTrack_ptErr"                                , &mu_bestTrack_ptErr                             );
 
-		tree_->Branch( "mu_pfRhoCorrRelIso03Boost"                         , &mu_pfRhoCorrRelIso03Boost                      );
-		tree_->Branch( "mu_pfRhoCorrRelIso04Boost"                         , &mu_pfRhoCorrRelIso04Boost                      );
-		tree_->Branch( "mu_pfDeltaCorrRelIsoBoost"                         , &mu_pfDeltaCorrRelIsoBoost                      );
-		tree_->Branch( "mu_pfRelIsoBoost"                                  , &mu_pfRelIsoBoost                               );
-		tree_->Branch( "mu_photonIsoBoost"                                 , &mu_photonIsoBoost                              );
-		tree_->Branch( "mu_neutralHadIsoBoost"                             , &mu_neutralHadIsoBoost                          );
-		tree_->Branch( "mu_chargedHadIsoBoost"                             , &mu_chargedHadIsoBoost                          );
+    if ( runFlags["doMuonIsoVars"] ) {
+		  tree_->Branch( "mu_pfRhoCorrRelIso03Boost"                         , &mu_pfRhoCorrRelIso03Boost                      );
+		  tree_->Branch( "mu_pfRhoCorrRelIso04Boost"                         , &mu_pfRhoCorrRelIso04Boost                      );
+		  tree_->Branch( "mu_pfDeltaCorrRelIsoBoost"                         , &mu_pfDeltaCorrRelIsoBoost                      );
+		  tree_->Branch( "mu_pfRelIsoBoost"                                  , &mu_pfRelIsoBoost                               );
+		  tree_->Branch( "mu_photonIsoBoost"                                 , &mu_photonIsoBoost                              );
+		  tree_->Branch( "mu_neutralHadIsoBoost"                             , &mu_neutralHadIsoBoost                          );
+		  tree_->Branch( "mu_chargedHadIsoBoost"                             , &mu_chargedHadIsoBoost                          );
+    }
 
 		tree_->Branch( "mu_normChi2"                                       , &mu_normChi2                                    );
 		tree_->Branch( "mu_isGlobalMuon"                                   , &mu_isGlobalMuon                                );
@@ -184,8 +193,11 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "mu_pixelHits"                                      , &mu_pixelHits                                   );
 		tree_->Branch( "mu_globalHits"                                     , &mu_globalHits                                  );
 
-		tree_->Branch( "mu_SemileptonicPFIso"                              , &mu_SemileptonicPFIso                           );
-		tree_->Branch( "mu_SemileptonicCorrPFIso"                          , &mu_SemileptonicCorrPFIso                       );
+
+    if ( runFlags["doMuonIsoVars"] ) {
+		  tree_->Branch( "mu_SemileptonicPFIso"                              , &mu_SemileptonicPFIso                           );
+		  tree_->Branch( "mu_SemileptonicCorrPFIso"                          , &mu_SemileptonicCorrPFIso                       );
+    }
 	} //doMuons
 
 	if ( runFlags["doTaus"] ){
@@ -717,16 +729,16 @@ void NtupleBranches::reset( void ){
 	el_isHeep51ElectronBoosted.clear();
 	el_isLooseElectronBoosted.clear();
 
-	el_pfRhoCorrRelIso03Boost.clear();
-	el_pfRhoCorrRelIso04Boost.clear();
-	el_pfDeltaCorrRelIsoBoost.clear();
-	el_pfRelIsoBoost.clear();
-	el_photonIsoBoost.clear();
-	el_neutralHadIsoBoost.clear();
-	el_chargedHadIsoBoost.clear();
+  el_pfRhoCorrRelIso03Boost.clear();
+  el_pfRhoCorrRelIso04Boost.clear();
+  el_pfDeltaCorrRelIsoBoost.clear();
+  el_pfRelIsoBoost.clear();
+  el_photonIsoBoost.clear();
+  el_neutralHadIsoBoost.clear();
+  el_chargedHadIsoBoost.clear();
 
-	el_SemileptonicPFIso.clear();
-	el_SemileptonicCorrPFIso.clear();
+  el_SemileptonicPFIso.clear();
+  el_SemileptonicCorrPFIso.clear();
 
 	/** muons */
 	mu_N        = 0;
@@ -745,6 +757,18 @@ void NtupleBranches::reset( void ){
 	mu_isPFMuon.clear();
 	mu_isSoftMuon.clear();
 
+	mu_normChi2.clear();
+	mu_isGlobalMuon.clear();
+	mu_trackerHits.clear();
+	mu_matchedStations.clear();
+	mu_pixelHits.clear();
+	mu_globalHits.clear();
+
+	mu_d0.clear();
+	mu_dz.clear();
+	mu_bestTrack_pt.clear();
+	mu_bestTrack_ptErr.clear();
+
 	mu_pfRhoCorrRelIso03.clear();
 	mu_pfRhoCorrRelIso04.clear();
 	mu_pfDeltaCorrRelIso.clear();
@@ -753,10 +777,6 @@ void NtupleBranches::reset( void ){
 	mu_neutralHadIso.clear();
 	mu_chargedHadIso.clear();
 	mu_trackIso.clear();
-	mu_d0.clear();
-	mu_dz.clear();
-	mu_bestTrack_pt.clear();
-	mu_bestTrack_ptErr.clear();
 
 	mu_pfRhoCorrRelIso03Boost.clear();
 	mu_pfRhoCorrRelIso04Boost.clear();
@@ -766,12 +786,6 @@ void NtupleBranches::reset( void ){
 	mu_neutralHadIsoBoost.clear();
 	mu_chargedHadIsoBoost.clear();
 
-	mu_normChi2.clear();
-	mu_isGlobalMuon.clear();
-	mu_trackerHits.clear();
-	mu_matchedStations.clear();
-	mu_pixelHits.clear();
-	mu_globalHits.clear();
 
 	mu_SemileptonicPFIso.clear();
 	mu_SemileptonicCorrPFIso.clear();
