@@ -684,7 +684,7 @@ if config["CORRMETONTHEFLY"]:
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPhotons     = cms.bool(config["DOPHOTONS"]),
-
+    doJetIdVars   = cms.bool(config["DOJETIDVARS"]),
     runOnMC	      = cms.bool(config["RUNONMC"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenJets        = cms.bool(config["DOGENJETS"]),

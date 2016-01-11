@@ -92,6 +92,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	runFlags["doTaus"] = iConfig.getParameter<bool>("doTaus");
 	runFlags["doAK8Jets"] = iConfig.getParameter<bool>("doAK8Jets");
 	runFlags["doAK4Jets"] = iConfig.getParameter<bool>("doAK4Jets");
+	runFlags["doJetIdVars"] = iConfig.getParameter<bool>("doJetIdVars");
 	runFlags["doVertices"] = iConfig.getParameter<bool>("doVertices");
 	runFlags["doTriggerDecisions"] = iConfig.getParameter<bool>("doTriggerDecisions");
 	runFlags["doTriggerObjects"] = iConfig.getParameter<bool>("doTriggerObjects");

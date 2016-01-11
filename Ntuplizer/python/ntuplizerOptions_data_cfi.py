@@ -19,6 +19,7 @@ config["DOMUONS"] = True
 config["DOTAUS"] = False
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
+config["DOJETIDVARS"] = False
 config["DOVERTICES"] = True
 config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = True
