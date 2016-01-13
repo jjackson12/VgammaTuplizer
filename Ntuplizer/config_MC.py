@@ -13,7 +13,7 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
-				   
+
 ####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -690,6 +690,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doGenEvent        = cms.bool(config["DOGENEVENT"]),
     doPileUp        = cms.bool(config["DOPILEUP"]),
     doElectrons       = cms.bool(config["DOELECTRONS"]),
+    doElectronIdVars   = cms.bool(config["DOELECTRONIDVARS"]),
+    doElectronIsoVars   = cms.bool(config["DOELECTRONISOVARS"]),
     doMuons        = cms.bool(config["DOMUONS"]),
     doMuonIdVars   = cms.bool(config["DOMUONIDVARS"]),
     doMuonIsoVars   = cms.bool(config["DOMUONISOVARS"]),
