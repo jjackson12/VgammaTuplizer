@@ -1,5 +1,6 @@
 ####### Process initialization ##########
 
+import sys
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")
@@ -13,7 +14,6 @@ process.TFileService = cms.Service("TFileService",
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
 
-				   
 ####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -23,11 +23,9 @@ options = VarParsing.VarParsing ('analysis')
 
 options.maxEvents = 200
 
-
 #data file
 
 options.inputFiles = 'root://eoscms.cern.ch//store/data/Run2015D/SinglePhoton/MINIAOD/PromptReco-v4/000/258/177/00000/FC29564D-0F6D-E511-9A7D-02163E0146F2.root'
-
 
 options.parseArguments()
 
@@ -96,7 +94,7 @@ fatjet_ptmin = 100.0
 from RecoJets.Configuration.RecoPFJets_cff import *
 from RecoJets.JetProducers.AnomalousCellParameters_cfi import *
 from RecoJets.JetProducers.PFJetParameters_cfi import *
-                                                                                                          
+
 process.chs = cms.EDFilter("CandPtrSelector",
   src = cms.InputTag('packedPFCandidates'),
   cut = cms.string('fromPV')
@@ -175,6 +173,8 @@ if config["GETJECFROMDBFILE"]:
     process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFchs')
     process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFPuppi')
     process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_DATA.db')
+  else:
+    sys.exit("This config file expects to run on data, but an option to run on MC was received.")
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -504,7 +504,6 @@ if config["DOMETRECLUSTERING"]:
                            )
   process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
   process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
-  # TODO check why this isn't in MC but is in data
   process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
   
   if config["RUNONMC"]:
@@ -692,6 +691,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPileUp        = cms.bool(config["DOPILEUP"]),
     doElectrons       = cms.bool(config["DOELECTRONS"]),
     doMuons        = cms.bool(config["DOMUONS"]),
+    doMuonIdVars   = cms.bool(config["DOMUONIDVARS"]),
+    doMuonIsoVars   = cms.bool(config["DOMUONISOVARS"]),
     doTaus        = cms.bool(config["DOTAUS"]),
     doAK8Jets        = cms.bool(config["DOAK8JETS"]),
     doAK4Jets        = cms.bool(config["DOAK4JETS"]),
@@ -708,8 +709,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     photons = cms.InputTag("slimmedPhotons"),
-    # TODO: implement the 25ns version of these cut-based photonID maps when they become available
-    #phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-loose"),
     phoMediumIdMap = cms.InputTag("egmPhotonIDs:mvaPhoID-Spring15-25ns-nonTrig-V2-wp90"),
     phoIdVerbose = cms.bool(False),
     phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Values"),

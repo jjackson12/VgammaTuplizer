@@ -1,5 +1,6 @@
 ####### Process initialization ##########
 
+import sys
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")
@@ -12,7 +13,7 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
-
+				   
 ####### Config parser ##########
 
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -20,15 +21,12 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 
 
-options.maxEvents = -1
-
+options.maxEvents = 200
 
 #data file
 
-#options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
-#mc file
-
 options.inputFiles='file:/afs/cern.ch/user/j/johakala/work/public/WZgammaSampleMC/M-2000/Job_1.root'
+
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -170,16 +168,13 @@ if config["GETJECFROMDBFILE"]:
             ),
             connect = cms.string('sqlite:JEC/Summer15_25nsV6_MC.db')
             )
-  if not config["RUNONMC"]:
-    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK4PFchs')
-    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFchs')
-    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_DATA.db')
-  elif config["RUNONMC"]:
+  if config["RUNONMC"]:
     process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK4PFchs')
     process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFchs')
     process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFPuppi')
     process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_MC.db')
+  else:
+    sys.exit("This config file expects to run on MC, but an option to run on data was received.")
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -509,7 +504,6 @@ if config["DOMETRECLUSTERING"]:
                            )
   process.patPFMetT1T2Corr.type1JetPtThreshold = cms.double(15.0)
   process.patPFMetT2Corr.type1JetPtThreshold = cms.double(15.0)
-  # TODO check why this isn't in MC but is in data
   process.slimmedMETs.t01Variation = cms.InputTag("slimmedMETs","","RECO")
   
   if config["RUNONMC"]:
@@ -685,7 +679,7 @@ if config["CORRMETONTHEFLY"]:
 #                        filterParams = pfJetIDSelector.clone(),
 #                        src = cms.InputTag(jetsAK8)
 #                        )
-
+                                                                                      
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPhotons     = cms.bool(config["DOPHOTONS"]),
@@ -696,8 +690,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doGenEvent        = cms.bool(config["DOGENEVENT"]),
     doPileUp        = cms.bool(config["DOPILEUP"]),
     doElectrons       = cms.bool(config["DOELECTRONS"]),
-    doElectronIdVars   = cms.bool(config["DOELECTRONIDVARS"]),
-    doElectronIsoVars   = cms.bool(config["DOELECTRONISOVARS"]),
     doMuons        = cms.bool(config["DOMUONS"]),
     doMuonIdVars   = cms.bool(config["DOMUONIDVARS"]),
     doMuonIsoVars   = cms.bool(config["DOMUONISOVARS"]),
@@ -717,8 +709,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     photons = cms.InputTag("slimmedPhotons"),
-    # TODO: implement the 25ns version of these cut-based photonID maps when they become available
-    #phoLooseIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-loose"),
     phoMediumIdMap = cms.InputTag("egmPhotonIDs:mvaPhoID-Spring15-25ns-nonTrig-V2-wp90"),
     phoIdVerbose = cms.bool(False),
     phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Values"),
