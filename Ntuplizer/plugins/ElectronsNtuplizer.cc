@@ -42,6 +42,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronHEEPIdMapToken_  ( eleIDtokens[4] )
         , electronHEEPId51MapToken_( eleIDtokens[5] )
 	, eletauToken_		   ( eletauToken    )
+	, doElectronIdVars_   	   ( runFlags["doElectronIdVars"]  )
 	, doElectronIsoVars_   	   ( runFlags["doElectronIsoVars"]  )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
 {
@@ -205,38 +206,40 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     /*======= IDs ==========*/   	    
     float et = ele.energy()!=0. ? ele.et()/ele.energy()*ele.caloEnergy() : 0.;
     nBranches_->el_et                      .push_back(et);
-    nBranches_->el_passConversionVeto      .push_back(ele.passConversionVeto());
-    nBranches_->el_full5x5_sigmaIetaIeta   .push_back(ele.full5x5_sigmaIetaIeta());
-    nBranches_->el_dEtaIn		   .push_back(ele.deltaEtaSuperClusterTrackAtVtx());
-    nBranches_->el_dPhiIn		   .push_back(ele.deltaPhiSuperClusterTrackAtVtx());
-    nBranches_->el_hOverE		   .push_back(ele.hcalOverEcal());
-    nBranches_->el_dz  		           .push_back(ele.gsfTrack()->dz((*firstGoodVertex).position()));
-    nBranches_->el_d0  	                   .push_back((-1)*ele.gsfTrack()->dxy((*firstGoodVertex).position()));
-    nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
-    
-    nBranches_->el_dr03EcalRecHitSumEt.push_back(ele.dr03EcalRecHitSumEt());
-    nBranches_->el_dr03HcalDepth1TowerSumEt.push_back(ele.dr03HcalDepth1TowerSumEt());
-    nBranches_->el_rho.push_back(*(rho_.product()));
-    nBranches_->el_ecalDriven.push_back(ele.ecalDriven());
-    nBranches_->el_dEtaInSeed.push_back(dEtaInSeed( ele ));
-    nBranches_->el_full5x5_e2x5Max.push_back(ele.full5x5_e2x5Max());
-    nBranches_->el_full5x5_e5x5.push_back(ele.full5x5_e5x5());
-    nBranches_->el_full5x5_e1x5.push_back(ele.full5x5_e1x5());
-    nBranches_->el_dr03TkSumPt.push_back(ele.dr03TkSumPt());
-    nBranches_->el_superCluster_e.push_back(ele.superCluster()->energy());
-    nBranches_->el_hadronicOverEm.push_back(ele.hadronicOverEm());
+    if ( doElectronIdVars_ ) {
+      nBranches_->el_passConversionVeto      .push_back(ele.passConversionVeto());
+      nBranches_->el_full5x5_sigmaIetaIeta   .push_back(ele.full5x5_sigmaIetaIeta());
+      nBranches_->el_dEtaIn		   .push_back(ele.deltaEtaSuperClusterTrackAtVtx());
+      nBranches_->el_dPhiIn		   .push_back(ele.deltaPhiSuperClusterTrackAtVtx());
+      nBranches_->el_hOverE		   .push_back(ele.hcalOverEcal());
+      nBranches_->el_dz  		           .push_back(ele.gsfTrack()->dz((*firstGoodVertex).position()));
+      nBranches_->el_d0  	                   .push_back((-1)*ele.gsfTrack()->dxy((*firstGoodVertex).position()));
+      nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
+      
+      nBranches_->el_dr03EcalRecHitSumEt.push_back(ele.dr03EcalRecHitSumEt());
+      nBranches_->el_dr03HcalDepth1TowerSumEt.push_back(ele.dr03HcalDepth1TowerSumEt());
+      nBranches_->el_rho.push_back(*(rho_.product()));
+      nBranches_->el_ecalDriven.push_back(ele.ecalDriven());
+      nBranches_->el_dEtaInSeed.push_back(dEtaInSeed( ele ));
+      nBranches_->el_full5x5_e2x5Max.push_back(ele.full5x5_e2x5Max());
+      nBranches_->el_full5x5_e5x5.push_back(ele.full5x5_e5x5());
+      nBranches_->el_full5x5_e1x5.push_back(ele.full5x5_e1x5());
+      nBranches_->el_dr03TkSumPt.push_back(ele.dr03TkSumPt());
+      nBranches_->el_superCluster_e.push_back(ele.superCluster()->energy());
+      nBranches_->el_hadronicOverEm.push_back(ele.hadronicOverEm());
 
-    reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
-    nBranches_->el_relIsoWithDBeta	    .push_back((pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt ))/ele.pt());
+      reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
+      nBranches_->el_relIsoWithDBeta	    .push_back((pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt ))/ele.pt());
    
-    if( ele.ecalEnergy() == 0 ){
-    	    nBranches_->el_ooEmooP.push_back(1e30);
-    }
-    else if( !std::isfinite(ele.ecalEnergy())){
-    	    nBranches_->el_ooEmooP.push_back(1e30);
-    }
-    else{
-    	    nBranches_->el_ooEmooP.push_back(fabs(1.0/ele.ecalEnergy() - ele.eSuperClusterOverP()/ele.ecalEnergy() ));
+      if( ele.ecalEnergy() == 0 ){
+      	    nBranches_->el_ooEmooP.push_back(1e30);
+      }
+      else if( !std::isfinite(ele.ecalEnergy())){
+      	    nBranches_->el_ooEmooP.push_back(1e30);
+      }
+      else{
+      	    nBranches_->el_ooEmooP.push_back(fabs(1.0/ele.ecalEnergy() - ele.eSuperClusterOverP()/ele.ecalEnergy() ));
+      }
     }
 
     const auto el = electrons_->ptrAt(nele);

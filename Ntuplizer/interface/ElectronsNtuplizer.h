@@ -43,6 +43,7 @@ private:
    edm::Handle<edm::ValueMap<bool> >         medium_id_decisions;
    edm::Handle<edm::ValueMap<bool> >         tight_id_decisions;
    edm::Handle<pat::TauCollection> 	     taus_         ;  
+   bool doElectronIdVars_;
    bool doElectronIsoVars_;
    bool doBoostedTaus_;
 };

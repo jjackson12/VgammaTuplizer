@@ -20,7 +20,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 
 
-options.maxEvents = 200
+options.maxEvents = -1
 
 
 #data file
@@ -28,9 +28,7 @@ options.maxEvents = 200
 #options.inputFiles = '/store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v3/000/256/728/00000/3ABED78F-455F-E511-B394-02163E011CE5.root'
 #mc file
 
-options.inputFiles = 'root://eoscms.cern.ch//store/mc/RunIISpring15DR74/GGJets_M-1000To2000_Pt-50_13TeV-sherpa/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/20000/6E03DD41-B82F-E511-971A-02163E013645.root'
-
-
+options.inputFiles='file:/afs/cern.ch/user/j/johakala/work/public/WZgammaSampleMC/M-2000/Job_1.root'
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -698,8 +696,10 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doGenEvent        = cms.bool(config["DOGENEVENT"]),
     doPileUp        = cms.bool(config["DOPILEUP"]),
     doElectrons       = cms.bool(config["DOELECTRONS"]),
+    doElectronIdVars   = cms.bool(config["DOELECTRONIDVARS"]),
     doElectronIsoVars   = cms.bool(config["DOELECTRONISOVARS"]),
     doMuons        = cms.bool(config["DOMUONS"]),
+    doMuonIdVars   = cms.bool(config["DOMUONIDVARS"]),
     doMuonIsoVars   = cms.bool(config["DOMUONISOVARS"]),
     doTaus        = cms.bool(config["DOTAUS"]),
     doAK8Jets        = cms.bool(config["DOAK8JETS"]),

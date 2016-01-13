@@ -14,6 +14,7 @@ MuonsNtuplizer::MuonsNtuplizer( edm::EDGetTokenT<pat::MuonCollection>    muonTok
 	, verticeToken_     ( verticeToken )
 	, rhoToken_	    ( rhoToken     )
 	, mutauToken_       ( mutauToken   )  
+	, doMuonIdVars_    ( runFlags["doMuonIdVars"]  )
 	, doMuonIsoVars_    ( runFlags["doMuonIsoVars"]  )
 	, doBoostedTaus_    ( runFlags["doBoostedTaus"]  )
 {
@@ -125,50 +126,52 @@ void MuonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSet
     nBranches_->mu_isHighPtMuon.push_back(mu.isHighPtMuon(*firstGoodVertex));
     nBranches_->mu_isTightMuon .push_back(mu.isTightMuon(*firstGoodVertex));
   
-    float dxy = fabs(mu.muonBestTrack()->dxy( (*firstGoodVertex).position() ));
-    nBranches_->mu_d0          .push_back(dxy);
-    nBranches_->mu_dz          .push_back(mu.muonBestTrack()->dz( (*firstGoodVertex).position() ));
-    nBranches_->mu_bestTrack_pt.push_back(mu.muonBestTrack()->pt());  
-    nBranches_->mu_bestTrack_ptErr.push_back(mu.muonBestTrack()->ptError());
-    
     nBranches_->mu_isSoftMuon  .push_back(mu.isSoftMuon(*firstGoodVertex));
     nBranches_->mu_isLooseMuon .push_back(mu.isLooseMuon());
     nBranches_->mu_isPFMuon    .push_back(mu.isPFMuon());   
-        
+
     double rho = *(rho_.product());     
     float deltaR = 0.3;
     double energy = TMath::Pi()*deltaR*deltaR*rho;
-  
-    nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
-   
+    if ( doMuonIdVars_ ) {
+      float dxy = fabs(mu.muonBestTrack()->dxy( (*firstGoodVertex).position() ));
+      nBranches_->mu_d0          .push_back(dxy);
+      //nBranches_->mu_dz          .push_back(mu.muonBestTrack()->dz( (*firstGoodVertex).position() ));
+      nBranches_->mu_bestTrack_pt.push_back(mu.muonBestTrack()->pt());  
+      nBranches_->mu_bestTrack_ptErr.push_back(mu.muonBestTrack()->ptError());
       
-    double normChi2	   = -99;
-    int    trackerHits     = -99;
-    int    pixelHits	   = -99;
-    int    globalMuonHits  = -99;
+          
   
-    if( mu.isGlobalMuon() ) 
-      normChi2=mu.normChi2();
+      nBranches_->mu_isGlobalMuon.push_back(mu.isGlobalMuon());  
+      
+      double normChi2	   = -99;
+      int    trackerHits     = -99;
+      int    pixelHits	   = -99;
+      int    globalMuonHits  = -99;
   
-    if( !mu.track().isNull() )
-      trackerHits = (mu.track())->hitPattern().trackerLayersWithMeasurement();
+      if( mu.isGlobalMuon() ) 
+        normChi2=mu.normChi2();
   
-    if( !mu.innerTrack().isNull() )
-      pixelHits = (mu.innerTrack())->hitPattern().numberOfValidPixelHits();
+      if( !mu.track().isNull() )
+        trackerHits = (mu.track())->hitPattern().trackerLayersWithMeasurement();
   
-    if( !mu.globalTrack().isNull() )
-      globalMuonHits = (mu.globalTrack())->hitPattern().numberOfValidMuonHits();
+      if( !mu.innerTrack().isNull() )
+        pixelHits = (mu.innerTrack())->hitPattern().numberOfValidPixelHits();
   
-    nBranches_->mu_normChi2	   .push_back(normChi2);
-    nBranches_->mu_trackerHits    .push_back(trackerHits);
-    nBranches_->mu_matchedStations.push_back(mu.numberOfMatchedStations());
-    nBranches_->mu_pixelHits	   .push_back(pixelHits);
-    nBranches_->mu_globalHits     .push_back(globalMuonHits);
+      if( !mu.globalTrack().isNull() )
+        globalMuonHits = (mu.globalTrack())->hitPattern().numberOfValidMuonHits();
+  
+      nBranches_->mu_normChi2	   .push_back(normChi2);
+      nBranches_->mu_trackerHits    .push_back(trackerHits);
+      nBranches_->mu_matchedStations.push_back(mu.numberOfMatchedStations());
+      nBranches_->mu_pixelHits	   .push_back(pixelHits);
+      nBranches_->mu_globalHits     .push_back(globalMuonHits);
+    }
         
     /*===== ISO ====*/
     deltaR = 0.3;
+    energy = TMath::Pi()*deltaR*deltaR*rho;    
     if ( doMuonIsoVars_ ) {
-      energy = TMath::Pi()*deltaR*deltaR*rho;    
       nBranches_->mu_pfRhoCorrRelIso03.push_back((mu.chargedHadronIso() + std::max(0., mu.neutralHadronIso() + mu.photonIso() - energy))/mu.pt());
       nBranches_->mu_pfRhoCorrRelIso03Boost.push_back((mu.userIsolation(pat::PfChargedHadronIso) + std::max(0., mu.userIsolation(pat::PfNeutralHadronIso) + mu.userIsolation(pat::PfGammaIso) - energy))/mu.pt());
       

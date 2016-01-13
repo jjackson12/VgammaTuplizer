@@ -88,8 +88,10 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
 	runFlags["doPhotons"] = iConfig.getParameter<bool>("doPhotons");
 	runFlags["doElectrons"] = iConfig.getParameter<bool>("doElectrons");
+	runFlags["doElectronIdVars"] = iConfig.getParameter<bool>("doElectronIdVars");
 	runFlags["doElectronIsoVars"] = iConfig.getParameter<bool>("doElectronIsoVars");
 	runFlags["doMuons"] = iConfig.getParameter<bool>("doMuons");
+	runFlags["doMuonIdVars"] = iConfig.getParameter<bool>("doMuonIdVars");
 	runFlags["doMuonIsoVars"] = iConfig.getParameter<bool>("doMuonIsoVars");
 	runFlags["doTaus"] = iConfig.getParameter<bool>("doTaus");
 	runFlags["doAK8Jets"] = iConfig.getParameter<bool>("doAK8Jets");
