@@ -38,11 +38,9 @@ PhotonsNtuplizer::PhotonsNtuplizer(NtupleBranches*                              
 , photonToken_                      ( photonToken    )
 , verticeToken_	                    ( verticeToken   )
 , rhoToken_	                        ( rhoToken	     )
-, photonMediumIdMapToken_           ( phoIDtokens[0] )
-//, photonLooseIdMapToken_            ( phoIDtokens[0] )
-//, photonMediumIdMapToken_           ( phoIDtokens[1] )
-//, photonMediumIdFullInfoMapToken_   ( phoIDtokens[2] )
-//, photonTightIdMapToken_            ( phoIDtokens[2] )
+, photonLooseIdMapToken_            ( phoIDtokens[0] )
+, photonMediumIdMapToken_           ( phoIDtokens[1] )
+, photonTightIdMapToken_            ( phoIDtokens[2] )
 , photonMvaValuesMapToken_          ( phoIDtokens1[0] )
 , photonMvaCategoriesMapToken_      ( phoIDtokens2[0] )
 
@@ -57,26 +55,17 @@ PhotonsNtuplizer::~PhotonsNtuplizer( void )
 }
 
 //===================================================================================================================
-//float PhotonsNtuplizer::dEtaInSeed( const reco::Photon &pho ){
-//  // TODO do we need this?
-//	return pho.superCluster().isNonnull() && pho.superCluster()->seed().isNonnull() ? pho.deltaEtaSuperClusterTrackAtVtx()
-//    - pho.superCluster()->eta() + pho.superCluster()->seed()->eta() : std::numeric_limits<float>::max();
-//}
-
-
-//===================================================================================================================
 void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
     
     event.getByToken(photonToken_                     , photons                );
     event.getByToken(verticeToken_                    , vertices_              );
     event.getByToken(rhoToken_	                      , rho_                   );
     
-    //event.getByToken(photonLooseIdMapToken_           , loose_id_decisions     );
+    event.getByToken(photonLooseIdMapToken_           , loose_id_decisions     );
     event.getByToken(photonMediumIdMapToken_          , medium_id_decisions    );
-    //event.getByToken(photonMediumIdFullInfoMapToken_  , medium_id_cutflow_data );
+    event.getByToken(photonTightIdMapToken_           , tight_id_decisions     );
     event.getByToken(photonMvaValuesMapToken_         , mvaValues              );
     event.getByToken(photonMvaCategoriesMapToken_     , mvaCategories          );
-    //event.getByToken(photonTightIdMapToken_           , tight_id_decisions     );
     
     /*   Vertex stuff -- need this?
      // Find the first vertex in the collection that passes good quality criteria
@@ -117,14 +106,14 @@ void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
         
         /*======= IDs ==========*/
         //float et = pho.energy()!=0. ? pho.et()/pho.energy()*pho.caloEnergy() : 0.;
-        //bool isPassLoose = (*loose_id_decisions)[pho];
+        bool isPassLoose = (*loose_id_decisions)[pho];
         bool isPassMedium = (*medium_id_decisions)[pho];
-        //bool isPassTight = (*tight_id_decisions)[pho];
-        //nBranches_->ph_passLooseId.push_back ( (int)isPassLoose );
+        bool isPassTight = (*tight_id_decisions)[pho];
+        nBranches_->ph_passLooseId.push_back ( (int)isPassLoose );
         nBranches_->ph_passMediumId.push_back ( (int)isPassMedium );
+        nBranches_->ph_passTightId.push_back ( (int)isPassTight );
         nBranches_->ph_mvaValue.push_back( (*mvaValues)[pho]);
         nBranches_->ph_mvaCategory.push_back( (*mvaCategories)[pho]);
-        //nBranches_->ph_passTightId.push_back ( (int)isPassTight );
         ++npho;
         
     }

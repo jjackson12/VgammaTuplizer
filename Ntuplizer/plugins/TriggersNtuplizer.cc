@@ -53,41 +53,45 @@ TriggersNtuplizer::~TriggersNtuplizer( void )
 //===================================================================================================================
 bool TriggersNtuplizer::findTrigger( std::string trigName ){
 
-   if( trigName.find("AK8PFJet360_TrimMass30") != std::string::npos ||
-       trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
-       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV0p45") != std::string::npos ||
-       trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
-       trigName.find("PFHT650_WideJetMJJ900DEtaJJ1p5") != std::string::npos ||
-       trigName.find("PFHT400_v") != std::string::npos ||
-       trigName.find("PFHT475") != std::string::npos ||
-       trigName.find("PFHT600") != std::string::npos ||
-       trigName.find("PFHT650") != std::string::npos ||
-       trigName.find("PFHT800") != std::string::npos ||
-       trigName.find("PFHT900") != std::string::npos ||
-       trigName.find("PFHT900") != std::string::npos ||
-       trigName.find("PFJet320") != std::string::npos ||
-       trigName.find("PFJet450") != std::string::npos ||         
-       trigName.find("IsoMu20_eta2p1") != std::string::npos ||
-       trigName.find("IsoMu24_eta2p1") != std::string::npos ||
-       trigName.find("Mu45_eta2p1") != std::string::npos ||
-       trigName.find("Mu50_eta2p1") != std::string::npos ||
-       trigName.find("Ele27_eta2p1_WPLoose") != std::string::npos ||
-       trigName.find("Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
-       trigName.find("Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
-       trigName.find("Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
-       trigName.find("Ele115_CaloIdVT_GsfTrkIdT") != std::string::npos ||
-       trigName.find("HLT_Ele22_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_DoubleMediumIsoPFTau35") != std::string::npos ||
-       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_IsoMu16_eta2p1_MET30_JetIDCleaned_LooseIsoPFTau50") != std::string::npos ||
-       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_IsoMu17_eta2p1_MediumIsoPFTau") != std::string::npos ||
-       trigName.find("HLT_IsoMu20_eta2p1_LooseIsoPFTau20") != std::string::npos ||
-       trigName.find("HLT_Photon175") != std::string::npos ||
-       trigName.find("HLT_Photon165_HE10") != std::string::npos ||
-       trigName.find("HLT_Photon165_R9Id90_HE10_IsoM") != std::string::npos ||
-       trigName.find("Photon90_CaloIdL_PFHT500") != std::string::npos ||
-       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos
+   if( 
+       trigName.find( "PFHT800"                                        ) != std::string::npos ||
+       trigName.find( "PFHT900"                                        ) != std::string::npos ||
+       trigName.find( "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_PFMET40"  ) != std::string::npos ||
+       trigName.find( "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_VBF"      ) != std::string::npos ||
+       trigName.find( "HLT_Photon22_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
+       trigName.find( "HLT_Photon22_v"                                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon30_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
+       trigName.find( "HLT_Photon30_v"                                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_PFMET40"  ) != std::string::npos ||
+       trigName.find( "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_VBF"      ) != std::string::npos ||
+       trigName.find( "HLT_Photon36_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
+       trigName.find( "HLT_Photon36_v"                                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_PFMET40"  ) != std::string::npos ||
+       trigName.find( "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_VBF"      ) != std::string::npos ||
+       trigName.find( "HLT_Photon50_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
+       trigName.find( "HLT_Photon50_v"                                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_PFMET40"  ) != std::string::npos ||
+       trigName.find( "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_VBF"      ) != std::string::npos ||
+       trigName.find( "HLT_Photon75_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
+       trigName.find( "HLT_Photon75_v"                                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon90_CaloIdL_PFHT500"                   ) != std::string::npos || 
+       trigName.find( "HLT_Photon90_CaloIdL_PFHT600"                   ) != std::string::npos || 
+       trigName.find( "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_PFMET40"  ) != std::string::npos || 
+       trigName.find( "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_VBF"      ) != std::string::npos || 
+       trigName.find( "HLT_Photon90_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
+       trigName.find( "HLT_Photon90_v"                                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_PFMET40" ) != std::string::npos ||
+       trigName.find( "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_VBF"     ) != std::string::npos ||
+       trigName.find( "HLT_Photon120_R9Id90_HE10_IsoM"                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon120_v"                                ) != std::string::npos ||
+       trigName.find( "HLT_Photon135_PFMET100"                         ) != std::string::npos ||
+       trigName.find( "HLT_Photon165_HE10"                             ) != std::string::npos ||
+       trigName.find( "HLT_Photon165_R9Id90_HE10_IsoM"                 ) != std::string::npos ||
+       trigName.find( "HLT_Photon175_v"                                ) != std::string::npos ||
+       trigName.find( "HLT_Photon250_NoHE"                             ) != std::string::npos ||
+       trigName.find( "HLT_Photon300_NoHE"                             ) != std::string::npos ||
+       trigName.find( "HLT_Photon500_v"                                ) != std::string::npos ||
+       trigName.find( "HLT_Photon600_v"                                ) != std::string::npos 
    ) return true;
    else
      return false;
@@ -140,27 +144,120 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
 				
   			   for (unsigned h = 0; h < obj.filterIds().size(); ++h) vfilterIDs.push_back( obj.filterIds()[h]); // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
 				
-  			   if( pathNamesLast[h] == "HLT_AK8PFJet360_TrimMass30_v1") vfiredTrigger.push_back( 0 );
-  			   if( pathNamesLast[h] == "HT_AK8PFHT700_TrimR0p1PT0p03Mass50_v1") vfiredTrigger.push_back( 1 );
-  			   if( pathNamesLast[h] == "HLT_AK8DiPFJet280_200_TrimMass30_BTagCSV0p41_v1") vfiredTrigger.push_back( 2 );
-  			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ950DEtaJJ1p5_v1") vfiredTrigger.push_back( 3 );
-  			   if( pathNamesLast[h] == "HLT_PFHT650_WideJetMJJ900DEtaJJ1p5_v1") vfiredTrigger.push_back( 4 );
-  			   if( pathNamesLast[h] == "HLT_PFHT900_v1") vfiredTrigger.push_back( 5 );
-  			   if( pathNamesLast[h] == "HLT_IsoMu24_eta2p1_v1") vfiredTrigger.push_back( 6 );
-  			   if( pathNamesLast[h] == "HLT_IsoMu24_eta2p1_v2") vfiredTrigger.push_back( 7 );
-  			   if( pathNamesLast[h] == "HLT_Mu45_eta2p1_v1") vfiredTrigger.push_back( 8 );
-  			   if( pathNamesLast[h] == "HLT_Mu50_eta2p1_v1") vfiredTrigger.push_back( 9 );
-  			   if( pathNamesLast[h] == "HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v1") vfiredTrigger.push_back( 10 );
-  			   if( pathNamesLast[h] == "HLT_Ele32_eta2p1_WP75_Gsf_v1") vfiredTrigger.push_back( 11 );
-  			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 12 );
-  			   if( pathNamesLast[h] == "HLT_Ele105_CaloIdVT_GsfTrkIdT_v2") vfiredTrigger.push_back( 13 );
-  			   if( pathNamesLast[h] == "HLT_Ele115_CaloIdVT_GsfTrkIdT_v1") vfiredTrigger.push_back( 14 );
-  			   if( pathNamesLast[h] == "HLT_PFHT800_v1") vfiredTrigger.push_back( 15 );
-  			   if( pathNamesLast[h] == "HLT_PFHT800_v2") vfiredTrigger.push_back( 16 );
-  			   if( pathNamesLast[h] == "HLT_Photon175_v3") vfiredTrigger.push_back( 17 );
-  			   if( pathNamesLast[h] == "HLT_Photon165_HE10_v3") vfiredTrigger.push_back( 18 );
-  			   if( pathNamesLast[h] == "HLT_Photon165_R9Id90_HE10_IsoM_v2") vfiredTrigger.push_back( 19 );
-  			   if( pathNamesLast[h] == "Photon90_CaloIdL_PFHT500") vfiredTrigger.push_back( 20 );
+  			   if( pathNamesLast[h] == "HLT_PFHT800_v1"                                   ) vfiredTrigger.push_back( 0 );
+  			   if( pathNamesLast[h] == "HLT_PFHT800_v2"                                   ) vfiredTrigger.push_back( 1 );
+  			   if( pathNamesLast[h] == "HLT_PFHT800_v3"                                   ) vfiredTrigger.push_back( 2 );
+  			   if( pathNamesLast[h] == "HLT_PFHT900_v1"                                   ) vfiredTrigger.push_back( 3 );
+  			   if( pathNamesLast[h] == "HLT_PFHT900_v2"                                   ) vfiredTrigger.push_back( 4 );
+  			   if( pathNamesLast[h] == "HLT_PFHT900_v3"                                   ) vfiredTrigger.push_back( 5 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_PFMET40_v1" ) vfiredTrigger.push_back( 6 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_PFMET40_v2" ) vfiredTrigger.push_back( 7 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_PFMET40_v3" ) vfiredTrigger.push_back( 8 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_VBF_v1"     ) vfiredTrigger.push_back( 9 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_VBF_v2"     ) vfiredTrigger.push_back( 10 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_VBF_v3"     ) vfiredTrigger.push_back( 11 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_IsoM_v1"                 ) vfiredTrigger.push_back( 12 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_IsoM_v2"                 ) vfiredTrigger.push_back( 13 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_R9Id90_HE10_IsoM_v3"                 ) vfiredTrigger.push_back( 14 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_v1"                                  ) vfiredTrigger.push_back( 15 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_v2"                                  ) vfiredTrigger.push_back( 16 );
+  			   if( pathNamesLast[h] == "HLT_Photon22_v3"                                  ) vfiredTrigger.push_back( 17 );
+  			   if( pathNamesLast[h] == "HLT_Photon30_R9Id90_HE10_IsoM_v1"                 ) vfiredTrigger.push_back( 18 );
+  			   if( pathNamesLast[h] == "HLT_Photon30_R9Id90_HE10_IsoM_v2"                 ) vfiredTrigger.push_back( 19 );
+  			   if( pathNamesLast[h] == "HLT_Photon30_R9Id90_HE10_IsoM_v3"                 ) vfiredTrigger.push_back( 20 );
+  			   if( pathNamesLast[h] == "HLT_Photon30_v1"                                  ) vfiredTrigger.push_back( 21 );
+  			   if( pathNamesLast[h] == "HLT_Photon30_v2"                                  ) vfiredTrigger.push_back( 22 );
+  			   if( pathNamesLast[h] == "HLT_Photon30_v3"                                  ) vfiredTrigger.push_back( 23 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_PFMET40_v1" ) vfiredTrigger.push_back( 24 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_PFMET40_v2" ) vfiredTrigger.push_back( 25 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_PFMET40_v3" ) vfiredTrigger.push_back( 26 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_VBF_v1"     ) vfiredTrigger.push_back( 27 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_VBF_v2"     ) vfiredTrigger.push_back( 28 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_Iso40_EBOnly_VBF_v3"     ) vfiredTrigger.push_back( 29 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_IsoM_v1"                 ) vfiredTrigger.push_back( 30 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_IsoM_v2"                 ) vfiredTrigger.push_back( 31 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_R9Id90_HE10_IsoM_v3"                 ) vfiredTrigger.push_back( 32 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_v1"                                  ) vfiredTrigger.push_back( 33 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_v2"                                  ) vfiredTrigger.push_back( 34 );
+  			   if( pathNamesLast[h] == "HLT_Photon36_v3"                                  ) vfiredTrigger.push_back( 35 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_PFMET40_v1" ) vfiredTrigger.push_back( 36 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_PFMET40_v2" ) vfiredTrigger.push_back( 37 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_PFMET40_v3" ) vfiredTrigger.push_back( 38 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_VBF_v1"     ) vfiredTrigger.push_back( 39 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_VBF_v2"     ) vfiredTrigger.push_back( 40 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_Iso40_EBOnly_VBF_v3"     ) vfiredTrigger.push_back( 41 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_IsoM_v1"                 ) vfiredTrigger.push_back( 42 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_IsoM_v2"                 ) vfiredTrigger.push_back( 43 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_R9Id90_HE10_IsoM_v3"                 ) vfiredTrigger.push_back( 44 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_v1"                                  ) vfiredTrigger.push_back( 45 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_v2"                                  ) vfiredTrigger.push_back( 46 );
+  			   if( pathNamesLast[h] == "HLT_Photon50_v3"                                  ) vfiredTrigger.push_back( 47 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_PFMET40_v1" ) vfiredTrigger.push_back( 48 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_PFMET40_v2" ) vfiredTrigger.push_back( 49 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_PFMET40_v3" ) vfiredTrigger.push_back( 50 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_VBF_v1"     ) vfiredTrigger.push_back( 51 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_VBF_v2"     ) vfiredTrigger.push_back( 52 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_Iso40_EBOnly_VBF_v3"     ) vfiredTrigger.push_back( 53 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_IsoM_v1"                 ) vfiredTrigger.push_back( 54 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_IsoM_v2"                 ) vfiredTrigger.push_back( 55 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_R9Id90_HE10_IsoM_v3"                 ) vfiredTrigger.push_back( 56 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_v1"                                  ) vfiredTrigger.push_back( 57 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_v2"                                  ) vfiredTrigger.push_back( 58 );
+  			   if( pathNamesLast[h] == "HLT_Photon75_v3"                                  ) vfiredTrigger.push_back( 59 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_CaloIdL_PFHT500_v1"                  ) vfiredTrigger.push_back( 60 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_CaloIdL_PFHT500_v2"                  ) vfiredTrigger.push_back( 61 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_CaloIdL_PFHT500_v3"                  ) vfiredTrigger.push_back( 62 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_CaloIdL_PFHT600_v1"                  ) vfiredTrigger.push_back( 63 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_CaloIdL_PFHT600_v2"                  ) vfiredTrigger.push_back( 64 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_CaloIdL_PFHT600_v3"                  ) vfiredTrigger.push_back( 65 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_PFMET40_v1" ) vfiredTrigger.push_back( 66 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_PFMET40_v2" ) vfiredTrigger.push_back( 67 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_PFMET40_v3" ) vfiredTrigger.push_back( 68 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_VBF_v1"     ) vfiredTrigger.push_back( 69 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_VBF_v2"     ) vfiredTrigger.push_back( 70 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_Iso40_EBOnly_VBF_v3"     ) vfiredTrigger.push_back( 71 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_IsoM_v1"                 ) vfiredTrigger.push_back( 72 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_IsoM_v2"                 ) vfiredTrigger.push_back( 73 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_R9Id90_HE10_IsoM_v3"                 ) vfiredTrigger.push_back( 74 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_v1"                                  ) vfiredTrigger.push_back( 75 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_v2"                                  ) vfiredTrigger.push_back( 76 );
+  			   if( pathNamesLast[h] == "HLT_Photon90_v3"                                  ) vfiredTrigger.push_back( 77 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_PFMET40_v1") vfiredTrigger.push_back( 78 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_PFMET40_v2") vfiredTrigger.push_back( 79 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_PFMET40_v3") vfiredTrigger.push_back( 80 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_VBF_v1"    ) vfiredTrigger.push_back( 81 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_VBF_v2"    ) vfiredTrigger.push_back( 82 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_Iso40_EBOnly_VBF_v3"    ) vfiredTrigger.push_back( 83 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_IsoM_v1"                ) vfiredTrigger.push_back( 84 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_IsoM_v2"                ) vfiredTrigger.push_back( 85 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_R9Id90_HE10_IsoM_v3"                ) vfiredTrigger.push_back( 86 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_v1"                                 ) vfiredTrigger.push_back( 87 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_v2"                                 ) vfiredTrigger.push_back( 88 );
+  			   if( pathNamesLast[h] == "HLT_Photon120_v3"                                 ) vfiredTrigger.push_back( 89 );
+  			   if( pathNamesLast[h] == "HLT_Photon135_PFMET100_v1"                        ) vfiredTrigger.push_back( 90 );
+  			   if( pathNamesLast[h] == "HLT_Photon135_PFMET100_v2"                        ) vfiredTrigger.push_back( 91 );
+  			   if( pathNamesLast[h] == "HLT_Photon135_PFMET100_v3"                        ) vfiredTrigger.push_back( 92 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_HE10_v1"                            ) vfiredTrigger.push_back( 93 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_HE10_v2"                            ) vfiredTrigger.push_back( 94 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_HE10_v3"                            ) vfiredTrigger.push_back( 95 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_R9Id90_HE10_IsoM_v1"                ) vfiredTrigger.push_back( 96 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_R9Id90_HE10_IsoM_v2"                ) vfiredTrigger.push_back( 97 );
+  			   if( pathNamesLast[h] == "HLT_Photon165_R9Id90_HE10_IsoM_v3"                ) vfiredTrigger.push_back( 98 );
+  			   if( pathNamesLast[h] == "HLT_Photon175_v1"                                 ) vfiredTrigger.push_back( 99 );
+  			   if( pathNamesLast[h] == "HLT_Photon175_v2"                                 ) vfiredTrigger.push_back( 100 );
+  			   if( pathNamesLast[h] == "HLT_Photon175_v3"                                 ) vfiredTrigger.push_back( 101 );
+  			   if( pathNamesLast[h] == "HLT_Photon250_NoHE_v1"                            ) vfiredTrigger.push_back( 102 );
+  			   if( pathNamesLast[h] == "HLT_Photon250_NoHE_v2"                            ) vfiredTrigger.push_back( 103 );
+  			   if( pathNamesLast[h] == "HLT_Photon250_NoHE_v3"                            ) vfiredTrigger.push_back( 104 );
+  			   if( pathNamesLast[h] == "HLT_Photon300_NoHE_v1"                            ) vfiredTrigger.push_back( 105 );
+  			   if( pathNamesLast[h] == "HLT_Photon300_NoHE_v2"                            ) vfiredTrigger.push_back( 106 );
+  			   if( pathNamesLast[h] == "HLT_Photon300_NoHE_v3"                            ) vfiredTrigger.push_back( 107 );
+  			   if( pathNamesLast[h] == "HLT_Photon500_v1"                                 ) vfiredTrigger.push_back( 108 );
+  			   if( pathNamesLast[h] == "HLT_Photon500_v2"                                 ) vfiredTrigger.push_back( 109 );
+  			   if( pathNamesLast[h] == "HLT_Photon500_v3"                                 ) vfiredTrigger.push_back( 110 );
+  			   if( pathNamesLast[h] == "HLT_Photon600_v1"                                 ) vfiredTrigger.push_back( 111 );
+  			   if( pathNamesLast[h] == "HLT_Photon600_v2"                                 ) vfiredTrigger.push_back( 112 );
+  			   if( pathNamesLast[h] == "HLT_Photon600_v3"                                 ) vfiredTrigger.push_back( 113 );
   			   // else vfiredTrigger.push_back( -99 );
   			}
 			

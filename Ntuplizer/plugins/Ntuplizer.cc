@@ -43,14 +43,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	photonToken_                      (consumes<edm::View<pat::Photon> >              (iConfig.getParameter<edm::InputTag>("photons")))                                    ,
 	muonToken_                        (consumes<pat::MuonCollection>                   (iConfig.getParameter<edm::InputTag>("muons")))                                      ,
 
-	//phoLooseIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoLooseIdMap")))                              ,
+	phoLooseIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoLooseIdMap")))                              ,
 	phoMediumIdMapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoMediumIdMap")))                             ,
-	//phoMediumIdFullInfoMapToken_      (consumes<edm::ValueMap<vid::CutFlowResult> >    (iConfig.getParameter<edm::InputTag>("phoMediumIdFullInfoMap")))                     ,
+	phoTightIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoTightIdMap")))                              ,
 	phoMvaValuesMapToken_             (consumes<edm::ValueMap<float> >                 (iConfig.getParameter<edm::InputTag>("phoMvaValuesMap")))                               ,
 	phoMvaCategoriesMapToken_         (consumes<edm::ValueMap<int> >                   (iConfig.getParameter<edm::InputTag>("phoMvaCategoriesMap")))                           ,
-	//phoTightIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoTightIdMap")))                              ,
 	phoVerboseIdFlag_                                                                  (iConfig.getParameter<bool>         ("phoIdVerbose"))                                ,
-  //TODO: should this verboseIdFlag be here?
 
 	electronToken_                    (consumes<edm::View<pat::Electron> >             (iConfig.getParameter<edm::InputTag>("electrons")))                                  ,
 	eleHEEPIdMapToken_                (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleHEEPIdMap")))                               ,
@@ -206,10 +204,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 	if (runFlags["doPhotons"]) {
 
 		std::vector<edm::EDGetTokenT<edm::ValueMap<bool> > > phoIdTokens;
-		// phoIdTokens.push_back(phoLooseIdMapToken_ );
+		phoIdTokens.push_back(phoLooseIdMapToken_ );
 		phoIdTokens.push_back(phoMediumIdMapToken_);
-    // phoIdTokens.push_back(phoTightIdMapToken_ );
-    // phoIdTokens.push_back(phoMediumIdFullInfoMapToken_);
+    phoIdTokens.push_back(phoTightIdMapToken_ );
     std::vector<edm::EDGetTokenT<edm::ValueMap<float> > > phoIdTokens1;
     phoIdTokens1.push_back(phoMvaValuesMapToken_);
     std::vector<edm::EDGetTokenT<edm::ValueMap<int> > > phoIdTokens2;
