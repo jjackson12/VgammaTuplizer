@@ -115,9 +115,16 @@ class NtupleBranches {
 		//EffectiveAreas                     ph_effAreaNeuHadrons_        ;
 		//EffectiveAreas                     ph_effAreaPhotons_           ;
 
+		std::vector<float>                   ph_sigmaIetaIeta             ;    
+		std::vector<float>                   ph_hOverE                    ;    
+		std::vector<float>                   ph_isoGamma                  ;    
+		std::vector<float>                   ph_isoCh                     ;    
+		std::vector<bool>                    ph_passEleVeto               ;    
 		std::vector<int>                     ph_passLooseId               ;
 		std::vector<int>                     ph_passMediumId              ;
 		std::vector<int>                     ph_passTightId               ;    
+		std::vector<float>                   ph_rho                       ;    
+		std::vector<float>                   ph_fixedGridRho              ;    
 
 		/** electrons */
 		int                                  el_N                         ;

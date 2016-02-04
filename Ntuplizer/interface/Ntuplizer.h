@@ -45,6 +45,7 @@ private:
   
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
+  edm::EDGetTokenT<double>                                  fixedGridRhoToken_  ;
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_        ;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_      ;
 

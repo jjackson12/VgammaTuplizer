@@ -59,7 +59,15 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "ph_mass"                                           , &ph_mass                                       );
 		tree_->Branch( "ph_pt"                                             , &ph_pt                                         );
 		tree_->Branch( "ph_et"                                             , &ph_et                                         );
+		tree_->Branch( "ph_rho"                                            , &ph_rho                                        );
+		tree_->Branch( "ph_fixedGridRho"                                   , &ph_fixedGridRho                               );
 		tree_->Branch( "ph_superCluster_eta"                               , &ph_superCluster_eta                           );
+		tree_->Branch( "ph_superCluster_phi"                               , &ph_superCluster_phi                           );
+		tree_->Branch( "ph_sigmaIetaIeta"                                  , &ph_sigmaIetaIeta                              );
+		tree_->Branch( "ph_hOverE"                                         , &ph_hOverE                                     );
+		tree_->Branch( "ph_isoGamma"                                       , &ph_isoGamma                                   );
+		tree_->Branch( "ph_isoCh"                                          , &ph_isoCh                                      );
+		tree_->Branch( "ph_passEleVeto"                                    , &ph_passEleVeto                                );
 		tree_->Branch( "ph_passLooseId"                                    , &ph_passLooseId                                );
 		tree_->Branch( "ph_passMediumId"                                   , &ph_passMediumId                               );
 		tree_->Branch( "ph_passTightId"                                    , &ph_passTightId                                );
@@ -651,12 +659,19 @@ void NtupleBranches::reset( void ){
 	ph_pt.clear();
 	ph_et.clear();
 	ph_superCluster_eta.clear();
+	ph_superCluster_phi.clear();
 	ph_passLooseId.clear();
 	ph_passMediumId.clear();
 	ph_passTightId.clear();
   ph_mvaValue.clear();
   ph_mvaCategory.clear();
-
+	ph_rho.clear();
+	ph_sigmaIetaIeta.clear();    
+	ph_hOverE.clear();    
+	ph_isoGamma.clear();    
+	ph_isoCh.clear();    
+	ph_passEleVeto.clear();    
+	ph_fixedGridRho.clear();
 
 	/** electrons */
 	el_N        = 0;
