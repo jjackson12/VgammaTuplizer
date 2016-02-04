@@ -4,17 +4,21 @@
 #include "../interface/CandidateNtuplizer.h"
 
 class GenParticlesNtuplizer : public CandidateNtuplizer {
-
+    
 public:
-  GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches );
-  ~GenParticlesNtuplizer( void ); 
-
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
-
+    GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches );
+    ~GenParticlesNtuplizer( void );
+    
+    void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
+    
 private:
-   edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
-   edm::Handle< reco::GenParticleCollection >  genParticles_;
-      
+    
+    bool checkPDGID(int pdgid);
+    int photonOrigin(reco::GenParticle photon);
+    
+    edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
+    edm::Handle< reco::GenParticleCollection >  genParticles_;
+    
 };
 
 #endif // GenParticlesNtuplizer_H

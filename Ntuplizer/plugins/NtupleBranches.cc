@@ -28,6 +28,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 			tree_->Branch( "genParticle_phi"                                 , &genParticle_phi                               ); 
 			tree_->Branch( "genParticle_mass"                                , &genParticle_mass                              ); 
 			tree_->Branch( "genParticle_pdgId"                               , &genParticle_pdgId                             );
+            tree_->Branch( "genParticle_origin"                              , &genParticle_origin                            );
 			tree_->Branch( "genParticle_status"                              , &genParticle_status                            );
 			tree_->Branch( "genParticle_mother"                              , &genParticle_mother                            );
 			tree_->Branch( "genParticle_nMoth"                               , &genParticle_nMoth                             );
@@ -631,6 +632,7 @@ void NtupleBranches::reset( void ){
 	genParticle_phi.clear();
 	genParticle_mass.clear();
 	genParticle_pdgId.clear();
+    genParticle_origin.clear();
 	genParticle_status.clear();
 	genParticle_mother.clear();
 	genParticle_nMoth.clear();

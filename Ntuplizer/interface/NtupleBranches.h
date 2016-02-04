@@ -61,6 +61,7 @@ class NtupleBranches {
 		std::vector<float>                   genParticle_phi              ;
 		std::vector<float>                   genParticle_mass             ;
 		std::vector<int  >                   genParticle_pdgId            ;
+        std::vector<int  >                   genParticle_origin           ;
 		std::vector<int  >                   genParticle_status           ;
 		std::vector<int  >                   genParticle_nDau             ;
 		std::vector<int  >                   genParticle_nMoth            ;
