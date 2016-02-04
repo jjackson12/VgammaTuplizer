@@ -152,27 +152,27 @@ if config["GETJECFROMDBFILE"]:
             toGet = cms.VPSet(
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK4PFchs'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK4PFchs'),
                  label  = cms.untracked.string('AK4PFchs')
                  ),
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFchs'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK8PFchs'),
                  label  = cms.untracked.string('AK8PFchs')
                  ),
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_MC_AK8PFPuppi'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK8PFPuppi'),
                  label  = cms.untracked.string('AK8PFPuppi')
                  ),
             ),
-            connect = cms.string('sqlite:JEC/Summer15_25nsV6_MC.db')
+            connect = cms.string('sqlite:JEC/Summer15_25nsV7_MC.db')
             )
   if not config["RUNONMC"]:
-    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK4PFchs')
-    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFchs')
-    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV6_DATA_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV6_DATA.db')
+    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_DATA_AK4PFchs')
+    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_DATA_AK8PFchs')
+    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_DATA_AK8PFPuppi')
+    process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV7_DATA.db')
   else:
     sys.exit("This config file expects to run on data, but an option to run on MC was received.")
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
@@ -741,6 +741,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK4forMetCorr = cms.vstring( jecLevelsForMET ),
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
+    fixedGridRho = cms.InputTag("fixedGridRhoAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("addPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
