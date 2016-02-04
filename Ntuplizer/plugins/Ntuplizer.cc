@@ -211,14 +211,17 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     phoIdTokens1.push_back(phoMvaValuesMapToken_);
     std::vector<edm::EDGetTokenT<edm::ValueMap<int> > > phoIdTokens2;
     phoIdTokens2.push_back(phoMvaCategoriesMapToken_);
-
+    std::vector<edm::EDGetTokenT<EcalRecHitCollection> > phoIdTokens3;
+    phoIdTokens3.push_back(ecalHitEBToken_);
+    phoIdTokens3.push_back(ecalHitEEToken_);
 		nTuplizers_["photons"] = new PhotonsNtuplizer( nBranches_, 
 				photonToken_ , 
 				vtxToken_    , 
 				rhoToken_    , 
 				phoIdTokens  ,
-                                                      phoIdTokens1  ,
-                                                      phoIdTokens2   );
+        phoIdTokens1 ,
+        phoIdTokens2 ,
+        phoIdTokens3   );
 	}    
 	if (runFlags["doElectrons"]) {
 
