@@ -371,7 +371,7 @@ class NtupleBranches {
 		//std::vector<float>                jetAK4_jecDown                    ; 
 		std::vector<bool>                   jetAK4_IDLoose                    ;
 		std::vector<bool>                   jetAK4_IDTight                    ;
-
+        std::vector<bool>                   jetAK4_IDTightLepVeto              ;
 		std::vector<float>                  jetAK4_muf                        ;
 		std::vector<float>                  jetAK4_phf                        ;
 		std::vector<float>                  jetAK4_emf                        ;
@@ -423,6 +423,7 @@ class NtupleBranches {
 		//std::vector<float>                jetAK8_jecDown                    ;
 		std::vector<bool >                  jetAK8_IDLoose                    ;
 		std::vector<bool >                  jetAK8_IDTight                    ;
+		std::vector<bool >                  jetAK8_IDTightLepVeto             ;
 		std::vector<float>                  jetAK8_muf                        ;
 		std::vector<float>                  jetAK8_phf                        ;
 

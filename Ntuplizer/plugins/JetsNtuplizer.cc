@@ -66,13 +66,13 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
     (j.chargedEmEnergyFraction() < 0.99 || fabs(j.eta())>2.4 ) &&
     (j.chargedHadronEnergyFraction() > 0. || fabs(j.eta())>2.4 ) );*/
 
-  //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
+  //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID
   //and with dijet group https://github.com/CMSDIJET/DijetRootTreeMaker/blob/e650ba19e9e9bc676754a948298bb5cf850f4ecc/plugins/DijetTreeProducer.cc#L869
 
   double eta = j.eta();    
   double chf = j.chargedHadronEnergyFraction();
   double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
-  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+  //double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());
   double nemf = j.neutralEmEnergyFraction();
   double cemf = j.chargedEmEnergyFraction();
   int chMult = j.chargedMultiplicity();
@@ -80,19 +80,17 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
 
-  return (nhf<0.99 && nemf<0.99 && NumConst>1 && muf < 0.8) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);        
+  return (nhf<0.99 && nemf<0.99 && NumConst>1) && ((fabs(eta) <= 2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);
 
 }
 //===================================================================================================================
 bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
 
-
-
-  //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
+  //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID
   double eta = j.eta();    
   double chf = j.chargedHadronEnergyFraction();
   double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
-  double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());  
+  //double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());
   double nemf = j.neutralEmEnergyFraction();
   double cemf = j.chargedEmEnergyFraction();
   int chMult = j.chargedMultiplicity();
@@ -100,9 +98,27 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
   int npr    = chMult + neMult;
   int NumConst = npr;
 
-  return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);      
+  return (nhf<0.90 && nemf<0.90 && NumConst>1) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4);
 }
 //===================================================================================================================
+bool JetsNtuplizer::tightLepVeto( const pat::Jet& j ) {
+    
+    //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID
+    double eta = j.eta();
+    double chf = j.chargedHadronEnergyFraction();
+    double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
+    double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());
+    double nemf = j.neutralEmEnergyFraction();
+    double cemf = j.chargedEmEnergyFraction();
+    int chMult = j.chargedMultiplicity();
+    int neMult = j.neutralMultiplicity();
+    int npr    = chMult + neMult;
+    int NumConst = npr;
+    
+    return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);
+}
+//===================================================================================================================
+
 void JetsNtuplizer::initJetCorrFactors( void ){
 
   std::vector<JetCorrectorParameters> vPar;
@@ -167,6 +183,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       bool IDLoose = looseJetID(j);
       bool IDTight = tightJetID(j);
+      bool IDTightLepVeto = tightLepVeto(j);
+        
+        
       //if( !IDLoose ) continue;
 
 
@@ -210,6 +229,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       //nBranches_->jetAK4_jecDown        .push_back(corrDown);
       nBranches_->jetAK4_IDLoose            .push_back(IDLoose);
       nBranches_->jetAK4_IDTight            .push_back(IDTight);
+        nBranches_->jetAK4_IDTightLepVeto            .push_back(IDTightLepVeto);
+        
       if( doJetIdVars_ ) {
         nBranches_->jetAK4_cm           .push_back(j.chargedMultiplicity());
         nBranches_->jetAK4_nm           .push_back(j.neutralMultiplicity());
@@ -390,6 +411,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
       bool IDLoose = looseJetID(fj);
       bool IDTight = tightJetID(fj);
+        bool IDTightLepVeto = tightLepVeto(fj);
       //if( !IDLoose ) continue;
 
       nBranches_->jetAK8_N++;         
@@ -401,6 +423,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_jec          .push_back(corr);
       nBranches_->jetAK8_IDLoose            .push_back(IDLoose);
       nBranches_->jetAK8_IDTight            .push_back(IDTight);
+        nBranches_->jetAK8_IDTightLepVeto            .push_back(IDTightLepVeto);
       if( doJetIdVars_ ) {
         nBranches_->jetAK8_muf           .push_back(fj.muonEnergyFraction());
         nBranches_->jetAK8_phf           .push_back(fj.photonEnergyFraction());

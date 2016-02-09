@@ -319,6 +319,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "jetAK4_jec"        , &jetAK4_jec    );
 		tree_->Branch( "jetAK4_IDLoose"      , &jetAK4_IDLoose   );
 		tree_->Branch( "jetAK4_IDTight"      , &jetAK4_IDTight   );
+        tree_->Branch( "jetAK4_IDTightLepVeto"      , &jetAK4_IDTightLepVeto   );
+        
     if( runFlags["doJetIdVars"] ) {
 		  tree_->Branch( "jetAK4_muf"       , &jetAK4_muf   );
 		  tree_->Branch( "jetAK4_phf"       , &jetAK4_phf   );
@@ -373,6 +375,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "jetAK8_jec"         , &jetAK8_jec      );
 		tree_->Branch( "jetAK8_IDLoose"       , &jetAK8_IDLoose     );
 		tree_->Branch( "jetAK8_IDTight"       , &jetAK8_IDTight           );
+        tree_->Branch( "jetAK8_IDTightLepVeto"       , &jetAK8_IDTightLepVeto           );
     if( runFlags["doJetIdVars"] ) {
 		  tree_->Branch( "jetAK8_muf"        , &jetAK8_muf     );
 		  tree_->Branch( "jetAK8_phf"        , &jetAK8_phf     );
@@ -907,7 +910,8 @@ void NtupleBranches::reset( void ){
 	jetAK4_e.clear();
 	jetAK4_jec.clear();
 	//jetAK4_jecUp.clear();
-	//jetAK4_jecDown.clear(); 
+	//jetAK4_jecDown.clear();
+    jetAK4_IDTightLepVeto.clear();
 	jetAK4_IDTight.clear();
 	jetAK4_IDLoose.clear();
 	jetAK4_muf.clear();
@@ -957,6 +961,7 @@ void NtupleBranches::reset( void ){
 	//jetAK8_jecDown.clear();
 	jetAK8_IDLoose.clear();
 	jetAK8_IDTight.clear();
+    jetAK8_IDTightLepVeto.clear();
 	jetAK8_muf.clear();
 	jetAK8_phf.clear();
 	jetAK8_emf.clear();
