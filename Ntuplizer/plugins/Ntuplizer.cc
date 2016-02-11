@@ -77,6 +77,9 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
   /*=======================================================================================*/
   edm::Service<TFileService> fs;
+    
+    _hCounter = fs->make<TH1D>("hCounter", "Events counter", 5,0,5);
+
   TTree* tree = fs->make<TTree>( "tree", "tree" );
 
   std::map< std::string, bool > runFlags;
@@ -308,7 +311,9 @@ Ntuplizer::~Ntuplizer()
 
 ///////////////////////////////////////////////////////////////////////////////////
 void Ntuplizer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
-
+    
+    _hCounter->Fill(0.,1);
+    
   nBranches_->reset();
 
   edm::Handle<reco::VertexCollection> vertices;
