@@ -317,6 +317,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "jetAK4_phi"        , &jetAK4_phi   );
 		tree_->Branch( "jetAK4_e"        , &jetAK4_e    );
 		tree_->Branch( "jetAK4_jec"        , &jetAK4_jec    );
+        tree_->Branch( "jetAK4_jecUp"	    , &jetAK4_jecUp 	 );
+        tree_->Branch( "jetAK4_jecDown"	    , &jetAK4_jecDown 	 );
 		tree_->Branch( "jetAK4_IDLoose"      , &jetAK4_IDLoose   );
 		tree_->Branch( "jetAK4_IDTight"      , &jetAK4_IDTight   );
         tree_->Branch( "jetAK4_IDTightLepVeto"      , &jetAK4_IDTightLepVeto   );
@@ -373,6 +375,8 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "jetAK8_phi"         , &jetAK8_phi     );
 		tree_->Branch( "jetAK8_e"         , &jetAK8_e      );
 		tree_->Branch( "jetAK8_jec"         , &jetAK8_jec      );
+        tree_->Branch( "jetAK8_jecUp"	     , &jetAK8_jecUp 	         );
+        tree_->Branch( "jetAK8_jecDown"	     , &jetAK8_jecDown 	         );
 		tree_->Branch( "jetAK8_IDLoose"       , &jetAK8_IDLoose     );
 		tree_->Branch( "jetAK8_IDTight"       , &jetAK8_IDTight           );
         tree_->Branch( "jetAK8_IDTightLepVeto"       , &jetAK8_IDTightLepVeto           );
@@ -420,9 +424,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 		tree_->Branch( "jetAK8_pruned_mass"      , &jetAK8_pruned_mass       );
 		tree_->Branch( "jetAK8_pruned_massCorr"  , &jetAK8_pruned_massCorr   );
 		tree_->Branch( "jetAK8_pruned_jec"       , &jetAK8_pruned_jec        );
+        tree_->Branch( "jetAK8_pruned_jecUp"     , &jetAK8_pruned_jecUp      );
+        tree_->Branch( "jetAK8_pruned_jecDown"   , &jetAK8_pruned_jecDown    );
 		tree_->Branch( "jetAK8_softdrop_mass"    , &jetAK8_softdrop_mass     ); 
 		tree_->Branch( "jetAK8_softdrop_massCorr", &jetAK8_softdrop_massCorr );
 		tree_->Branch( "jetAK8_softdrop_jec"     , &jetAK8_softdrop_jec      );
+        tree_->Branch( "jetAK8_softdrop_jecUp"   , &jetAK8_softdrop_jecUp      );
+        tree_->Branch( "jetAK8_softdrop_jecDown" , &jetAK8_softdrop_jecDown    );
 
 		if (runFlags["doTrimming"]) {
 			/*----------------------AK10 trimming ---------------------------*/   
@@ -909,8 +917,8 @@ void NtupleBranches::reset( void ){
 	jetAK4_phi.clear();
 	jetAK4_e.clear();
 	jetAK4_jec.clear();
-	//jetAK4_jecUp.clear();
-	//jetAK4_jecDown.clear();
+	jetAK4_jecUp.clear();
+	jetAK4_jecDown.clear();
     jetAK4_IDTightLepVeto.clear();
 	jetAK4_IDTight.clear();
 	jetAK4_IDLoose.clear();
@@ -957,8 +965,8 @@ void NtupleBranches::reset( void ){
 	jetAK8_phi.clear();
 	jetAK8_e.clear();
 	jetAK8_jec.clear();
-	//jetAK8_jecUp.clear();
-	//jetAK8_jecDown.clear();
+	jetAK8_jecUp.clear();
+	jetAK8_jecDown.clear();
 	jetAK8_IDLoose.clear();
 	jetAK8_IDTight.clear();
     jetAK8_IDTightLepVeto.clear();
@@ -1003,7 +1011,11 @@ void NtupleBranches::reset( void ){
 	jetAK8_softdrop_massCorr.clear();
 	jetAK10_trimmed_massCorr.clear();
 	jetAK8_pruned_jec.clear();
+    jetAK8_pruned_jecUp.clear();
+    jetAK8_pruned_jecDown.clear();
 	jetAK8_softdrop_jec.clear();
+    jetAK8_softdrop_jecUp.clear();
+    jetAK8_softdrop_jecDown.clear();
 	jetAK10_trimmed_jec.clear();
 	jetAK10_ecf1.clear();
 	jetAK10_ecf2.clear();

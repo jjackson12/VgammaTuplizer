@@ -607,12 +607,14 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
+jecAK8chsUncFile = "/scratch/osg/lesya/CMSSW_7_4_16_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/JEC/Summer15_25nsV7_MC_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "/scratch/osg/lesya/CMSSW_7_4_16_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/JEC/Summer15_25nsV7_MC_Uncertainty_AK4PFchs.txt"
 
-JECprefix = "Summer15_25nsV6"
+JECprefix = "Summer15_25nsV7"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV6"
+   JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV6"
+   JECprefix = "Summer15_25nsV7"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
@@ -746,16 +748,19 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
     fixedGridRho = cms.InputTag("fixedGridRhoAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
-    PUInfo = cms.InputTag("addPileupInfo"),
+    #PUInfo = cms.InputTag("addPileupInfo"),
+    PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
     HLT = cms.InputTag("TriggerResults","","HLT"),
     triggerobjects = cms.InputTag("selectedPatTrigger"),
     triggerprescales = cms.InputTag("patTrigger"),
     noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
+    jecAK8chsUnc = cms.string( jecAK8chsUncFile ),
     jecAK8GroomedchsPayloadNames = cms.vstring( jecLevelsAK8Groomedchs ),
     jecAK8PuppiPayloadNames = cms.vstring( jecLevelsAK8Puppi ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
+    jecAK4chsUnc = cms.string( jecAK4chsUncFile ),
     jecpath = cms.string(''),
     
     ## Noise Filters ###################################

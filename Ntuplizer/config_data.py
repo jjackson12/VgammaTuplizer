@@ -73,10 +73,10 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if config["RUNONMC"]:
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v2')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v5')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(config["RUNONMC"]):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v4')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_reMiniAOD_v2')
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -538,7 +538,8 @@ for idmod in my_id_modules_el:
 switchOnVIDPhotonIdProducer(process,dataFormat)
 process.egmPhotonIDSequence = cms.Sequence(process.egmPhotonIDSequence)
 
-my_id_modules_ph = ['RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring15_25ns_nonTrig_V2_cff']
+my_id_modules_ph = ['RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring15_25ns_nonTrig_V2_cff',
+                    'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring15_25ns_V1_cff'    ]
 
 for idmod in my_id_modules_ph:
     setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection)
@@ -605,12 +606,14 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
+jecAK8chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "JEC/Summer15_25nsV7_DATA_Uncertainty_AK4PFchs.txt"
 
-JECprefix = "Summer15_25nsV6"
+JECprefix = "Summer15_25nsV7"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV6"
+   JECprefix = "Summer15_25nsV7"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV6"
+   JECprefix = "Summer15_25nsV7"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
@@ -711,11 +714,12 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     photons = cms.InputTag("slimmedPhotons"),
-    phoMediumIdMap = cms.InputTag("egmPhotonIDs:mvaPhoID-Spring15-25ns-nonTrig-V2-wp90"),
     phoIdVerbose = cms.bool(False),
     phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Values"),
     phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Categories"),
-    #phoTightIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-50ns-V1-standalone-tight"),
+    phoLooseIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-loose"),
+    phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-medium"),
+    phoTightIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-tight"),
     electrons = cms.InputTag("slimmedElectrons"),
     eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
@@ -750,9 +754,11 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     triggerprescales = cms.InputTag("patTrigger"),
     noiseFilter = cms.InputTag('TriggerResults','', hltFiltersProcessName),
     jecAK8chsPayloadNames = cms.vstring( jecLevelsAK8chs ),
+    jecAK8chsUnc = cms.string( jecAK8chsUncFile ),
     jecAK8GroomedchsPayloadNames = cms.vstring( jecLevelsAK8Groomedchs ),
     jecAK8PuppiPayloadNames = cms.vstring( jecLevelsAK8Puppi ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
+    jecAK4chsUnc = cms.string( jecAK4chsUncFile ),
     jecpath = cms.string(''),
     
     ## Noise Filters ###################################

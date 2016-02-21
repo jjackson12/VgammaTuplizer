@@ -25,6 +25,8 @@ class JetsNtuplizer : public CandidateNtuplizer {
 
     void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
     void initJetCorrFactors( void );
+    void initJetCorrUncertainty( void );
+
 
 
   private:
@@ -35,10 +37,13 @@ class JetsNtuplizer : public CandidateNtuplizer {
     boost::shared_ptr<FactorizedJetCorrector>             jecAK8_                    ;      
     boost::shared_ptr<FactorizedJetCorrector>             jecAK8Groomed_             ;      
     boost::shared_ptr<FactorizedJetCorrector>             jecAK8Puppi_               ;      
-    // boost::shared_ptr<JetCorrectionUncertainty>        jecAK8Unc_                 ;
+    boost::shared_ptr<JetCorrectionUncertainty>           jecAK8Unc_                 ;
+    std::string                      	                  jecAK8UncName_	    	;
     std::vector<std::string>                              jecAK4PayloadNames_        ;
     boost::shared_ptr<FactorizedJetCorrector>             jecAK4_                    ;
-    // boost::shared_ptr<JetCorrectionUncertainty>        jecAK4Unc_                 ;
+    boost::shared_ptr<JetCorrectionUncertainty>           jecAK4Unc_                 ;
+    std::string     	                       	      jecAK4UncName_	    	;
+
 
 
     edm::EDGetTokenT<pat::JetCollection>                  jetInputToken_             ;
