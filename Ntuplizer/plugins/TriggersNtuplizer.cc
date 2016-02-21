@@ -91,7 +91,8 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find( "HLT_Photon250_NoHE"                             ) != std::string::npos ||
        trigName.find( "HLT_Photon300_NoHE"                             ) != std::string::npos ||
        trigName.find( "HLT_Photon500_v"                                ) != std::string::npos ||
-       trigName.find( "HLT_Photon600_v"                                ) != std::string::npos 
+       trigName.find( "HLT_Photon600_v"                                ) != std::string::npos ||
+       trigName.find( "HLT_PFMET170_v"                                 ) != std::string::npos 
    ) return true;
    else
      return false;
@@ -258,6 +259,9 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   if( pathNamesLast[h] == "HLT_Photon600_v1"                                 ) vfiredTrigger.push_back( 111 );
   			   if( pathNamesLast[h] == "HLT_Photon600_v2"                                 ) vfiredTrigger.push_back( 112 );
   			   if( pathNamesLast[h] == "HLT_Photon600_v3"                                 ) vfiredTrigger.push_back( 113 );
+  			   if( pathNamesLast[h] == "HLT_PFMET170_v1"                                  ) vfiredTrigger.push_back( 114 );
+  			   if( pathNamesLast[h] == "HLT_PFMET170_v2"                                  ) vfiredTrigger.push_back( 115 );
+  			   if( pathNamesLast[h] == "HLT_PFMET170_v3"                                  ) vfiredTrigger.push_back( 116 );
   			   // else vfiredTrigger.push_back( -99 );
   			}
 			
