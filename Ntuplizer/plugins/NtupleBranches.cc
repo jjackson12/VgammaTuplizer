@@ -43,6 +43,9 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 			tree_->Branch( "lheNj"                                           , &lheNj                                         ); 
 			tree_->Branch( "genWeight"                                       , &genWeight                                     ); 
 			tree_->Branch( "qScale"                                          , &qScale                                        );
+            tree_->Branch( "sys_weights"                                     , &sys_weights                                );
+            tree_->Branch( "originalXWGTUP"                                  , &originalXWGTUP                                );
+            tree_->Branch( "pdf_scalePDF"                                    , &pdf_scalePDF                                  );
 			tree_->Branch( "PDF_x"                                           , &PDF_x                                         );
 			tree_->Branch( "PDF_xPDF"                                        , &PDF_xPDF                                      );
 			tree_->Branch( "PDF_id"                                          , &PDF_id                                        );
@@ -656,6 +659,9 @@ void NtupleBranches::reset( void ){
 	lheNj       = 0;
 	genWeight   = 0;
 	qScale      = 0;
+    pdf_scalePDF = 0;
+    originalXWGTUP = 0;
+    sys_weights.clear();
 	PDF_id.clear();  
 	PDF_x.clear();  
 	PDF_xPDF.clear();

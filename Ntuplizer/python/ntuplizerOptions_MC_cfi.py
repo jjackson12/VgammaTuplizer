@@ -13,6 +13,7 @@ config["DOPHOTONS"] = True
 config["DOGENPARTICLES"] = True
 config["DOGENJETS"] = False
 config["DOGENEVENT"] = True
+config["DOLHEEVENT"] = False
 config["DOPILEUP"] = True
 config["DOELECTRONS"] = True
 config["DOELECTRONIDVARS"] = False

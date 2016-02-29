@@ -12,6 +12,7 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavour.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 #include "../interface/NtupleBranches.h"
@@ -49,6 +50,7 @@ private:
   edm::EDGetTokenT<double>                                  fixedGridRhoToken_  ;
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_        ;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_      ;
+    edm::EDGetTokenT< LHEEventProduct >                   lheeventToken_      ;
 
   
   edm::EDGetTokenT<reco::GenParticleCollection>             genparticleToken_   ;

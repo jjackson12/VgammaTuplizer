@@ -28,6 +28,7 @@ rhoToken_                         (consumes<double>                             
 fixedGridRhoToken_                (consumes<double>                                (iConfig.getParameter<edm::InputTag>("fixedGridRho")))                               ,
 puinfoToken_                      (consumes<std::vector<PileupSummaryInfo> >       (iConfig.getParameter<edm::InputTag>("PUInfo")))                                     ,
 geneventToken_                    (consumes<GenEventInfoProduct>                   (iConfig.getParameter<edm::InputTag>("genEventInfo")))                               ,
+lheeventToken_                     (consumes<LHEEventProduct>                        (iConfig.getParameter<edm::InputTag>("lheEventInfo")))                               ,
 genparticleToken_                 (consumes<reco::GenParticleCollection>           (iConfig.getParameter<edm::InputTag>("genparticles")))                               ,
 
 jetToken_                         (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("jets")))                                       ,
@@ -87,6 +88,7 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
     runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
     runFlags["doGenJets"] = iConfig.getParameter<bool>("doGenJets");
     runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
+    runFlags["doLHEEvent"] = iConfig.getParameter<bool>("doLHEEvent");
     runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
     runFlags["doPhotons"] = iConfig.getParameter<bool>("doPhotons");
     runFlags["doElectrons"] = iConfig.getParameter<bool>("doElectrons");
@@ -290,11 +292,13 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
             puTokens.push_back( puinfoToken_ );
             nTuplizers_["PU"] = new PileUpNtuplizer( puTokens, nBranches_ );
         }
-        
         if (runFlags["doGenEvent"]) {
             std::vector<edm::EDGetTokenT< GenEventInfoProduct > > geneTokens;
             geneTokens.push_back( geneventToken_ );
-            nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ );
+            std::vector<edm::EDGetTokenT< LHEEventProduct > > lheTokens;
+            lheTokens.push_back( lheeventToken_ );
+            bool doPDF = runFlags["doLHEEvent"];
+            nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, lheTokens, doPDF, nBranches_ );
         }
     }
 }

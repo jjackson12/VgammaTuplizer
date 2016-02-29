@@ -74,6 +74,9 @@ public:
     float                                lheNj                        ;
     float                                genWeight                    ;
     float                                qScale                       ;
+    float                                pdf_scalePDF                 ;
+    float                                originalXWGTUP               ;
+    std::vector<float>                   sys_weights                  ;
     std::vector<int  >                   PDF_id                       ;
     std::vector<float>                   PDF_x                        ;
     std::vector<float>                   PDF_xPDF                     ;
