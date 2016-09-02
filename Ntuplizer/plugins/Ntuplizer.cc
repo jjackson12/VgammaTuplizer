@@ -298,7 +298,7 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
             std::vector<edm::EDGetTokenT< LHEEventProduct > > lheTokens;
             lheTokens.push_back( lheeventToken_ );
             bool doPDF = runFlags["doLHEEvent"];
-            nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, lheTokens, doPDF, nBranches_ );
+            nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, lheTokens, doPDF, nBranches_, _hCounter );
         }
     }
 }

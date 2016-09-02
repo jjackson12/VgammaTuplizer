@@ -25,7 +25,7 @@ options.maxEvents = -1
 
 #data file
 
-options.inputFiles='file:/store/mc/RunIISpring15MiniAODv2/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/60000/FC49C351-E66D-E511-BA9E-6CC2173D6A70.root'
+options.inputFiles='file:/cms/data/store/mc/RunIISpring16MiniAODv2/GluGluSpin0ToZGamma_ZToQQ_W_0-p-014_M_750_TuneCUEP8M1_13TeV_pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/10000/326D893B-8A33-E611-92C7-001E672488D1.root'
 #options.inputFiles=''
 
 options.parseArguments()
@@ -74,10 +74,10 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if config["RUNONMC"]:
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_mcRun2_asymptotic_v2')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_miniAODv2')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(config["RUNONMC"]):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '74X_dataRun2_Prompt_v4')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8')
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -112,10 +112,10 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
              beta = cms.double(1.0),        # CMS default is 1
              R0 = cms.double( 0.8 ),        # CMS default is jet cone size
-             Rcutoff = cms.double( -999.0),      # not used by default
+             Rcutoff = cms.double( 999.0),      # not used by default
              # variables for axes definition :
              axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-             nPass = cms.int32(-999),       # not used by default
+             nPass = cms.int32(999),       # not used by default
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
 
@@ -153,27 +153,27 @@ if config["GETJECFROMDBFILE"]:
             toGet = cms.VPSet(
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK4PFchs'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK4PFchs'),
                  label  = cms.untracked.string('AK4PFchs')
                  ),
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK8PFchs'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFchs'),
                  label  = cms.untracked.string('AK8PFchs')
                  ),
             cms.PSet(
                  record = cms.string('JetCorrectionsRecord'),
-                 tag    = cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK8PFPuppi'),
+                 tag    = cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFPuppi'),
                  label  = cms.untracked.string('AK8PFPuppi')
                  ),
             ),
-            connect = cms.string('sqlite:JEC/Summer15_25nsV7_MC.db')
+            connect = cms.string('sqlite:JEC/Spring16_25nsV6_MC.db')
             )
   if config["RUNONMC"]:
-    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK4PFchs')
-    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK8PFchs')
-    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Summer15_25nsV7_MC_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Summer15_25nsV7_MC.db')
+    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK4PFchs')
+    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFchs')
+    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFPuppi')
+    process.jec.connect = cms.string('sqlite:JEC/Spring16_25nsV6_MC.db')
   else:
     sys.exit("This config file expects to run on MC, but an option to run on data was received.")
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
@@ -193,10 +193,10 @@ if config["ADDAK8GENJETS"]:
                               measureDefinition = cms.uint32( 0 ), # CMS default is normalized measure
                               beta = cms.double(1.0),              # CMS default is 1
                               R0 = cms.double( 0.8 ),              # CMS default is jet cone size
-                              Rcutoff = cms.double( -999.0),       # not used by default
+                              Rcutoff = cms.double( 999.0),       # not used by default
                               # variables for axes definition :
                               axesDefinition = cms.uint32( 6 ),    # CMS default is 1-pass KT axes
-                              nPass = cms.int32(-999),             # not used by default
+                              nPass = cms.int32(999),             # not used by default
                               akAxesR0 = cms.double(-999.0)        # not used by default
                               )
 
@@ -607,14 +607,14 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "/scratch/osg/lesya/CMSSW_7_4_16_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/JEC/Summer15_25nsV7_MC_Uncertainty_AK8PFchs.txt"
-jecAK4chsUncFile = "/scratch/osg/lesya/CMSSW_7_4_16_patch2/src/EXOVVNtuplizerRunII/Ntuplizer/JEC/Summer15_25nsV7_MC_Uncertainty_AK4PFchs.txt"
+jecAK8chsUncFile = "/scratch/osg/lesya/CMSSW_8_0_14/src/EXOVVNtuplizerRunII/Ntuplizer/JEC/Spring16_25nsV6_MC_Uncertainty_AK8PFchs.txt"
+jecAK4chsUncFile = "/scratch/osg/lesya/CMSSW_8_0_14/src/EXOVVNtuplizerRunII/Ntuplizer/JEC/Spring16_25nsV6_MC_Uncertainty_AK4PFchs.txt"
 
-JECprefix = "Summer15_25nsV7"
+JECprefix = "Spring16_25nsV6"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Summer15_25nsV7"
+   JECprefix = "Spring16_25nsV6"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer15_25nsV7"
+   JECprefix = "Spring16_25nsV6"
 
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
@@ -770,7 +770,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
     noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
     noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
-    noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
+    noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),
+    noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHalo2015Filter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
     noiseFilterSelection_goodVertices = cms.string('Flag_goodVertices'),

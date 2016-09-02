@@ -11,7 +11,7 @@ config["BUNCHSPACING"] = 25
 #--------- basic sequences ----------#
 config["DOPHOTONS"] = True
 config["DOGENPARTICLES"] = True
-config["DOGENJETS"] = False
+config["DOGENJETS"] = True
 config["DOGENEVENT"] = True
 config["DOLHEEVENT"] = False
 config["DOPILEUP"] = True
