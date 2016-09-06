@@ -1,7 +1,7 @@
 # EXOVVNtuplizerRunII
 
 
-## Instructions for CMSSW_7_4_16_patch1
+## Instructions for CMSSW_8_0_19
 
 ```
 cmsrel CMSSW_8_0_19
