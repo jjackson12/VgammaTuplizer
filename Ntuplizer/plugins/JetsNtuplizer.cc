@@ -100,7 +100,6 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
     double eta = j.eta();
     double chf = j.chargedHadronEnergyFraction();
     double nhf = j.neutralHadronEnergyFraction(); // + j.HFHadronEnergyFraction();
-    double muf = j.muonEnergy()/(j.jecFactor(0) * j.energy());
     double nemf = j.neutralEmEnergyFraction();
     double cemf = j.chargedEmEnergyFraction();
     int chMult = j.chargedMultiplicity();
@@ -108,7 +107,7 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
     int npr    = chMult + neMult;
     int NumConst = npr;
     
-    return (nhf<0.90 && nemf<0.90 && NumConst>1 && muf<0.8) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.90) || fabs(eta)>2.4);
+    return (nhf<0.90 && nemf<0.90 && NumConst>1) && ((fabs(eta)<=2.4 && chf>0 && chMult>0 && cemf<0.99) || fabs(eta)>2.4); // NOTE: cemf<0.99 is the LOOSE jet id WP.
 }
 
 //===================================================================================================================

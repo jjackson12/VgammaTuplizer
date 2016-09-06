@@ -428,21 +428,21 @@ if config["DOAK8RECLUSTERING"]:
                                             distMax = cms.double(0.8),
                                             value = cms.string('mass') 
                                             )         
-    process.ak8PFJetsCHSPrunedMass           = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+    process.ak8PFJetsCHSPrunedMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
                                             src = cms.InputTag("ak8CHSJets"),
                                             matched = cms.InputTag("patJetsAk8CHSJetsPrunedPacked"),
                                             distMax = cms.double(0.8),
                                             value = cms.string('mass')
                                             )
 
-    process.ak8PFJetsCHSSoftDropMass        = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+    process.ak8PFJetsCHSSoftDropMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
                                             src = cms.InputTag("ak8CHSJets"),
                                             matched = cms.InputTag("patJetsAk8CHSJetsSoftDropPacked"),                                         
                                             distMax = cms.double(0.8),
                                             value = cms.string('mass') 
                                             )    
 					         
-    process.patJetsAk8CHSJets.userData.userFloats.src += ['ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass','ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass']
+    process.patJetsAk8CHSJets.userData.userFloats.src += ['ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass','ak8PFJetsCHSPrunedMassCorrected','ak8PFJetsCHSSoftDropMassCorrected']
     process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','NjettinessAK8:tau2','NjettinessAK8:tau3']
     process.patJetsAk8CHSJets.addTagInfos = True
     #process.patJetsAk8CHSJetsSoftDropSubjets.addBTagInfo = True
@@ -653,7 +653,7 @@ jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 if config["CORRJETSONTHEFLY"]:
    if config["RUNONMC"]:
      jecLevelsAK8chs = [
-     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), 
      	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
@@ -672,15 +672,15 @@ if config["CORRJETSONTHEFLY"]:
        ]
    else:
      jecLevelsAK8chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix), #JEC for 74X
+     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs
+	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs // TODO: check this
        ]
      jecLevelsAK8Groomedchs = [
      	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
      	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs
+	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs // TODO: check this
        ]
      jecLevelsAK8Puppi = [
      	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
