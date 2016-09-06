@@ -25,7 +25,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 vtxToken_                         (consumes<reco::VertexCollection>                (iConfig.getParameter<edm::InputTag>("vertices")))                                   ,
 rhoToken_                         (consumes<double>                                (iConfig.getParameter<edm::InputTag>("rho")))                                        ,
-fixedGridRhoToken_                (consumes<double>                                (iConfig.getParameter<edm::InputTag>("fixedGridRho")))                               ,
+//fixedGridRhoToken_                (consumes<double>                                (iConfig.getParameter<edm::InputTag>("fixedGridRho")))                               ,
 puinfoToken_                      (consumes<std::vector<PileupSummaryInfo> >       (iConfig.getParameter<edm::InputTag>("PUInfo")))                                     ,
 geneventToken_                    (consumes<GenEventInfoProduct>                   (iConfig.getParameter<edm::InputTag>("genEventInfo")))                               ,
 lheeventToken_                     (consumes<LHEEventProduct>                        (iConfig.getParameter<edm::InputTag>("lheEventInfo")))                               ,
@@ -64,14 +64,18 @@ tauEleTauToken_                   (consumes<pat::TauCollection>                 
 tauMuTauToken_                    (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("tausMuTau")))                                  ,
 
 metToken_                         (consumes<pat::METCollection>                    (iConfig.getParameter<edm::InputTag>("mets")))                                       ,
-jetForMetCorrToken_               (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("jetsForMetCorr")))                             ,
+	metSigToken_	      	    (consumes<double>(edm::InputTag("METSignificance","METSignificance"))),
+	metCovToken_	      	    (consumes<math::Error<2>::type>(edm::InputTag("METSignificance","METCovariance"))),
 
-triggerToken_                     (consumes<edm::TriggerResults>                   (iConfig.getParameter<edm::InputTag>("HLT")))                                        ,
-triggerObjects_                   (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects")))                             ,
-triggerPrescales_                 (consumes<pat::PackedTriggerPrescales>           (iConfig.getParameter<edm::InputTag>("triggerprescales")))                           ,
-noiseFilterToken_                 (consumes<edm::TriggerResults>                   (iConfig.getParameter<edm::InputTag>("noiseFilter")))                                ,
-HBHENoiseFilterLooseResultToken_  (consumes<bool>                                  (iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose")))  ,
-HBHENoiseFilterTightResultToken_  (consumes<bool>                                  (iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight")))
+	jetForMetCorrToken_   	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jetsForMetCorr"))),
+
+	triggerToken_	      	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("HLT"))),
+	triggerObjects_	      	    (consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("triggerobjects"))),
+	triggerPrescales_     	    (consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("triggerprescales"))),
+        noiseFilterToken_     	    (consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"))),
+        HBHENoiseFilterLooseResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterLoose"))),
+        HBHENoiseFilterTightResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseFilterTight"))),
+        HBHENoiseIsoFilterResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseIsoFilter")))
 
 {
     
@@ -111,6 +115,8 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
     runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
     runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
     runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
+  runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
+  runFlags["doPuppiRecluster"] = iConfig.getParameter<edm::InputTag>("puppijets").label()!="";
     
     std::string jecpath = iConfig.getParameter<std::string>("jecpath");
     
@@ -157,6 +163,21 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
         jecAK4chsLabels.push_back( iConfig.getParameter<std::string>("jecAK4chsUnc") );
 
         
+    std::vector<std::string> jerAK8chsFileLabels;
+    jerAK8chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8chs_res_PayloadNames") );
+    jerAK8chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8chs_sf_PayloadNames") );
+    std::vector<std::string> jerAK4chsFileLabels;
+    jerAK4chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4chs_res_PayloadNames") );
+     jerAK4chsFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4chs_sf_PayloadNames") );
+     std::vector<std::string> jerAK8PuppiFileLabels;
+    jerAK8PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8Puppi_res_PayloadNames") );
+    jerAK8PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK8Puppi_sf_PayloadNames") );
+
+    std::vector<std::string> jerAK4PuppiFileLabels;
+    jerAK4PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4Puppi_res_PayloadNames") );
+    jerAK4PuppiFileLabels.push_back( iConfig.getParameter<std::string>("jerAK4Puppi_sf_PayloadNames") );
+
+
         nTuplizers_["jets"] = new JetsNtuplizer( jetTokens      ,
                                                 jecAK4chsLabels,
                                                 jecAK8Labels   ,
@@ -166,7 +187,12 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
                                                 rhoToken_      ,
                                                 vtxToken_      ,
                                                 nBranches_     ,
-                                                runFlags     );
+                                             runFlags	    ,
+					     jerAK8chsFileLabels,
+					     jerAK4chsFileLabels,
+					     jerAK8PuppiFileLabels,
+					     jerAK4PuppiFileLabels
+					     ); 
     }
     
     /*=======================================================================================*/
@@ -188,9 +214,12 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
                                                muonToken_         ,
                                                rhoToken_         ,
                                                vtxToken_         ,
+					    metSigToken_       ,
+					    metCovToken_       ,
                                                jecAK4Labels       ,
                                                corrFormulas       ,
-                                               nBranches_        );
+					    nBranches_         ,
+					    runFlags  );
     }
     
     
@@ -225,7 +254,7 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
                                                       photonToken_        ,
                                                       vtxToken_           ,
                                                       rhoToken_           ,
-                                                      fixedGridRhoToken_  ,
+                                                      //fixedGridRhoToken_  ,
                                                       phoIdTokens         ,
                                                       phoIdTokens1        ,
                                                       phoIdTokens2        );
@@ -261,6 +290,7 @@ HBHENoiseFilterTightResultToken_  (consumes<bool>                               
                                                         noiseFilterToken_,
                                                         HBHENoiseFilterLooseResultToken_,
                                                         HBHENoiseFilterTightResultToken_,
+						     HBHENoiseIsoFilterResultToken_,
                                                         nBranches_,
                                                         iConfig,
                                                         runFlags );

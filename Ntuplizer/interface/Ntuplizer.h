@@ -12,12 +12,16 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavourMatching.h"
 #include "SimDataFormats/JetMatching/interface/JetFlavour.h"
-#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 #include "../interface/NtupleBranches.h"
 
-
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenRunInfoProduct.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHERunInfoProduct.h"
+#include "GeneratorInterface/LHEInterface/interface/LHEEvent.h"
 class NtupleBranches;
 class CandidateNtuplizer;
 
@@ -47,7 +51,6 @@ private:
   
   edm::EDGetTokenT<reco::VertexCollection>                  vtxToken_           ;
   edm::EDGetTokenT<double>                                  rhoToken_           ;
-  edm::EDGetTokenT<double>                                  fixedGridRhoToken_  ;
   edm::EDGetTokenT< std::vector<PileupSummaryInfo> >        puinfoToken_        ;
   edm::EDGetTokenT< GenEventInfoProduct >                   geneventToken_      ;
     edm::EDGetTokenT< LHEEventProduct >                   lheeventToken_      ;
@@ -89,6 +92,8 @@ private:
   edm::EDGetTokenT<pat::TauCollection> 	    		            tauMuTauToken_	;
 
   edm::EDGetTokenT<pat::METCollection> 	    		            metToken_		;
+  edm::EDGetTokenT<double>                                  metSigToken_    ;
+  edm::EDGetTokenT<math::Error<2>::type>                    metCovToken_ ;
   edm::EDGetTokenT<pat::JetCollection>                      jetForMetCorrToken_ ;
   
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_       ;
@@ -98,6 +103,7 @@ private:
   edm::EDGetTokenT<edm::TriggerResults>                     noiseFilterToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterLooseResultToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterTightResultToken_;
+  edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken_; 
   
 
 };

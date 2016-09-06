@@ -2,7 +2,7 @@
 #define METsNtuplizer_H
 
 #include "../interface/CandidateNtuplizer.h"
-
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 class TFormula;
 
 class METsNtuplizer : public CandidateNtuplizer {
@@ -13,9 +13,12 @@ public:
 		  edm::EDGetTokenT<pat::MuonCollection>    muontoken   ,
 		  edm::EDGetTokenT<double>		   rhotoken    ,
 		  edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
+		  edm::EDGetTokenT<double>		   metSigtoken    ,
+		  edm::EDGetTokenT<math::Error<2>::type>    metCovtoken ,
 		  std::vector<std::string>		   jecAK4labels,
 		  std::vector<std::string>		   corrformulas,
-		  NtupleBranches*			   nBranches  );
+		  NtupleBranches*			   nBranches   ,
+		  std::map< std::string, bool >&                       runFlags );
    ~METsNtuplizer( void );
    
    void 	fillBranches      ( edm::Event const & event, const edm::EventSetup& iSetup );
@@ -30,6 +33,9 @@ public:
     edm::EDGetTokenT<pat::MuonCollection>	 muonInputToken_ ;
     edm::EDGetTokenT<double>			 rhoToken_	 ;  
     edm::EDGetTokenT<reco::VertexCollection>	 verticeToken_   ;   
+    edm::EDGetTokenT<double>			 metSigToken_	 ;  
+    edm::EDGetTokenT<math::Error<2>::type>	 metCovToken_   ;   
+
     std::vector<std::string>			 jetCorrLabel_   ;
     std::vector<std::string>			 corrFormulas_   ;
 
@@ -43,12 +49,18 @@ public:
     edm::Handle< double >			 rho_		 ;
     edm::Handle<reco::VertexCollection> 	 vertices_	 ;
    
+    edm::Handle<double>                          significanceHandle;
+    edm::Handle<math::Error<2>::type>            covHandle;
+ 
+   
     std::map<std::string,double>		 TypeICorrMap_   ;
     
     TFormula* corrPx_;
     TFormula* corrPy_;
 
     bool doCorrOnTheFly_;
+    bool doMETSVFIT_;
+
 };
 
 #endif // METsNtuplizer_H

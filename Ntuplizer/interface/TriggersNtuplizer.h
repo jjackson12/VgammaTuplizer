@@ -14,6 +14,7 @@ public:
 		     edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken,
 		     edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken, 
 		     edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken, 
+		     edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken, 
 		     NtupleBranches* nBranches, 
 		     const edm::ParameterSet& iConfig, 
 		     std::map< std::string, bool >& runFlags );
@@ -37,7 +38,9 @@ private:
    std::string HBHENoiseFilter_Selector_;
    edm::EDGetTokenT<bool> HBHENoiseFilterLoose_Selector_;
    edm::EDGetTokenT<bool> HBHENoiseFilterTight_Selector_;
+   edm::EDGetTokenT<bool> HBHENoiseIsoFilter_Selector_;
    std::string CSCHaloNoiseFilter_Selector_;
+   std::string CSCTightHalo2015Filter_Selector_;
    std::string HCALlaserNoiseFilter_Selector_;
    std::string ECALDeadCellNoiseFilter_Selector_;
    std::string GoodVtxNoiseFilter_Selector_;
@@ -49,6 +52,12 @@ private:
    std::string TrkPOG_toomanystrip_NoiseFilter_Selector_;
    std::string TrkPOG_logError_NoiseFilter_Selector_;
    std::string METFilters_Selector_;
+   //NEW FOR ICHEP
+   std::string CSCTightHaloTrkMuUnvetoFilter_Selector_  ;
+   std::string globalTightHalo2016Filter_Selector_  ;
+   std::string HcalStripHaloFilter_Selector_  ;
+   std::string chargedHadronTrackResolutionFilter_Selector_ ;
+   std::string muonBadTrackFilter_Selector_ ;
    
    bool doTriggerDecisions_;
    bool doTriggerObjects_;
