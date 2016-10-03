@@ -4,11 +4,12 @@
 GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens,
                                      std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens2,
                                      bool doPDF,
-                                     NtupleBranches* nBranches )
+                                     NtupleBranches* nBranches, TH1D* _hCounter )
 : CandidateNtuplizer( nBranches )
 , geneventToken_( tokens[0] )
 , lheeventToken_( tokens2[0] )
 , doPDF_(doPDF)
+, _hCounterLoc(_hCounter)
 {
     
 }
@@ -32,7 +33,13 @@ void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         }
     }
     
-    nBranches_->genWeight=geneventInfo_->weight();
+    double wght = 1;
+    if (geneventInfo_->weight() < 0)
+        wght = -1;
+    
+    _hCounterLoc->Fill(1.,wght);
+    
+    nBranches_->genWeight=wght;
     nBranches_->qScale=geneventInfo_->qScale();
     nBranches_->pdf_scalePDF=geneventInfo_->pdf()->scalePDF;
     nBranches_->PDF_x.push_back((geneventInfo_->pdf()->x).first);

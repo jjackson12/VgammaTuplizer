@@ -23,7 +23,7 @@ PhotonsNtuplizer::PhotonsNtuplizer(NtupleBranches*                              
                                    edm::EDGetToken                                        photonToken       ,
                                    edm::EDGetTokenT<reco::VertexCollection>               verticeToken      ,
                                    edm::EDGetTokenT<double>                               rhoToken          ,
-                                   edm::EDGetTokenT<double>                               fixedGridRhoToken ,
+                                   //edm::EDGetTokenT<double>                               fixedGridRhoToken ,
                                    std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > >  phoIDtokens       ,
                                    std::vector<edm::EDGetTokenT<edm::ValueMap<float> > >  phoIDtokens1      ,
                                    std::vector<edm::EDGetTokenT<edm::ValueMap<int> > >    phoIDtokens2
@@ -39,7 +39,7 @@ PhotonsNtuplizer::PhotonsNtuplizer(NtupleBranches*                              
   , photonToken_                      ( photonToken       )
   , verticeToken_                     ( verticeToken      )
   , rhoToken_                         ( rhoToken          )
-  , fixedGridRhoToken_                ( fixedGridRhoToken )
+  //, fixedGridRhoToken_                ( fixedGridRhoToken )
   , photonLooseIdMapToken_            ( phoIDtokens[0]    )
   , photonMediumIdMapToken_           ( phoIDtokens[1]    )
   , photonTightIdMapToken_            ( phoIDtokens[2]    )
@@ -62,7 +62,7 @@ void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   event.getByToken(photonToken_                     , photons                );
   event.getByToken(verticeToken_                    , vertices_              );
   event.getByToken(rhoToken_                        , rho_                   );
-  event.getByToken(fixedGridRhoToken_               , fixedGridRho_          );
+  //event.getByToken(fixedGridRhoToken_               , fixedGridRho_          );
 
   event.getByToken(photonLooseIdMapToken_           , loose_id_decisions     );
   event.getByToken(photonMediumIdMapToken_          , medium_id_decisions    );
@@ -106,9 +106,9 @@ void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
 
     /*======= ISO ==========*/
     double ph_rho = *(rho_.product());
-    double ph_fixedGridRho = *(fixedGridRho_.product());
+    //double ph_fixedGridRho = *(fixedGridRho_.product());
     nBranches_->ph_rho.push_back(ph_rho);
-    nBranches_->ph_fixedGridRho.push_back(ph_fixedGridRho);
+    //nBranches_->ph_fixedGridRho.push_back(ph_fixedGridRho);
     nBranches_->ph_sigmaIetaIeta.push_back(pho->sigmaIetaIeta());
     nBranches_->ph_hOverE.push_back(pho->hadronicOverEm());
     nBranches_->ph_isoGamma.push_back(pho->photonIso());

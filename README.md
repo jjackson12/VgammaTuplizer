@@ -1,33 +1,26 @@
 # EXOVVNtuplizerRunII
 
 
-## Instructions for CMSSW_7_4_16_patch1
+## Instructions for CMSSW_8_0_19
 
 ```
-cmsrel CMSSW_7_4_16_patch1
-cd CMSSW_7_4_16_patch1/src
+cmsrel CMSSW_8_0_19
+cd CMSSW_8_0_19/src
 cmsenv
+export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git.daily
 git cms-init
-```
-
-To get the 7_4_X (X>=16) photon ID:
-```
-git cms-merge-topic ikrav:egm_id_7.4.12_v1
-```
-
-For the boosted Hbb tagger (will add a lot of packages that will take a long time to compile):
-```
+git cms-merge-topic -u cms-met:CMSSW_8_0_X-METFilterUpdate
 git remote add btv-cmssw https://github.com/cms-btv-pog/cmssw.git
-git fetch btv-cmssw
-git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTagger-WithWeightFiles-v2_from-CMSSW_7_4_1
-```
-
-getting the code:
-```
-git cms-addpkg RecoJets/Configuration
-git clone https://github.com/jhakala/EXOVVNtuplizerRunII.git
+git fetch --tags btv-cmssw
+git cms-merge-topic -u cms-btv-pog:BoostedDoubleSVTaggerV3-WithWeightFiles-v1_from-CMSSW_8_0_8_patch1
+git clone git@github.com:jhakala/EXOVVNtuplizerRunII.git
+cd EXOVVNtuplizerRunII/
+git fetch
+git checkout 80X_dev
 scram b distclean
-scram b -j8
-cd EXOVVNtuplizerRunII/Ntuplizer
+cd ..
+scram b -j12
+# select your input file in config_MC.py
+# copy the appropriate JECs and JERs into the respective dirs
+cmsRun config_MC.py
 ```
-Tested on lxplus.

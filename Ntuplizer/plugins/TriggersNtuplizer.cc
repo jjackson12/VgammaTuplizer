@@ -12,6 +12,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
 				      edm::EDGetTokenT<edm::TriggerResults> noiseFilterToken, 
 				      edm::EDGetTokenT<bool> HBHENoiseFilterLooseResultToken,
 				      edm::EDGetTokenT<bool> HBHENoiseFilterTightResultToken,
+				      edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken,
 				      NtupleBranches* nBranches, 
 				      const edm::ParameterSet& iConfig, 
 				      std::map< std::string, bool >& runFlags)
@@ -20,8 +21,9 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    , triggerObjects_	( object )	
    , triggerPrescales_	( prescale )
    , noiseFilterToken_	( noiseFilterToken )
-   , HBHENoiseFilterLoose_Selector_ ( HBHENoiseFilterLooseResultToken )		
-   , HBHENoiseFilterTight_Selector_ ( HBHENoiseFilterTightResultToken )		
+   , HBHENoiseFilterLoose_Selector_( HBHENoiseFilterLooseResultToken )
+   , HBHENoiseFilterTight_Selector_( HBHENoiseFilterTightResultToken )
+   , HBHENoiseIsoFilter_Selector_( HBHENoiseIsoFilterResultToken )
    , doTriggerDecisions_( runFlags["doTriggerDecisions"] )
    , doTriggerObjects_	( runFlags["doTriggerObjects"] )
    , doHltFilters_	( runFlags["doHltFilters"] )
@@ -30,6 +32,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
    
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
   CSCHaloNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloFilter");
+  CSCTightHalo2015Filter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHalo2015Filter");
   HCALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_hcalLaserEventFilter");
   ECALDeadCellNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter");
   GoodVtxNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_goodVertices");
@@ -41,6 +44,13 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
   TrkPOG_toomanystrip_NoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trkPOG_toomanystripclus53X");
   TrkPOG_logError_NoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_trkPOG_logErrorTooManyClusters");
   METFilters_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_metFilters");
+   
+  //NEW FOR ICHEP
+  CSCTightHaloTrkMuUnvetoFilter_Selector_       =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter");  
+  globalTightHalo2016Filter_Selector_           =  iConfig.getParameter<std::string> ("noiseFilterSelection_globalTightHalo2016Filter");  
+  HcalStripHaloFilter_Selector_                 =  iConfig.getParameter<std::string> ("noiseFilterSelection_HcalStripHaloFilter");  
+  chargedHadronTrackResolutionFilter_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_chargedHadronTrackResolutionFilter");  
+  muonBadTrackFilter_Selector_                  =  iConfig.getParameter<std::string> ("noiseFilterSelection_muonBadTrackFilter");  
    
 }
 
@@ -56,6 +66,9 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
    if( 
        trigName.find( "PFHT800"                                        ) != std::string::npos ||
        trigName.find( "PFHT900"                                        ) != std::string::npos ||
+       trigName.find( "HLT_AK8PFJet360_TrimMass30_v"                   ) != std::string::npos ||
+       trigName.find( "HLT_CaloJet500_NoJetID_v"                        ) != std::string::npos ||
+       trigName.find( "HLT_ECALHT800_v"                                 ) != std::string::npos ||
        trigName.find( "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_PFMET40"  ) != std::string::npos ||
        trigName.find( "HLT_Photon22_R9Id90_HE10_Iso40_EBOnly_VBF"      ) != std::string::npos ||
        trigName.find( "HLT_Photon22_R9Id90_HE10_IsoM"                  ) != std::string::npos ||
@@ -85,14 +98,13 @@ bool TriggersNtuplizer::findTrigger( std::string trigName ){
        trigName.find( "HLT_Photon120_R9Id90_HE10_IsoM"                 ) != std::string::npos ||
        trigName.find( "HLT_Photon120_v"                                ) != std::string::npos ||
        trigName.find( "HLT_Photon135_PFMET100"                         ) != std::string::npos ||
-       trigName.find( "HLT_Photon165_HE10"                             ) != std::string::npos ||
+       trigName.find( "HLT_Photon165_HE10_v"                             ) != std::string::npos ||
        trigName.find( "HLT_Photon165_R9Id90_HE10_IsoM"                 ) != std::string::npos ||
        trigName.find( "HLT_Photon175_v"                                ) != std::string::npos ||
        trigName.find( "HLT_Photon250_NoHE"                             ) != std::string::npos ||
        trigName.find( "HLT_Photon300_NoHE"                             ) != std::string::npos ||
        trigName.find( "HLT_Photon500_v"                                ) != std::string::npos ||
-       trigName.find( "HLT_Photon600_v"                                ) != std::string::npos ||
-       trigName.find( "HLT_PFMET170_v"                                 ) != std::string::npos 
+       trigName.find( "HLT_Photon600_v"                                ) != std::string::npos 
    ) return true;
    else
      return false;
@@ -259,9 +271,6 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
   			   if( pathNamesLast[h] == "HLT_Photon600_v1"                                 ) vfiredTrigger.push_back( 111 );
   			   if( pathNamesLast[h] == "HLT_Photon600_v2"                                 ) vfiredTrigger.push_back( 112 );
   			   if( pathNamesLast[h] == "HLT_Photon600_v3"                                 ) vfiredTrigger.push_back( 113 );
-  			   if( pathNamesLast[h] == "HLT_PFMET170_v1"                                  ) vfiredTrigger.push_back( 114 );
-  			   if( pathNamesLast[h] == "HLT_PFMET170_v2"                                  ) vfiredTrigger.push_back( 115 );
-  			   if( pathNamesLast[h] == "HLT_PFMET170_v3"                                  ) vfiredTrigger.push_back( 116 );
   			   // else vfiredTrigger.push_back( -99 );
   			}
 			
@@ -280,13 +289,13 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
     event.getByToken(noiseFilterToken_, noiseFilterBits_);
     const edm::TriggerNames &names = event.triggerNames(*noiseFilterBits_);
   
-    bool HcalNoiseFilter = false;
-    
     for (unsigned int i = 0, n = noiseFilterBits_->size(); i < n; ++i) {
       if (names.triggerName(i) == HBHENoiseFilter_Selector_)
-        HcalNoiseFilter = noiseFilterBits_->accept(i); // TO BE USED
+        nBranches_->passFilter_HBHE_ = noiseFilterBits_->accept(i);
       if (names.triggerName(i) == CSCHaloNoiseFilter_Selector_)
-        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // TO BE USED
+        nBranches_->passFilter_CSCHalo_ = noiseFilterBits_->accept(i); // DEPRECATED	
+      if (names.triggerName(i) == CSCTightHalo2015Filter_Selector_)
+        nBranches_->passFilter_CSCTightHalo2015_ = noiseFilterBits_->accept(i); // TO BE USED
       if (names.triggerName(i) == HCALlaserNoiseFilter_Selector_)
         nBranches_->passFilter_HCALlaser_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == ECALDeadCellNoiseFilter_Selector_)
@@ -309,9 +318,20 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
         nBranches_->passFilter_TrkPOG_logError_ = noiseFilterBits_->accept(i); // DEPRECATED
       if (names.triggerName(i) == METFilters_Selector_)
         nBranches_->passFilter_METFilters_ = noiseFilterBits_->accept(i); // DEPRECATED
+       //NEW FOR ICHEP
+      if (names.triggerName(i) == CSCTightHaloTrkMuUnvetoFilter_Selector_)
+        nBranches_->passFilter_CSCTightHaloTrkMuUnvetoFilter_ = noiseFilterBits_->accept(i); 
+      if (names.triggerName(i) == globalTightHalo2016Filter_Selector_           )
+        nBranches_->passFilter_globalTightHalo2016_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016 
+      if (names.triggerName(i) == HcalStripHaloFilter_Selector_                 )
+        nBranches_->passFilter_HcalStripHalo_ = noiseFilterBits_->accept(i); 
+      if (names.triggerName(i) == chargedHadronTrackResolutionFilter_Selector_  )
+        nBranches_->passFilter_chargedHadronTrackResolution_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016 
+      if (names.triggerName(i) == muonBadTrackFilter_Selector_                  )
+        nBranches_->passFilter_muonBadTrack_ = noiseFilterBits_->accept(i); // TO BE USED FOR ICHEP 2016 
     }
     
-    if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
+    //if( !runOnMC_ /*&& event.id().run() < 251585*/ ){
 
        edm::Handle<bool> HBHENoiseFilterLooseResultHandle;
        event.getByToken(HBHENoiseFilterLoose_Selector_, HBHENoiseFilterLooseResultHandle);
@@ -320,7 +340,7 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
          LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
        }
  
-       HcalNoiseFilter = HBHENoiseFilterLooseResult;
+       //HcalNoiseFilter = HBHENoiseFilterLooseResult;
        nBranches_->passFilter_HBHELoose_ = HBHENoiseFilterLooseResult;
 
        edm::Handle<bool> HBHENoiseFilterTightResultHandle;
@@ -332,9 +352,16 @@ void TriggersNtuplizer::fillBranches( edm::Event const & event, const edm::Event
  
        nBranches_->passFilter_HBHETight_ = HBHENoiseFilterTightResult;
                     
+        edm::Handle<bool> HBHENoiseIsoFilterResultHandle;
+       event.getByToken(HBHENoiseIsoFilter_Selector_, HBHENoiseIsoFilterResultHandle);
+       bool HBHENoiseIsoFilterResult = *HBHENoiseIsoFilterResultHandle;
+       if (!HBHENoiseIsoFilterResultHandle.isValid()) {
+         LogDebug("") << "CaloTowerAnalyzer: Could not find HBHENoiseFilterResult" << std::endl;
     }
     
-    nBranches_->passFilter_HBHE_ = HcalNoiseFilter; // TO BE USED
+       nBranches_->passFilter_HBHEIso_ = HBHENoiseIsoFilterResult;
+                          
+    //}
 
   } //doHltFilters_
 

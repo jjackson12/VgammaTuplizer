@@ -2,6 +2,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include <TFormula.h>
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 //===================================================================================================================        
 METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
@@ -9,9 +10,13 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 				edm::EDGetTokenT<pat::MuonCollection> 	 muontoken   ,
 				edm::EDGetTokenT<double> 		 rhotoken    ,
 				edm::EDGetTokenT<reco::VertexCollection> vtxtoken    ,
+				edm::EDGetTokenT<double>	      metSigtoken    ,
+				edm::EDGetTokenT<math::Error<2>::type> metCovtoken ,
+
 				std::vector<std::string> 		 jecAK4labels,
 				std::vector<std::string>	  	 corrformulas,
-				NtupleBranches* 			 nBranches   )
+				NtupleBranches* 			 nBranches   , 
+				std::map< std::string, bool >&                        runFlags 	)
 									
 : CandidateNtuplizer ( nBranches    )
 , metInputToken_     ( mettoken     )
@@ -19,8 +24,11 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 , muonInputToken_    ( muontoken    )	    
 , rhoToken_	     ( rhotoken     )	    
 , verticeToken_	     ( vtxtoken     )														    
+, metSigToken_       ( metSigtoken  )
+, metCovToken_  	(metCovtoken)										    
 , jetCorrLabel_	     ( jecAK4labels )								    
 , corrFormulas_	     ( corrformulas )						    
+, doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
 
 {
         if( jetCorrLabel_.size() != 0 ){
@@ -214,7 +222,29 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
     nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	  
     
+   
+  } 
+
+  if (doMETSVFIT_) {
+ 
+
+    event.getByToken (metSigToken_, significanceHandle);
+    event.getByToken (metCovToken_, covHandle);
+  //event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
+  //event.getByLabel ("METSignificance", "METCovariance", covHandle);
+ 
+  nBranches_->MET_significance.push_back( (*significanceHandle));
+  nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
+  nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
+  nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
+  //FROM LOW MASS ANALYSIS
+  // covMET[0][0] = (*covHandle)(0,0);
+  // covMET[1][0] = (*covHandle)(1,0);
+  // covMET[0][1] = covMET[1][0]; // (1,0) is the only one saved
+  // covMET[1][1] = (*covHandle)(1,1);
+  
   } 
 		
+
 }
 
