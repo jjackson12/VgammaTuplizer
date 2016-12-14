@@ -24,3 +24,6 @@ scram b -j12
 # copy the appropriate JECs and JERs into the respective dirs
 cmsRun config_MC.py
 ```
+
+to add the new MVA photon ID, follow the instructions here:
+https://twiki.cern.ch/twiki/bin/view/CMS/MultivariatePhotonIdentificationRun2#Recipes_for_regular_users
