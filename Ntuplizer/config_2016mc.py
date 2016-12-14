@@ -12,7 +12,7 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
 
 ####### Config parser ##########
 
@@ -25,8 +25,10 @@ options.maxEvents = -1
 
 #data file
 
-options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016B/SinglePhoton/MINIAOD/23Sep2016-v3/110000/C0614094-EC98-E611-A4A4-0CC47A745284.root'
-#options.inputFiles=''
+#options.inputFiles='file:/afs/cern.ch/user/j/johakala/work/public/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
+#options.inputFiles='file:/afs/cern.ch/user/j/johakala/eos/cms/store/mc/RunIISpring16MiniAODv2/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/3643915C-0E1B-E611-A30B-001E6734B0D4.root'
+#options.inputFiles='file:/mnt/hadoop/users/hakala/2016HgammaSigs/M1000/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
+options.inputFiles=''
 
 options.parseArguments()
 
@@ -79,10 +81,10 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if config["RUNONMC"]:
-   sys.exit("This config file expects to run on data, but an option to run on MC was received.")
+   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_miniAODv2')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 elif not(config["RUNONMC"]):
-   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v4')
+   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8')
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
@@ -175,13 +177,13 @@ if config["GETJECFROMDBFILE"]:
             ),
             connect = cms.string('sqlite:JEC/Spring16_25nsV6_MC.db')
             )
-  if not config["RUNONMC"]:
-    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_DATA_AK4PFchs')
-    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_DATA_AK8PFchs')
-    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_DATA_AK8PFPuppi')
-    process.jec.connect = cms.string('sqlite:JEC/Spring16_25nsV6_DATA.db')
+  if config["RUNONMC"]:
+    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK4PFchs')
+    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFchs')
+    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFPuppi')
+    process.jec.connect = cms.string('sqlite:JEC/Spring16_25nsV6_MC.db')
   else:
-    sys.exit("This config file expects to run on data, but an option to run on MC was received.")
+    sys.exit("This config file expects to run on MC, but an option to run on data was received.")
   process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -642,7 +644,7 @@ jecAK8chsUncFile = "JEC"
 jecAK4chsUncFile = "JEC"
 
 JECprefix = "Spring16_25nsV6"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
    JECprefix = "Spring16_25nsV6"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
    JECprefix = "Spring16_25nsV6"
@@ -652,49 +654,48 @@ jecAK4chsUncFile = "JEC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 if config["CORRJETSONTHEFLY"]:
-   #if config["RUNONMC"]:
-   #  jecLevelsAK8chs = [
-   #  	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), 
-   #  	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-   #  	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
-   #    ]
-   #  jecLevelsAK8Groomedchs = [
-   #  	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-   #  	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
-   #    ]
-   #  jecLevelsAK8Puppi = [
-   #  	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-   #  	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
-   #    ]
-   #  jecLevelsAK4chs = [
-   #  	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-   #  	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-   #  	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
-   #    ]
-   #else:
-   if not config["RUNONMC"]:
+   if config["RUNONMC"]:
      jecLevelsAK8chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
+     	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), 
+     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK8PFchs.txt'%(JECprefix)
+     	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-     	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK8PFPuppi.txt'%(JECprefix)
+     	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
        ]
      jecLevelsAK4chs = [
-     	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-     	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-	 'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
-       ]   
+     	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+     	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+       ]
+   #else:
+   #  jecLevelsAK8chs = [
+   #  	 'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 #'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs // TODO: check this
+   #    ]
+   #  jecLevelsAK8Groomedchs = [
+   #  	 'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
+	 #'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs // TODO: check this
+   #    ]
+   #  jecLevelsAK8Puppi = [
+   #  	 'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+   #  	 'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
+	 #'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
+   #    ]
+   #  jecLevelsAK4chs = [
+   #  	 'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
+	 #'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+   #    ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
      jecLevelsForMET = [				       
