@@ -27,8 +27,8 @@ options.maxEvents = -1
 
 #options.inputFiles='file:/afs/cern.ch/user/j/johakala/work/public/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
 #options.inputFiles='file:/afs/cern.ch/user/j/johakala/eos/cms/store/mc/RunIISpring16MiniAODv2/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/3643915C-0E1B-E611-A30B-001E6734B0D4.root'
-#options.inputFiles='file:/mnt/hadoop/users/hakala/2016HgammaSigs/M1000/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
-options.inputFiles=''
+options.inputFiles='file:/mnt/hadoop/users/hakala/2016HgammaSigs/M1000/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
+#options.inputFiles=''
 
 options.parseArguments()
 
@@ -558,7 +558,7 @@ for idmod in my_id_modules_el:
 switchOnVIDPhotonIdProducer(process,dataFormat)
 process.egmPhotonIDSequence = cms.Sequence(process.egmPhotonIDSequence)
 
-my_id_modules_ph = ['RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring15_25ns_nonTrig_V2_cff',
+my_id_modules_ph = ['RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring16_nonTrig_V1_cff'  ,
                     'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring15_25ns_V1_cff'    ]
 
 for idmod in my_id_modules_ph:
@@ -640,9 +640,10 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "/home/hakala/cmssw/CMSSW_8_0_19/src/EXOVVNtuplizerRunII/Ntuplizer/JEC"
-jecAK4chsUncFile = "/home/hakala/cmssw/CMSSW_8_0_19/src/EXOVVNtuplizerRunII/Ntuplizer/JEC"
+jecAK8chsUncFile = "JEC"
+jecAK4chsUncFile = "JEC"
 
+JECprefix = "Spring16_25nsV6"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
    JECprefix = "Spring16_25nsV6"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
@@ -769,8 +770,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     phoLooseIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-loose"),
     phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-medium"),
     phoTightIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-tight"),
-    phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Values"),
-    phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring15NonTrig25nsV2Categories"),
+    phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring16NonTrigV1Values"),
+    phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring16NonTrigV1Categories"),
     electrons = cms.InputTag("slimmedElectrons"),
     eleHEEPId51Map = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV51"),
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV60"),
