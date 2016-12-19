@@ -4,8 +4,8 @@
 ## Instructions for CMSSW_8_0_20
 
 ```
-cmsrel CMSSW_8_0_19
-cd CMSSW_8_0_19/src
+cmsrel CMSSW_8_0_20
+cd CMSSW_8_0_20/src
 cmsenv
 export CMSSW_GIT_REFERENCE=/cvmfs/cms.cern.ch/cmssw.git.daily
 git cms-init
