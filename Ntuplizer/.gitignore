@@ -1,0 +1,10 @@
+*.pyc
+JEC/*
+JER/*
+Cert_*.txt
+*.root
+crabconfigs/*
+old
+old/*
+crab_jobs*
+Spring16_23Sep*

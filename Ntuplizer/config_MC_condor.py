@@ -2,15 +2,13 @@
 
 import sys
 import FWCore.ParameterSet.Config as cms
+print sys.argv
 
 process = cms.Process("Ntuple")
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
-process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string('flatTuple.root')
-                                   )
 
 from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_MC_cfi import config
 
@@ -20,16 +18,23 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-
 options.maxEvents = -1
+#options.maxEvents = 10
 
 #data file
 
-#options.inputFiles='file:/afs/cern.ch/user/j/johakala/work/public/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
-#options.inputFiles='file:/afs/cern.ch/user/j/johakala/eos/cms/store/mc/RunIISpring16MiniAODv2/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0-v1/60000/3643915C-0E1B-E611-A30B-001E6734B0D4.root'
-options.inputFiles='file:/mnt/hadoop/users/hakala/2016HgammaSigs/M1000/Zprime_Gh_hbb_M1000_1_MINIAOD.root'
-#options.inputFiles=''
 
+ # feed in a textfile that contains a list of each input sample (separated by newlines).
+options.register("fileNumber", "", VarParsing.VarParsing.multiplicity.singleton, VarParsing.VarParsing.varType.string, "fileNumber")
+fileNumber = sys.argv[2].split("=")[1]
+options.register("sigMass", "", VarParsing.VarParsing.multiplicity.singleton, VarParsing.VarParsing.varType.string, "sigMass")
+sigMass = sys.argv[3].split("=")[1]
+
+print "Using input file number: " + fileNumber
+print "Using signal mass: " + sigMass
+
+options.fileNumber=fileNumber
+options.sigMass=sigMass
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -39,6 +44,12 @@ process.options  = cms.untracked.PSet(
                      )
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
+options.inputFiles='file:/mnt/hadoop/users/hakala/2016HgammaSigs/M%s/Zprime_Gh_hbb_M%s_%s_MINIAOD.root'%(sigMass, sigMass, fileNumber)
+
+process.TFileService = cms.Service("TFileService",
+                                    fileName = cms.string('/home/hakala/cmssw/CMSSW_8_0_20/src/EXOVVNtuplizerRunII/Ntuplizer/Hgamma2016Sig_m%s/flatTuple_sig%s_%s.root' % (sigMass, sigMass, fileNumber))
+                                    #fileName = cms.string('flatTuple_Hgamma_test.root')
+                                   )
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(options.inputFiles)
@@ -83,8 +94,8 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 if config["RUNONMC"]:
    process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_miniAODv2')
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
-#elif not(config["RUNONMC"]):
-#   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8')
+elif not(config["RUNONMC"]):
+   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_miniAODv2')
    
 ######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:

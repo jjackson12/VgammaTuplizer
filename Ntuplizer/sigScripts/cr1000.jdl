@@ -1,0 +1,13 @@
+universe = vanilla
+Executable = cmsRun1000.sh 
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Notification = Error
+ 
+arguments = $(Process)
+ 
+Output = condorLogs/log.1000.$(Process).stdout
+Error = condorLogs/log.1000.$(Process).stderr
+Log = condorLogs/log.1000.$(Process).condorlog
+ 
+Queue 100
