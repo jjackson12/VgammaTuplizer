@@ -12,7 +12,7 @@ process.TFileService = cms.Service("TFileService",
                                     fileName = cms.string('flatTuple.root')
                                    )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+from VgammaTuplizer.Ntuplizer.ntuplizerOptions_data_cfi import config
 
 ####### Config parser ##########
 
@@ -25,8 +25,8 @@ options.maxEvents = -1
 
 #data file
 
-#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016B/SinglePhoton/MINIAOD/23Sep2016-v3/110000/C0614094-EC98-E611-A4A4-0CC47A745284.root'
-options.inputFiles=''
+options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016C/SinglePhoton/MINIAOD/03Feb2017-v1/110000/A6B405D4-47EB-E611-9DB5-0025904C5DE0.root'
+#options.inputFiles=''
 
 options.parseArguments()
 
@@ -51,7 +51,7 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
+reclusterPuppi=config["DOAK8PUPPIRECLUSTERING"]
 if reclusterPuppi:
   print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
 else: 
@@ -272,7 +272,7 @@ if config["ADDAK8GENJETS"]:
   # process.substructureSequenceGen += process.ak8GenJetsSoftDrop + process.ak8GenJetsSoftDropMass
   # process.substructureSequenceGen += process.ak8GenJetsPruned + process.ak8GenJetsPrunedMass
 
-  from EXOVVNtuplizerRunII.Ntuplizer.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
+  from VgammaTuplizer.Ntuplizer.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
 
   # Redo pat jets from gen AK8
 
@@ -572,7 +572,7 @@ if config["DOHLTFILTERS"]:
    ##___________________________BadChargedCandidate_Noise_Filter________________________________|| 
    process.load('Configuration.StandardSequences.Services_cff')
    process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
-   # process.load('EXOVVNtuplizerRunII.Ntuplizer.BadChargedCandidateFilter_cfi')
+   # process.load('VgammaTuplizer.Ntuplizer.BadChargedCandidateFilter_cfi')
    process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
    process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
    process.BadChargedCandidateFilter.debug = cms.bool(False)
@@ -638,18 +638,18 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "Spring16_23Sep2016BCDV1_DATA"
-jecAK4chsUncFile = "Spring16_23Sep2016BCDV1_DATA"
+jecAK8chsUncFile = "Summer16_23Sep2016BCDV4_DATA"
+jecAK4chsUncFile = "Summer16_23Sep2016BCDV4_DATA"
 
-JECprefix = "Spring16_23Sep2016BCDV1"
+JECprefix = "Summer16_23Sep2016BCDV4"
 if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
-   JECprefix = "Spring16_23Sep2016BCDV1"
+   JECprefix = "Summer16_23Sep2016BCDV4"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Spring16_23Sep2016BCDV1"
+   JECprefix = "Summer16_23Sep2016BCDV4"
 
 # Spring16JECs/BCD/Spring16_23Sep2016BCDV1_DATA/Spring16_23Sep2016BCDV1_DATA_Uncertainty_AK8PFchs.txt
-jecAK8chsUncFile = "Spring16_23Sep2016BCDV1_DATA/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "Spring16_23Sep2016BCDV1_DATA/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
+jecAK8chsUncFile = "Summer16_23Sep2016BCDV4_DATA/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
+jecAK4chsUncFile = "Summer16_23Sep2016BCDV4_DATA/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 if config["CORRJETSONTHEFLY"]:
@@ -675,40 +675,40 @@ if config["CORRJETSONTHEFLY"]:
    #else:
    if not config["RUNONMC"]:
      jecLevelsAK8chs = [
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L1FastJet_AK8PFchs.txt'      %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L3Absolute_AK8PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2L3Residual_AK8PFchs.txt'   %(JECprefix)
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L1FastJet_AK8PFchs.txt'      %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L3Absolute_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2L3Residual_AK8PFchs.txt'   %(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L3Absolute_AK8PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2L3Residual_AK8PFchs.txt'   %(JECprefix)
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L3Absolute_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2L3Residual_AK8PFchs.txt'   %(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2Relative_AK8PFPuppi.txt'   %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L3Absolute_AK8PFPuppi.txt'   %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2L3Residual_AK8PFPuppi.txt' %(JECprefix)
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2Relative_AK8PFPuppi.txt'   %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L3Absolute_AK8PFPuppi.txt'   %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2L3Residual_AK8PFPuppi.txt' %(JECprefix)
        ]
      jecLevelsAK4chs = [
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L1FastJet_AK4PFchs.txt'      %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2Relative_AK4PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L3Absolute_AK4PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2L3Residual_AK4PFchs.txt'   %(JECprefix)
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L1FastJet_AK4PFchs.txt'      %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2Relative_AK4PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L3Absolute_AK4PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2L3Residual_AK4PFchs.txt'   %(JECprefix)
        ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
      jecLevelsForMET = [       
-       'Spring16_23Sep2016BCDV1_DATA/%s_MC_L1FastJet_AK4PFchs.txt'        %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_MC_L2Relative_AK4PFchs.txt'       %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_MC_L3Absolute_AK4PFchs.txt'       %(JECprefix)
+       'Summer16_23Sep2016BCDV4_DATA/%s_MC_L1FastJet_AK4PFchs.txt'        %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_MC_L2Relative_AK4PFchs.txt'       %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_MC_L3Absolute_AK4PFchs.txt'       %(JECprefix)
        ]
    else:      
      jecLevelsForMET = [
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L1FastJet_AK4PFchs.txt'     %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2Relative_AK4PFchs.txt'    %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L3Absolute_AK4PFchs.txt'    %(JECprefix),
-       'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2L3Residual_AK4PFchs.txt'  %(JECprefix)
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L1FastJet_AK4PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2Relative_AK4PFchs.txt'    %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L3Absolute_AK4PFchs.txt'    %(JECprefix),
+       'Summer16_23Sep2016BCDV4_DATA/%s_DATA_L2L3Residual_AK4PFchs.txt'  %(JECprefix)
        ]  
               
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
