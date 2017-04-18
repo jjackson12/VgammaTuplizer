@@ -2,15 +2,17 @@
 
 import sys
 import FWCore.ParameterSet.Config as cms
-print sys.argv
 
 process = cms.Process("Ntuple")
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
+process.TFileService = cms.Service("TFileService",
+                                    fileName = cms.string('flatTuple.root')
+                                   )
 
-from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_SIG_cfi import config
+from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
 
 ####### Config parser ##########
 
@@ -18,23 +20,14 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
+
 options.maxEvents = -1
-#options.maxEvents = 10
 
 #data file
 
+#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016B/SinglePhoton/MINIAOD/23Sep2016-v3/110000/C0614094-EC98-E611-A4A4-0CC47A745284.root'
+options.inputFiles=''
 
- # feed in a textfile that contains a list of each input sample (separated by newlines).
-options.register("fileNumber", "", VarParsing.VarParsing.multiplicity.singleton, VarParsing.VarParsing.varType.string, "fileNumber")
-fileNumber = sys.argv[2].split("=")[1]
-options.register("sigMass", "", VarParsing.VarParsing.multiplicity.singleton, VarParsing.VarParsing.varType.string, "sigMass")
-sigMass = sys.argv[3].split("=")[1]
-
-print "Using input file number: " + fileNumber
-print "Using signal mass: " + sigMass
-
-options.fileNumber=fileNumber
-options.sigMass=sigMass
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -44,12 +37,6 @@ process.options  = cms.untracked.PSet(
                      )
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
-options.inputFiles='file:/mnt/hadoop/users/hakala/2016HgammaSigs/M%s/Zprime_Gh_hbb_M%s_%s_MINIAOD.root'%(sigMass, sigMass, fileNumber)
-
-process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string('/home/hakala/cmssw/CMSSW_8_0_21/src/EXOVVNtuplizerRunII/Ntuplizer/Hgamma2016Sig_m%s/flatTuple_sig%s_%s.root' % (sigMass, sigMass, fileNumber))
-                                    #fileName = cms.string('flatTuple_Hgamma_test.root')
-                                   )
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(options.inputFiles)
@@ -64,7 +51,8 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-if config["DOAK8PUPPIRECLUSTERING"]:
+reclusterPuppi=config["DOAK8PUPPIRECLUSTERING"]
+if reclusterPuppi:
   print "RECLUSTERING PUPPI (since not running of Spring16MiniAODv2)"
 else: 
   print " Not RECLUSTERING PUPPI (since running of Spring16MiniAODv2)"
@@ -91,12 +79,12 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 if config["RUNONMC"]:
-   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_miniAODv2')
+   sys.exit("This config file expects to run on data, but an option to run on MC was received.")
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
-#elif not(config["RUNONMC"]):
-#   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8')
+elif not(config["RUNONMC"]):
+   process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v6')
    
-######### read JSON file for data ##########                                                                       
+######### read JSON file for data ##########					                                                             
 if not(config["RUNONMC"]) and config["USEJSON"]:
 
   import FWCore.PythonUtilities.LumiList as LumiList
@@ -136,22 +124,22 @@ process.NjettinessAK8 = cms.EDProducer("NjettinessAdder",
              akAxesR0 = cms.double(-999.0)      # not used by default
              )
 
-if config["DOAK10TRIMMEDRECLUSTERING"]:             
+if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ECFAK10 = cms.EDProducer("ECFAdder",
              src = cms.InputTag("ak10CHSJetsTrimmed"),
              Njets = cms.vuint32(1, 2, 3),
              beta = cms.double(1.0),        # CMS default is 1
              )
-             
+			       
 
 process.ak8CHSJetsPruned = ak8PFJetsCHSPruned.clone( src = 'chs', jetPtMin = fatjet_ptmin )
 process.ak8CHSJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'chs', jetPtMin = fatjet_ptmin, beta = betapar  )
 
 
-if config["DOAK10TRIMMEDRECLUSTERING"]:             
+if config["DOAK10TRIMMEDRECLUSTERING"]:			       
   process.ak10CHSJetsTrimmed = ak8PFJetsCHSTrimmed.clone( src = 'chs', jetPtMin = fatjet_ptmin, rParam = 1.0, rFilt = 0.2, trimPtFracMin = 0.05 )
 
-if config["DOAK8PUPPIRECLUSTERING"]:
+if reclusterPuppi:
   process.load('CommonTools/PileupAlgos/Puppi_cff')
   process.puppi.useExistingWeights = True
   process.puppi.candName = cms.InputTag('packedPFCandidates')
@@ -160,7 +148,6 @@ if config["DOAK8PUPPIRECLUSTERING"]:
   process.ak8PuppiJetsPruned = ak8PFJetsCHSPruned.clone( src = 'puppi', jetPtMin = fatjet_ptmin )
   process.ak8PuppiJetsSoftDrop = ak8PFJetsCHSSoftDrop.clone( src = 'puppi', jetPtMin = fatjet_ptmin, beta = betapar  )
   process.NjettinessAK8Puppi = process.NjettinessAK8.clone( src = 'ak8PuppiJets' )
-
 
 #if config["GETJECFROMDBFILE"]:
 #  process.load("CondCore.DBCommon.CondDBCommon_cfi")
@@ -188,13 +175,13 @@ if config["DOAK8PUPPIRECLUSTERING"]:
 #            ),
 #            connect = cms.string('sqlite:JEC/Spring16_25nsV6_MC.db')
 #            )
-#  if config["RUNONMC"]:
-#    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK4PFchs')
-#    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFchs')
-#    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_MC_AK8PFPuppi')
-#    process.jec.connect = cms.string('sqlite:JEC/Spring16_25nsV6_MC.db')
+#  if not config["RUNONMC"]:
+#    process.jec.toGet[0].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_DATA_AK4PFchs')
+#    process.jec.toGet[1].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_DATA_AK8PFchs')
+#    process.jec.toGet[2].tag =  cms.string('JetCorrectorParametersCollection_Spring16_25nsV6_DATA_AK8PFPuppi')
+#    process.jec.connect = cms.string('sqlite:JEC/Spring16_25nsV6_DATA.db')
 #  else:
-#    sys.exit("This config file expects to run on MC, but an option to run on data was received.")
+#    sys.exit("This config file expects to run on data, but an option to run on MC was received.")
 #  process.es_prefer_jec = cms.ESPrefer('PoolDBESSource','jec')
 
 
@@ -338,13 +325,13 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
     rParam = getattr(process, fatjets_name).rParam.value()
     algo = None
     if 'ca' in fatjets_name.lower():
-      algo = 'ca'
-      assert getattr(process, fatjets_name).jetAlgorithm.value() == 'CambridgeAachen'
+	algo = 'ca'
+	assert getattr(process, fatjets_name).jetAlgorithm.value() == 'CambridgeAachen'
     elif 'ak' in fatjets_name.lower():
-      algo = 'ak'
-      assert getattr(process, fatjets_name).jetAlgorithm.value() == 'AntiKt'
+	algo = 'ak'
+	assert getattr(process, fatjets_name).jetAlgorithm.value() == 'AntiKt'
     else:
-      raise RuntimeError, "Unknown jet algorithm for fatjets name %s" % fatjets_name
+	raise RuntimeError, "Unknown jet algorithm for fatjets name %s" % fatjets_name
   
     subjets_name = groomed_jets_name + 'Subjets' # e.g. AK8CHSPruned + Subjets
   
@@ -353,17 +340,17 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
     ungroomed_genjets_name = 'INVALID'
   
     if genjets_name is not None:
-      groomed_jetproducer = getattr(process, groomed_jets_name)
-      assert groomed_jetproducer.type_() in ('FastjetJetProducer', 'CATopJetProducer'), "do not know how to construct genjet collection for %s" % repr(groomed_jetproducer)
-      groomed_genjets_name = genjets_name(groomed_jets_name)
-      if verbose: print "Adding groomed genjets ", groomed_genjets_name
-      setattr(process, groomed_genjets_name, groomed_jetproducer.clone(src = cms.InputTag('packedGenParticles'), jetType = 'GenJet'))
-      # add for ungroomed jets if not done yet (maybe never used in case ungroomed are not added, but that's ok ..)
-      ungroomed_jetproducer = getattr(process, fatjets_name)
-      assert ungroomed_jetproducer.type_() == 'FastjetJetProducer'
-      ungroomed_genjets_name = genjets_name(fatjets_name)
-      if verbose: print "Adding ungroomed genjets ", ungroomed_genjets_name
-      setattr(process, ungroomed_genjets_name, ungroomed_jetproducer.clone(src = cms.InputTag('packedGenParticles'), jetType = 'GenJet'))
+	    groomed_jetproducer = getattr(process, groomed_jets_name)
+	    assert groomed_jetproducer.type_() in ('FastjetJetProducer', 'CATopJetProducer'), "do not know how to construct genjet collection for %s" % repr(groomed_jetproducer)
+	    groomed_genjets_name = genjets_name(groomed_jets_name)
+	    if verbose: print "Adding groomed genjets ", groomed_genjets_name
+	    setattr(process, groomed_genjets_name, groomed_jetproducer.clone(src = cms.InputTag('packedGenParticles'), jetType = 'GenJet'))
+	    # add for ungroomed jets if not done yet (maybe never used in case ungroomed are not added, but that's ok ..)
+	    ungroomed_jetproducer = getattr(process, fatjets_name)
+	    assert ungroomed_jetproducer.type_() == 'FastjetJetProducer'
+	    ungroomed_genjets_name = genjets_name(fatjets_name)
+	    if verbose: print "Adding ungroomed genjets ", ungroomed_genjets_name
+	    setattr(process, ungroomed_genjets_name, ungroomed_jetproducer.clone(src = cms.InputTag('packedGenParticles'), jetType = 'GenJet'))
       
 
     # patify ungroomed jets, if not already done:
@@ -373,10 +360,10 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
       jetcorr_levels = cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual'])
     add_ungroomed = not hasattr(process, 'patJets' + cap(fatjets_name))
     addJetCollection(process, labelName = fatjets_name, jetSource = cms.InputTag(fatjets_name), algo = algo, rParam = rParam,
-      jetCorrections = (jetcorr_label, jetcorr_levels, 'None'),
-      genJetCollection = cms.InputTag(ungroomed_genjets_name),
-      **bTagParameters
-  )
+	    jetCorrections = (jetcorr_label, jetcorr_levels, 'None'),
+	    genJetCollection = cms.InputTag(ungroomed_genjets_name),
+	    **bTagParameters
+	)
 
     # patify groomed fat jets, with b-tagging:
     if config["RUNONMC"]:
@@ -389,18 +376,18 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
     # patify subjets, with subjet b-tagging:
     if subjets:
       addJetCollection(process, labelName = subjets_name, jetSource = cms.InputTag(groomed_jets_name, 'SubJets'), algo = algo, rParam = rParam,
-  jetCorrections = (jetcorr_label_subjets, jetcorr_levels, 'None'),
-  explicitJTA = True,
-  svClustering = True,
-  fatJets = cms.InputTag(fatjets_name), groomedFatJets = cms.InputTag(groomed_jets_name),
-  genJetCollection = cms.InputTag(groomed_genjets_name, 'SubJets'),
-  **bTagParameters)
+	jetCorrections = (jetcorr_label_subjets, jetcorr_levels, 'None'),
+	explicitJTA = True,
+	svClustering = True,
+	fatJets = cms.InputTag(fatjets_name), groomedFatJets = cms.InputTag(groomed_jets_name),
+	genJetCollection = cms.InputTag(groomed_genjets_name, 'SubJets'),
+	**bTagParameters)
   
       # add the merged jet collection which contains the links from fat jets to subjets:
       setattr(process, 'patJets' + cap(groomed_jets_name) + 'Packed',cms.EDProducer("BoostedJetMerger",
-  jetSrc=cms.InputTag("patJets" + cap(groomed_jets_name)),
-  subjetSrc=cms.InputTag("patJets" + cap(subjets_name)))
-  )
+	jetSrc=cms.InputTag("patJets" + cap(groomed_jets_name)),
+	subjetSrc=cms.InputTag("patJets" + cap(subjets_name)))
+	)
   
     # adapt all for b-tagging, and switch off some PAT features not supported in miniAOD:
     if subjets:
@@ -409,20 +396,20 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
       module_names = [groomed_jets_name]
     if add_ungroomed: module_names += [fatjets_name]
     for name in module_names:
-      if hasattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)):
-        getattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)).extSVCollection = cms.InputTag('slimmedSecondaryVertices')
-      getattr(process, 'patJetPartonMatch' + cap(name)).matched = 'prunedGenParticles'
-      producer = getattr(process, 'patJets' + cap(name))
-      producer.addJetCharge = False
-      producer.addAssociatedTracks = False
-      if not config["DOHBBTAG"]:
-          producer.addDiscriminators = True
-          producer.addBTagInfo = True
-      producer.addGenJetMatch = genjets_name is not None
-      # for fat groomed jets, gen jet match and jet flavor is not working, so switch it off:
-      if name == groomed_jets_name:
-          producer.addGenJetMatch = False
-          producer.getJetMCFlavour = False
+	if hasattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)):
+	    getattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)).extSVCollection = cms.InputTag('slimmedSecondaryVertices')
+	getattr(process, 'patJetPartonMatch' + cap(name)).matched = 'prunedGenParticles'
+	producer = getattr(process, 'patJets' + cap(name))
+	producer.addJetCharge = False
+	producer.addAssociatedTracks = False
+	if not config["DOHBBTAG"]:
+	    producer.addDiscriminators = True
+	    producer.addBTagInfo = True
+	producer.addGenJetMatch = genjets_name is not None
+	# for fat groomed jets, gen jet match and jet flavor is not working, so switch it off:
+	if name == groomed_jets_name:
+	    producer.addGenJetMatch = False
+	    producer.getJetMCFlavour = False
 
 ################# Recluster jets with b-tagging ######################
 if config["DOAK8RECLUSTERING"]: 
@@ -454,75 +441,74 @@ if config["DOAK8RECLUSTERING"]:
                                             distMax = cms.double(0.8),
                                             value = cms.string('mass') 
                                             )    
-                   
+					         
     process.patJetsAk8CHSJets.userData.userFloats.src += ['ak8PFJetsCHSPrunedMass','ak8PFJetsCHSSoftDropMass','ak8PFJetsCHSPrunedMassCorrected','ak8PFJetsCHSSoftDropMassCorrected']
     process.patJetsAk8CHSJets.userData.userFloats.src += ['NjettinessAK8:tau1','NjettinessAK8:tau2','NjettinessAK8:tau3']
     process.patJetsAk8CHSJets.addTagInfos = True
     #process.patJetsAk8CHSJetsSoftDropSubjets.addBTagInfo = True
 
 ################# Recluster trimmed jets ######################
-if config["DOAK10TRIMMEDRECLUSTERING"]:  
+if config["DOAK10TRIMMEDRECLUSTERING"]:	
     recluster_addBtagging(process, 'ak8CHSJets', 'ak10CHSJetsTrimmed', genjets_name = lambda s: s.replace('CHS', 'Gen'), verbose = False, btagging = False, subjets = False)
     process.patJetsAk10CHSJetsTrimmed.userData.userFloats.src += ['ECFAK10:ecf1','ECFAK10:ecf2','ECFAK10:ecf3']
     
 ################# Recluster puppi jets ######################
-if config["DOAK8PUPPIRECLUSTERING"]:
+if reclusterPuppi:
     recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsSoftDrop', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
     recluster_addBtagging(process, 'ak8PuppiJets', 'ak8PuppiJetsPruned', jetcorr_label = 'AK8PFPuppi', genjets_name = lambda s: s.replace('Puppi', 'Gen'), verbose = False, btagging = False, subjets = False)
   
     process.ak8PFJetsPuppiPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                src = cms.InputTag("ak8PuppiJets"),
-                matched = cms.InputTag("ak8PuppiJetsPruned"),
-                distMax = cms.double(0.8),
-                value = cms.string('mass')
-                )
+    					  src = cms.InputTag("ak8PuppiJets"),
+    					  matched = cms.InputTag("ak8PuppiJetsPruned"),
+    					  distMax = cms.double(0.8),
+    					  value = cms.string('mass')
+    					  )
 
     process.ak8PFJetsPuppiSoftDropMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                src = cms.InputTag("ak8PuppiJets"),
-                matched = cms.InputTag("ak8PuppiJetsSoftDrop"),            
-                distMax = cms.double(0.8),
-                value = cms.string('mass') 
-                )      
-    process.ak8PFJetsPuppiPrunedMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                src = cms.InputTag("ak8PuppiJets"),
-                matched = cms.InputTag("patJetsAk8PuppiJetsPruned"),
-                distMax = cms.double(0.8),
-                value = cms.string('mass')
-                )
+    					  src = cms.InputTag("ak8PuppiJets"),
+    					  matched = cms.InputTag("ak8PuppiJetsSoftDrop"),					  
+    					  distMax = cms.double(0.8),
+    					  value = cms.string('mass') 
+    					  )	    
+    process.ak8PFJetsPuppiPrunedMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+    					  src = cms.InputTag("ak8PuppiJets"),
+    					  matched = cms.InputTag("patJetsAk8PuppiJetsPruned"),
+    					  distMax = cms.double(0.8),
+    					  value = cms.string('mass')
+    					  )
 
-    process.ak8PFJetsPuppiSoftDropMassCorrected = cms.EDProducer("RecoJetDeltaRValueMapProducer",
-                src = cms.InputTag("ak8PuppiJets"),
-                matched = cms.InputTag("patJetsAk8PuppiJetsSoftDrop"),           
-                distMax = cms.double(0.8),
-                value = cms.string('mass') 
-                )      
+    process.ak8PFJetsPuppiSoftDropMass = cms.EDProducer("RecoJetDeltaRValueMapProducer",
+    					  src = cms.InputTag("ak8PuppiJets"),
+    					  matched = cms.InputTag("patJetsAk8PuppiJetsSoftDrop"),					 
+    					  distMax = cms.double(0.8),
+    					  value = cms.string('mass') 
+    					  )	    
 
-    process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiSoftDropMassCorrected']
-    #process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiPrunedMass','ak8PFJetsPuppiPrunedMassCorrected']
+    process.patJetsAk8PuppiJets.userData.userFloats.src += ['ak8PFJetsPuppiSoftDropMass','ak8PFJetsPuppiSoftDropMass']
     process.patJetsAk8PuppiJets.userData.userFloats.src += ['NjettinessAK8Puppi:tau1','NjettinessAK8Puppi:tau2','NjettinessAK8Puppi:tau3']
-process.patJetsAk8PuppiJets.addTagInfos = True
+    process.patJetsAk8PuppiJets.addTagInfos = True
 
 
 # ###### Recluster MET ##########
 if config["DOMETRECLUSTERING"]:
 
   from PhysicsTools.PatAlgos.tools.jetTools import switchJetCollection
-      
+		  
   if config["RUNONMC"]:
      switchJetCollection(process,
                          jetSource = cms.InputTag('ak4PFJetsCHS'),
-             jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
-             genParticles = cms.InputTag('prunedGenParticles'),
-             pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], ''),
+		         genParticles = cms.InputTag('prunedGenParticles'),
+		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
      )
   else:
      switchJetCollection(process,
                          jetSource = cms.InputTag('ak4PFJetsCHS'),
-             jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], ''),
-             genParticles = cms.InputTag('prunedGenParticles'),
-             pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
+		         jetCorrections = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], ''),
+		         genParticles = cms.InputTag('prunedGenParticles'),
+		         pvSource = cms.InputTag('offlineSlimmedPrimaryVertices')
      )
-          
+		  		
   process.patJets.addGenJetMatch = cms.bool(False) 
   process.patJets.addGenPartonMatch = cms.bool(False) 
   process.patJets.addPartonJetMatch = cms.bool(False) 
@@ -545,7 +531,7 @@ if config["DOMETRECLUSTERING"]:
     process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
     process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
     process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-                 
+			           
 ####### Adding HEEP id ##########
 
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -558,7 +544,7 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 
 # define which IDs we want to produce
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_PHYS14_PU20bx25_V2_cff',
-#     'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
+#		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
 my_id_modules_el = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
@@ -633,7 +619,7 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
   jetsAK8pruned = "patJetsAk8CHSJetsPrunedPacked"
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
-if config["DOAK8PUPPIRECLUSTERING"]:  
+if reclusterPuppi:  
   jetsAK8Puppi = "patJetsAk8PuppiJets"  
 
 if config["DOSEMILEPTONICTAUSBOOSTED"]:
@@ -652,75 +638,77 @@ jecLevelsAK4chs = []
 jecLevelsAK4 = []
 jecLevelsAK8Puppi = []
 jecLevelsForMET = []
-jecAK8chsUncFile = "Summer16_23Sep2016V4_MC"
-jecAK4chsUncFile = "Summer16_23Sep2016V4_MC"
+jecAK8chsUncFile = "Summer16_23Sep2016EFV4_DATA"
+jecAK4chsUncFile = "Summer16_23Sep2016EFV4_DATA"
 
-JECprefix = "Summer16_23Sep2016V4"
-if config["BUNCHSPACING"] == 25 and config["RUNONMC"] and config["SPRING16"]:
-   JECprefix = "Summer16_23Sep2016V4"
+JECprefix = "Summer16_23Sep2016EFV4"
+if config["BUNCHSPACING"] == 25 and config["RUNONMC"]:
+   JECprefix = "Summer16_23Sep2016EFV4"
 elif config["BUNCHSPACING"] == 25 and not(config["RUNONMC"]):   
-   JECprefix = "Summer16_23Sep2016V4"
+   JECprefix = "Summer16_23Sep2016EFV4"
 
-jecAK8chsUncFile = "Summer16_23Sep2016V4_MC/%s_MC_Uncertainty_AK8PFchs.txt"%(JECprefix)
-jecAK4chsUncFile = "Summer16_23Sep2016V4_MC/%s_MC_Uncertainty_AK4PFchs.txt"%(JECprefix)
+# Spring16JECs/F/Summer16_23Sep2016EFV4_DATA/Summer16_23Sep2016FV1_DATA_Uncertainty_AK8PFchs.txt
+jecAK8chsUncFile = "Summer16_23Sep2016EFV4_DATA/%s_DATA_Uncertainty_AK8PFchs.txt"%(JECprefix)
+jecAK4chsUncFile = "Summer16_23Sep2016EFV4_DATA/%s_DATA_Uncertainty_AK4PFchs.txt"%(JECprefix)
 
 
 if config["CORRJETSONTHEFLY"]:
-   if config["RUNONMC"]:
+   #if config["RUNONMC"]:
+   #  jecLevelsAK8chs = [
+   #  	 'JEC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), 
+   #  	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+   #    ]
+   #  jecLevelsAK8Groomedchs = [
+   #  	 'JEC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+   #    ]
+   #  jecLevelsAK8Puppi = [
+   #  	 'JEC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
+   #  	 'JEC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+   #    ]
+   #  jecLevelsAK4chs = [
+   #  	 'JEC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
+   #  	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+   #    ]
+   #else:
+   if not config["RUNONMC"]:
      jecLevelsAK8chs = [
-        'Summer16_23Sep2016V4_MC/%s_MC_L1FastJet_AK8PFchs.txt'%(JECprefix), 
-        'Summer16_23Sep2016V4_MC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L1FastJet_AK8PFchs.txt'      %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L3Absolute_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2L3Residual_AK8PFchs.txt'   %(JECprefix)
        ]
      jecLevelsAK8Groomedchs = [
-        'Summer16_23Sep2016V4_MC/%s_MC_L2Relative_AK8PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L3Absolute_AK8PFchs.txt'%(JECprefix)
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L3Absolute_AK8PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2L3Residual_AK8PFchs.txt'   %(JECprefix)
        ]
      jecLevelsAK8Puppi = [
-        'Summer16_23Sep2016V4_MC/%s_MC_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L3Absolute_AK8PFPuppi.txt'%(JECprefix)
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2Relative_AK8PFPuppi.txt'   %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L3Absolute_AK8PFPuppi.txt'   %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2L3Residual_AK8PFPuppi.txt' %(JECprefix)
        ]
      jecLevelsAK4chs = [
-        'Summer16_23Sep2016V4_MC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
-       ]
-#   else:
-#     jecLevelsAK8chs = [
-#        'JEC/%s_DATA_L1FastJet_AK8PFchs.txt'%(JECprefix),
-#        'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-#        'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-#   'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs // TODO: check this
-#       ]
-#     jecLevelsAK8Groomedchs = [
-#        'JEC/%s_DATA_L2Relative_AK8PFchs.txt'%(JECprefix),
-#        'JEC/%s_DATA_L3Absolute_AK8PFchs.txt'%(JECprefix),
-#   'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFchs // TODO: check this
-#       ]
-#     jecLevelsAK8Puppi = [
-#        'JEC/%s_DATA_L2Relative_AK8PFPuppi.txt'%(JECprefix),
-#        'JEC/%s_DATA_L3Absolute_AK8PFPuppi.txt'%(JECprefix),
-#   'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)# just for spring16V3 using the ones from ak4 instead that AK8PFpuppi
-#       ]
-#     jecLevelsAK4chs = [
-#        'JEC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-#        'JEC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-#        'JEC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-#   'JEC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
-#       ]   
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L1FastJet_AK4PFchs.txt'      %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2Relative_AK4PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L3Absolute_AK4PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2L3Residual_AK4PFchs.txt'   %(JECprefix)
+       ]   
 if config["CORRMETONTHEFLY"]:  
    if config["RUNONMC"]:
-     jecLevelsForMET = [               
-        'Summer16_23Sep2016V4_MC/%s_MC_L1FastJet_AK4PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L2Relative_AK4PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
+     jecLevelsForMET = [       
+       'Summer16_23Sep2016EFV4_DATA/%s_MC_L1FastJet_AK4PFchs.txt'        %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_MC_L2Relative_AK4PFchs.txt'       %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_MC_L3Absolute_AK4PFchs.txt'       %(JECprefix)
        ]
-   else:                        
+   else:      
      jecLevelsForMET = [
-        'Summer16_23Sep2016V4_MC/%s_DATA_L1FastJet_AK4PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_DATA_L2Relative_AK4PFchs.txt'%(JECprefix),
-        'Summer16_23Sep2016V4_MC/%s_DATA_L3Absolute_AK4PFchs.txt'%(JECprefix),
-   'Summer16_23Sep2016V4_MC/%s_DATA_L2L3Residual_AK4PFchs.txt'%(JECprefix)
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L1FastJet_AK4PFchs.txt'     %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2Relative_AK4PFchs.txt'    %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L3Absolute_AK4PFchs.txt'    %(JECprefix),
+       'Summer16_23Sep2016EFV4_DATA/%s_DATA_L2L3Residual_AK4PFchs.txt'  %(JECprefix)
        ]  
               
 #from PhysicsTools.SelectorUtils.pfJetIDSelector_cfi import pfJetIDSelector
@@ -749,7 +737,7 @@ jerAK4PuppiFile_sf = "JER/%s_MC_SF_AK4PFPuppi.txt"%(JERprefix)
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doPhotons     = cms.bool(config["DOPHOTONS"]),
     doJetIdVars   = cms.bool(config["DOJETIDVARS"]),
-    runOnMC        = cms.bool(config["RUNONMC"]),
+    runOnMC	      = cms.bool(config["RUNONMC"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenJets        = cms.bool(config["DOGENJETS"]),
     doGenEvent        = cms.bool(config["DOGENEVENT"]),
@@ -769,7 +757,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doTriggerObjects  = cms.bool(config["DOTRIGGEROBJECTS"]),
     doHltFilters      = cms.bool(config["DOHLTFILTERS"]),
     doMissingEt       = cms.bool(config["DOMISSINGET"]),
-    doHbbTag        = cms.bool(config["DOHBBTAG"]),
+    doHbbTag	      = cms.bool(config["DOHBBTAG"]),
     doPrunedSubjets   = cms.bool(config["DOAK8PRUNEDRECLUSTERING"]),
     doTrimming        = cms.bool(config["DOAK10TRIMMEDRECLUSTERING"]),
     doPuppi           = cms.bool(config["DOAK8PUPPI"]),
