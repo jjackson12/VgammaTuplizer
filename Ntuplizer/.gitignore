@@ -3,8 +3,8 @@ JEC/*
 JER/*
 Cert_*.txt
 *.root
-crabconfigs/*
 old
+crabconfigs/crab_*
 old/*
 crab_jobs*
 Spring16_23Sep*

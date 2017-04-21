@@ -25,8 +25,8 @@ options.maxEvents = -1
 
 #data file
 
-options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016C/SinglePhoton/MINIAOD/03Feb2017-v1/110000/A6B405D4-47EB-E611-9DB5-0025904C5DE0.root'
-#options.inputFiles=''
+#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016C/SinglePhoton/MINIAOD/03Feb2017-v1/110000/A6B405D4-47EB-E611-9DB5-0025904C5DE0.root'
+options.inputFiles=''
 
 options.parseArguments()
 
@@ -572,7 +572,6 @@ if config["DOHLTFILTERS"]:
    ##___________________________BadChargedCandidate_Noise_Filter________________________________|| 
    process.load('Configuration.StandardSequences.Services_cff')
    process.load('RecoMET.METFilters.BadChargedCandidateFilter_cfi')
-   # process.load('VgammaTuplizer.Ntuplizer.BadChargedCandidateFilter_cfi')
    process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
    process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
    process.BadChargedCandidateFilter.debug = cms.bool(False)
