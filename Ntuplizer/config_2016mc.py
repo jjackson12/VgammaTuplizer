@@ -327,13 +327,13 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
     rParam = getattr(process, fatjets_name).rParam.value()
     algo = None
     if 'ca' in fatjets_name.lower():
-	algo = 'ca'
-	assert getattr(process, fatjets_name).jetAlgorithm.value() == 'CambridgeAachen'
+      algo = 'ca'
+      assert getattr(process, fatjets_name).jetAlgorithm.value() == 'CambridgeAachen'
     elif 'ak' in fatjets_name.lower():
-	algo = 'ak'
-	assert getattr(process, fatjets_name).jetAlgorithm.value() == 'AntiKt'
+      algo = 'ak'
+      assert getattr(process, fatjets_name).jetAlgorithm.value() == 'AntiKt'
     else:
-	raise RuntimeError, "Unknown jet algorithm for fatjets name %s" % fatjets_name
+      raise RuntimeError, "Unknown jet algorithm for fatjets name %s" % fatjets_name
   
     subjets_name = groomed_jets_name + 'Subjets' # e.g. AK8CHSPruned + Subjets
   
@@ -398,20 +398,20 @@ def recluster_addBtagging(process, fatjets_name, groomed_jets_name, jetcorr_labe
       module_names = [groomed_jets_name]
     if add_ungroomed: module_names += [fatjets_name]
     for name in module_names:
-	if hasattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)):
-	    getattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)).extSVCollection = cms.InputTag('slimmedSecondaryVertices')
-	getattr(process, 'patJetPartonMatch' + cap(name)).matched = 'prunedGenParticles'
-	producer = getattr(process, 'patJets' + cap(name))
-	producer.addJetCharge = False
-	producer.addAssociatedTracks = False
-	if not config["DOHBBTAG"]:
-	    producer.addDiscriminators = True
-	    producer.addBTagInfo = True
-	producer.addGenJetMatch = genjets_name is not None
-	# for fat groomed jets, gen jet match and jet flavor is not working, so switch it off:
-	if name == groomed_jets_name:
-	    producer.addGenJetMatch = False
-	    producer.getJetMCFlavour = False
+      if hasattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)):
+        getattr(process,'pfInclusiveSecondaryVertexFinderTagInfos' + cap(name)).extSVCollection = cms.InputTag('slimmedSecondaryVertices')
+      getattr(process, 'patJetPartonMatch' + cap(name)).matched = 'prunedGenParticles'
+      producer = getattr(process, 'patJets' + cap(name))
+      producer.addJetCharge = False
+      producer.addAssociatedTracks = False
+      if not config["DOHBBTAG"]:
+          producer.addDiscriminators = True
+          producer.addBTagInfo = True
+      producer.addGenJetMatch = genjets_name is not None
+      # for fat groomed jets, gen jet match and jet flavor is not working, so switch it off:
+      if name == groomed_jets_name:
+          producer.addGenJetMatch = False
+          producer.getJetMCFlavour = False
 
 ################# Recluster jets with b-tagging ######################
 if config["DOAK8RECLUSTERING"]: 
