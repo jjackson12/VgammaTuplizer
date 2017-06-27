@@ -49,6 +49,13 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
 			tree_->Branch( "PDF_x"                                           , &PDF_x                                         );
 			tree_->Branch( "PDF_xPDF"                                        , &PDF_xPDF                                      );
 			tree_->Branch( "PDF_id"                                          , &PDF_id                                        );
+      tree_->Branch( "lheParticle_pdgId"       , &lheParticle_pdgId);
+      tree_->Branch( "lheParticle_status"       , &lheParticle_status);
+      tree_->Branch( "lheParticle_mother"       , &lheParticle_mother);
+      tree_->Branch( "lheParticle_pt"       , &lheParticle_pt);
+      tree_->Branch( "lheParticle_eta"       , &lheParticle_eta);
+      tree_->Branch( "lheParticle_phi"       , &lheParticle_phi);
+      tree_->Branch( "lheParticle_mass"       , &lheParticle_mass);
 		} //doGenEvent
 	} //runOnMC
 
@@ -663,6 +670,13 @@ void NtupleBranches::reset( void ){
 	PDF_id.clear();  
 	PDF_x.clear();  
 	PDF_xPDF.clear();
+  lheParticle_pdgId.clear();
+  lheParticle_status.clear();
+  lheParticle_mother.clear();
+  lheParticle_pt.clear();
+  lheParticle_eta.clear();
+  lheParticle_phi.clear();
+  lheParticle_mass.clear();
 
 
 	/** photons */

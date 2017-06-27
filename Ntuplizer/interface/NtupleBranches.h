@@ -78,6 +78,13 @@ public:
     std::vector<int  >                   PDF_id                       ;
     std::vector<float>                   PDF_x                        ;
     std::vector<float>                   PDF_xPDF                     ;
+    std::vector<int>                     lheParticle_pdgId            ;
+    std::vector<int>                     lheParticle_status           ;
+    std::vector<std::vector<int> >       lheParticle_mother           ;
+    std::vector<float>                   lheParticle_pt               ; 
+    std::vector<float>                   lheParticle_eta              ; 
+    std::vector<float>                   lheParticle_phi              ; 
+    std::vector<float>                   lheParticle_mass             ; 
     
     /** photons */
     int                                  ph_N                         ;
