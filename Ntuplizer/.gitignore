@@ -1,6 +1,9 @@
+*.root
 Hgamma2016Sig_m*
 crab_jobs*
 *.jdl
 cmsRun*.sh
 *.pyc
 Summer16_23Sep2016*
+crabconfigs/*
+old/*
