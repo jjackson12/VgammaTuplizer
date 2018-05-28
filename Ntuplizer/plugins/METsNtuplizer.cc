@@ -6,6 +6,8 @@
 
 //===================================================================================================================        
 METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken    , 
+				edm::EDGetTokenT<pat::METCollection>     metpuppitoken    , 
+				edm::EDGetTokenT<pat::METCollection>     metmvatoken    , 
  	 			edm::EDGetTokenT<pat::JetCollection>	 jettoken    ,
 				edm::EDGetTokenT<pat::MuonCollection> 	 muontoken   ,
 				edm::EDGetTokenT<double> 		 rhotoken    ,
@@ -20,15 +22,18 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 									
 : CandidateNtuplizer ( nBranches    )
 , metInputToken_     ( mettoken     )
+, metpuppiInputToken_( metpuppitoken)
+, metmvaInputToken_  ( metmvatoken  )
 , jetInputToken_     ( jettoken     )
 , muonInputToken_    ( muontoken    )	    
 , rhoToken_	     ( rhotoken     )	    
-, verticeToken_	     ( vtxtoken     )														    
+, verticeToken_	     ( vtxtoken     )	
 , metSigToken_       ( metSigtoken  )
-, metCovToken_  	(metCovtoken)										    
-, jetCorrLabel_	     ( jecAK4labels )								    
-, corrFormulas_	     ( corrformulas )						    
+, metCovToken_       ( metCovtoken  )
+, jetCorrLabel_	     ( jecAK4labels )
+, corrFormulas_	     ( corrformulas )	
 , doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
+, doMVAMET_        ( runFlags["doMVAMET"]  )					    
 
 {
         if( jetCorrLabel_.size() != 0 ){
@@ -132,15 +137,15 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
    double corrEx    = 0;
    double corrEy    = 0;
    double corrSumEt = 0;
-   
+
    for (const pat::Jet &jet : *jets_) {
-	   
+	     	   
      double emEnergyFraction = jet.chargedEmEnergyFraction() + jet.neutralEmEnergyFraction();
      if ( skipEM_ && emEnergyFraction > skipEMfractionThreshold_ ) continue;
      
      reco::Candidate::LorentzVector rawJetP4 = jet.correctedP4(0); 
      double corr = getJEC(rawJetP4, jet, jetCorrEtaMax_, jetCorrLabel_);    
-         
+              
      if ( skipMuons_ ) {
        const std::vector<reco::CandidatePtr> & cands = jet.daughterPtrVector();
        for ( std::vector<reco::CandidatePtr>::const_iterator cand = cands.begin();
@@ -178,20 +183,23 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+
+
+
+  // PFMET
 	
   event.getByToken(metInputToken_, METs_ );
 
   if( doCorrOnTheFly_ ) addTypeICorr(event);
 
   for (const pat::MET &met : *METs_) {
-  	  
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
     //const float rawPhi  = met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
     //const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
     const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
-    
+        
     TVector2 rawMET_;
     rawMET_.SetMagPhi (rawPt, rawPhi );
 
@@ -220,7 +228,14 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_phi.push_back(corrmet.Phi());
     nBranches_->MET_sumEt.push_back(sumEtcorr);
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
-    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	  
+    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	 
+    
+    nBranches_->MET_JetEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnUp) / met.et() );
+    nBranches_->MET_JetEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnDown) / met.et() );
+    nBranches_->MET_JetResUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResUp) / met.et() );
+    nBranches_->MET_JetResDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResDown) / met.et() );
+    nBranches_->MET_UnclusteredEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::UnclusteredEnUp) / met.et() );
+    nBranches_->MET_UnclusteredEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::UnclusteredEnDown) / met.et() );
     
    
   } 
@@ -244,7 +259,94 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   // covMET[1][1] = (*covHandle)(1,1);
   
   } 
+<<<<<<< HEAD
 		
+=======
+
+
+  // Y.T added 6 Sep. For puppi MET
+  event.getByToken(metpuppiInputToken_, METspuppi_ );
+
+  for (const pat::MET &met : *METspuppi_) {
+    nBranches_->MET_puppi_et.push_back(met.pt());
+    nBranches_->MET_puppi_phi.push_back(met.phi());
+
+  }
+
+  
+  // Y.T added 10 Sep. For MVA MET -> add options here 
+
+
+  if (doMVAMET_) {
+
+    event.getByToken(metmvaInputToken_, METsmva_ );
+    
+    int nmva = 0;
+    
+    for (const pat::MET &met : *METsmva_) {
+      
+      nmva++;
+      
+      std::vector<float> recoil_pt;
+      std::vector<float> recoil_eta;
+      std::vector<float> recoil_phi;
+      std::vector<int> recoil_pdgId;
+      
+      recoil_pt.clear();
+      recoil_eta.clear();
+      recoil_phi.clear();
+      recoil_pdgId.clear();
+
+      //    std::cout << "met = " << met.pt() << std::endl;
+      
+      for(auto name: met.userCandNames()){
+	reco::CandidatePtr aRecoCand = met.userCand(name);
+	
+	recoil_pt.push_back(aRecoCand->p4().Pt());
+	recoil_eta.push_back(aRecoCand->p4().Eta());
+	recoil_phi.push_back(aRecoCand->p4().Phi());
+	recoil_pdgId.push_back(aRecoCand->pdgId());
+      }
+
+      nBranches_->MET_mva_et.push_back(met.pt());
+      nBranches_->MET_mva_phi.push_back(met.phi());
+      nBranches_->MET_mva_cov00.push_back(met.getSignificanceMatrix()(0,0));
+      nBranches_->MET_mva_cov10.push_back(met.getSignificanceMatrix()(1,0));
+      nBranches_->MET_mva_cov11.push_back(met.getSignificanceMatrix()(1,1));
+      
+      nBranches_->MET_mva_recoil_pt.push_back(recoil_pt);
+      nBranches_->MET_mva_recoil_eta.push_back(recoil_eta);
+      nBranches_->MET_mva_recoil_phi.push_back(recoil_phi);
+      nBranches_->MET_mva_recoil_pdgId.push_back(recoil_pdgId);
+      
+    }
+
+    nBranches_->MET_Nmva.push_back(nmva);
+  }
+
+
+
+  if (doMETSVFIT_) {
+ 
+
+    event.getByToken (metSigToken_, significanceHandle);
+    event.getByToken (metCovToken_, covHandle);
+  //event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
+  //event.getByLabel ("METSignificance", "METCovariance", covHandle);
+ 
+    nBranches_->MET_significance.push_back( (*significanceHandle));
+    nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
+    nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
+    nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
+  //FROM LOW MASS ANALYSIS
+  // covMET[0][0] = (*covHandle)(0,0);
+  // covMET[1][0] = (*covHandle)(1,0);
+  // covMET[0][1] = covMET[1][0]; // (1,0) is the only one saved
+  // covMET[1][1] = (*covHandle)(1,1);
+  
+  }
+
+>>>>>>> 930b5a7b315ed70a48036f90f7f3fbbc5cdf6f10
 
 }
 

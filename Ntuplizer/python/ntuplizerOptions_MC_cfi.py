@@ -6,44 +6,55 @@ config = dict()
 config["SPRING16"] = True
 config["RUNONMC"] = True
 config["USEJSON"] = False
-config["JSONFILE"] = 'goldenJSON_PromptReco.txt'
+config["JSONFILE"] = "JSON/Cert_271036-279588_13TeV_PromptReco_Collisions16_JSON_NoL1T.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
 
 #--------- basic sequences ----------#
+config["DOGENPARTICLES"] = True
 config["DOPHOTONS"] = True
-config["DOGENPARTICLES"] = False
-config["DOGENJETS"] = False
-config["DOGENEVENT"] = False
-config["DOLHEEVENT"] = False
-config["DOPILEUP"] = False
+config["DOGENJETS"] = True
+config["DOGENEVENT"] = True
+config["DOPILEUP"] = True
 config["DOELECTRONS"] = False
-config["DOELECTRONIDVARS"] = False
-config["DOELECTRONISOVARS"] = False
-config["DOMUONS"] = False
-config["DOMUONIDVARS"] = False
-config["DOMUONISOVARS"] = False
-config["DOTAUS"] = False
+config["DOMUONS"] = True
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
-config["DOJETIDVARS"] = False
+config["DOHLTFILTERS"] = True
+config["DOSEMILEPTONICTAUSBOOSTED"] = False
+
+
 config["DOVERTICES"] = True
 config["DOTRIGGERDECISIONS"] = True
-config["DOTRIGGEROBJECTS"] = False
+config["DOTRIGGEROBJECTS"] = True
 config["DOHLTFILTERS"] = True
-config["DOMISSINGET"] = False
-config["DOTAUSBOOSTED"] = False
-config["DOMETSVFIT"] = False
-config["DOSEMILEPTONICTAUSBOOSTED"] = False
+config["DOMISSINGET"] = True
+config["DOTAUSBOOSTED"] = True
+config["DOMETSVFIT"] = True
+config["DOMVAMET"] = False
 
 #--------- AK8 jets reclustering ----------#
 config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
-config["DOAK8RECLUSTERING"] = True
-config["DOAK8PRUNEDRECLUSTERING"] = True #! To add pruned jet and pruned subjet collection (not in MINIAOD)
+config["DOAK8RECLUSTERING"] = False
+config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPI"] = True
-config["DOAK10TRIMMEDRECLUSTERING"] = False
+config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = True #Higgs-tagger
+config["DOAK8PUPPIRECLUSTERING"] = False
+config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
+
+#--------- MET reclustering ----------#
+config["DOMETRECLUSTERING"] = False
+
+#--------- AK8 jets reclustering ----------#
+config["ADDAK8GENJETS"] = True #! Add AK8 gen jet collection with pruned and softdrop mass
+config["DOAK8RECLUSTERING"] = False
+config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
+config["DOAK8PUPPI"] = True
+config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
+config["DOHBBTAG"] = True #Higgs-tagger
+config["DOAK8PUPPIRECLUSTERING"] = False
 config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#
