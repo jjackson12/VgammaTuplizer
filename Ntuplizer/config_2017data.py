@@ -26,7 +26,8 @@ options.maxEvents = -1
 #data file
 
 #options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016B/SinglePhoton/MINIAOD/23Sep2016-v3/110000/C0614094-EC98-E611-A4A4-0CC47A745284.root'
-options.inputFiles=''
+options.inputFiles='root://cmsxrootd.fnal.gov//store/data/Run2017B/SinglePhoton/MINIAOD/17Nov2017-v1/20000/00D960EC-7BD3-E711-A054-008CFAFBE880.root'
+
 
 options.parseArguments()
 
@@ -81,6 +82,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 if config["RUNONMC"]:
    sys.exit("This config file expects to run on data, but an option to run on MC was received.")
    # process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+######### TODO: Merge problem
 elif not(config["RUNONMC"]):
    process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v6')
    
@@ -272,7 +274,7 @@ if config["ADDAK8GENJETS"]:
   # process.substructureSequenceGen += process.ak8GenJetsSoftDrop + process.ak8GenJetsSoftDropMass
   # process.substructureSequenceGen += process.ak8GenJetsPruned + process.ak8GenJetsPrunedMass
 
-  from EXOVVNtuplizerRunII.Ntuplizer.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
+  from VgammaTuplizer.Ntuplizer.redoPatJets_cff import patJetCorrFactorsAK8, patJetsAK8, selectedPatJetsAK8
 
   # Redo pat jets from gen AK8
 
@@ -673,7 +675,10 @@ if config["CORRJETSONTHEFLY"]:
    #  	 'JEC/%s_MC_L3Absolute_AK4PFchs.txt'%(JECprefix)
    #    ]
    #else:
+   
+   #TODO: Replace with correct JEC
    if not config["RUNONMC"]:
+   
      jecLevelsAK8chs = [
        'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L1FastJet_AK8PFchs.txt'      %(JECprefix),
        'Spring16_23Sep2016BCDV1_DATA/%s_DATA_L2Relative_AK8PFchs.txt'     %(JECprefix),
@@ -721,7 +726,7 @@ if config["CORRMETONTHEFLY"]:
 #                        src = cms.InputTag(jetsAK8)
 #                        )
                                                                                       
-
+#TODO: Replace with correct JER
 ######## JER ########
 JERprefix = "Spring16_25nsV6"
 jerAK8chsFile_res = "JER/%s_MC_PtResolution_AK8PFchs.txt"%(JERprefix)

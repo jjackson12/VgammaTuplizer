@@ -5,7 +5,7 @@ config = dict()
 #--------- general ----------#
 config["SPRING16"] = False
 config["RUNONMC"] = False
-config["USEJSON"] = True
+config["USEJSON"] = False
 config["JSONFILE"] = "Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
@@ -43,7 +43,7 @@ config["DOAK8RECLUSTERING"] = True
 config["DOAK8PRUNEDRECLUSTERING"] = True #! To add pruned jet and pruned subjet collection (not in MINIAOD)
 config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False
-config["DOHBBTAG"] = True #Higgs-tagger
+config["DOHBBTAG"] = False #Higgs-tagger
 config["UpdateJetCollection"] = True #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#
