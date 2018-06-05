@@ -30,4 +30,4 @@ private:
    edm::Handle<LHEEventProduct> lheEventProduct_;
 };
 
-#endif // GenEventNtuplizer_H
+//#endif // GenEventNtuplizer_H
