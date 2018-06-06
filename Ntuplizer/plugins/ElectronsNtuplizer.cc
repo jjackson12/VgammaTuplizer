@@ -214,7 +214,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
       nBranches_->el_hOverE		   .push_back(ele.hcalOverEcal());
       nBranches_->el_dz  		           .push_back(ele.gsfTrack()->dz((*firstGoodVertex).position()));
       nBranches_->el_d0  	                   .push_back((-1)*ele.gsfTrack()->dxy((*firstGoodVertex).position()));
-      nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
+      nBranches_->el_expectedMissingInnerHits.push_back(ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS));
       
       nBranches_->el_dr03EcalRecHitSumEt.push_back(ele.dr03EcalRecHitSumEt());
       nBranches_->el_dr03HcalDepth1TowerSumEt.push_back(ele.dr03HcalDepth1TowerSumEt());
@@ -350,7 +350,7 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
   dz_ = ele.gsfTrack()->dz( (*firstGoodVertex).position() );
 
   // Conversion rejection
-  expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+  expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   passConversionVeto_ = ele.passConversionVeto(); 
  
   //Barrel cuts 
@@ -456,7 +456,7 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
 	       ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
     	       ele.dr03TkSumPt() < 5. && 
-	       ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	       ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	       iso < isoCut && fabs(dxy) < 0.02 )
     	  {
     	     if (ele.hadronicOverEm() < (2./ele.superCluster()->energy()+0.05)) isHeep51Electron = true;
@@ -475,7 +475,7 @@ bool ElectronsNtuplizer::eleIDpassed(std::string id, const pat::Electron &ele ){
 	      ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      ele.full5x5_sigmaIetaIeta() < 0.03 && 
     	      ele.dr03TkSumPt() < 5. && 
-	      ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	      ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	      iso < isoCut &&
 	      fabs(dxy) < 0.05 )
     	  {
@@ -558,7 +558,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
   dz_ = ele.gsfTrack()->dz( (*firstGoodVertex).position() );
 
   // Conversion rejection
-  expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+  expectedMissingInnerHits_ = ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
   passConversionVeto_ = ele.passConversionVeto(); 
  
   //Barrel cuts 
@@ -664,7 +664,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 	       ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      (ele.full5x5_e2x5Max()/ele.full5x5_e5x5() > 0.94 || ele.full5x5_e1x5()/ele.full5x5_e5x5() > 0.83) &&
     	       ele.dr03TkSumPt() < 5. && 
-	       ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	       ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	       // iso < isoCut &&
 	       fabs(dxy) < 0.02 )
     	  {
@@ -684,7 +684,7 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
 	      ele.deltaPhiSuperClusterTrackAtVtx() < 0.06 && 
     	      ele.full5x5_sigmaIetaIeta() < 0.03 && 
     	      ele.dr03TkSumPt() < 5. && 
-	      ele.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
+	      ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	      // iso < isoCut &&
 	      fabs(dxy) < 0.05 )
     	  {
