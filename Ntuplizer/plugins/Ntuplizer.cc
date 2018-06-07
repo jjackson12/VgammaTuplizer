@@ -23,47 +23,50 @@
 Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 
-vtxToken_                         (consumes<reco::VertexCollection>                (iConfig.getParameter<edm::InputTag>("vertices")))                                   ,
-rhoToken_                         (consumes<double>                                (iConfig.getParameter<edm::InputTag>("rho")))                                        ,
-//fixedGridRhoToken_                (consumes<double>                                (iConfig.getParameter<edm::InputTag>("fixedGridRho")))                               ,
-puinfoToken_                      (consumes<std::vector<PileupSummaryInfo> >       (iConfig.getParameter<edm::InputTag>("PUInfo")))                                     ,
-geneventToken_                    (consumes<GenEventInfoProduct>                   (iConfig.getParameter<edm::InputTag>("genEventInfo")))                               ,
-lheeventToken_                     (consumes<LHEEventProduct>                        (iConfig.getParameter<edm::InputTag>("lheEventInfo")))                               ,
-genparticleToken_                 (consumes<reco::GenParticleCollection>           (iConfig.getParameter<edm::InputTag>("genparticles")))                               ,
+	vtxToken_             	    (consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+	rhoToken_             	    (consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
+	packedpfcandidatesToken_    (consumes<std::vector<pat::PackedCandidate>>(iConfig.getParameter<edm::InputTag>("packedpfcandidates"))),
+	puinfoToken_          	    (consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("PUInfo"))),
+	geneventToken_        	    (consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genEventInfo"))),     
+	lheEventProductToken_       (consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("externallheProducer"))),     
+	genparticleToken_     	    (consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genparticles"))),
+	
+	jetToken_             	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
+	fatjetToken_          	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
+	prunedjetToken_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("prunedjets"))),
+	softdropjetToken_     	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("softdropjets"))),
+	trimmedjetToken_	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("trimmedjets"))),
+	puppijetToken_	            (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("puppijets"))),
+	genJetToken_	      	    (consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJets"))),
+        genJetAK8Token_	      	    (consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("genJetsAK8"))),
+	
+	flavourToken_	      	    (consumes<reco::JetFlavourMatchingCollection>(iConfig.getParameter<edm::InputTag>("subjetflavour"))),
 
-jetToken_                         (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("jets")))                                       ,
-fatjetToken_                      (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("fatjets")))                                    ,
-prunedjetToken_                   (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("prunedjets")))                                 ,
-softdropjetToken_                 (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("softdropjets")))                               ,
-trimmedjetToken_                  (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("trimmedjets")))                                ,
-puppijetToken_                    (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("puppijets")))                                  ,
-genJetToken_                      (consumes<reco::GenJetCollection>                (iConfig.getParameter<edm::InputTag>("genJets")))                                    ,
-genJetAK8Token_                   (consumes<pat::JetCollection>                    (iConfig.getParameter<edm::InputTag>("genJetsAK8")))                                 ,
 
-flavourToken_                     (consumes<reco::JetFlavourMatchingCollection>    (iConfig.getParameter<edm::InputTag>("subjetflavour")))                              ,
 
-photonToken_                      (consumes<edm::View<pat::Photon> >              (iConfig.getParameter<edm::InputTag>("photons")))                                    ,
-muonToken_                        (consumes<pat::MuonCollection>                   (iConfig.getParameter<edm::InputTag>("muons")))                                      ,
 
-phoLooseIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoLooseIdMap")))                              ,
-phoMediumIdMapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoMediumIdMap")))                             ,
-phoTightIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoTightIdMap")))                              ,
-phoMvaValuesMapToken_             (consumes<edm::ValueMap<float> >                 (iConfig.getParameter<edm::InputTag>("phoMvaValuesMap")))                               ,
-phoMvaCategoriesMapToken_         (consumes<edm::ValueMap<int> >                   (iConfig.getParameter<edm::InputTag>("phoMvaCategoriesMap")))                           ,
-phoVerboseIdFlag_                                                                  (iConfig.getParameter<bool>         ("phoIdVerbose"))                                ,
+	photonToken_                      (consumes<edm::View<pat::Photon> >              (iConfig.getParameter<edm::InputTag>("photons")))                                    ,
+	muonToken_                        (consumes<pat::MuonCollection>                   (iConfig.getParameter<edm::InputTag>("muons")))                                      ,
 
-electronToken_                    (consumes<edm::View<pat::Electron> >             (iConfig.getParameter<edm::InputTag>("electrons")))                                  ,
-eleHEEPIdMapToken_                (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleHEEPIdMap")))                               ,
-eleHEEPId51MapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleHEEPId51Map")))                             ,
-eleVetoIdMapToken_                (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleVetoIdMap")))                               ,
-eleLooseIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleLooseIdMap")))                              ,
-eleMediumIdMapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleMediumIdMap")))                             ,
-eleTightIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleTightIdMap")))                              ,
-tauToken_                         (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("taus")))                                       ,
-tauEleTauToken_                   (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("tausEleTau")))                                 ,
-tauMuTauToken_                    (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("tausMuTau")))                                  ,
+	phoLooseIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoLooseIdMap")))                              ,
+	phoMediumIdMapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoMediumIdMap")))                             ,
+	phoTightIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("phoTightIdMap")))                              ,
+	phoMvaValuesMapToken_             (consumes<edm::ValueMap<float> >                 (iConfig.getParameter<edm::InputTag>("phoMvaValuesMap")))                               ,
+	phoMvaCategoriesMapToken_         (consumes<edm::ValueMap<int> >                   (iConfig.getParameter<edm::InputTag>("phoMvaCategoriesMap")))                           ,
+	phoVerboseIdFlag_                                                                  (iConfig.getParameter<bool>         ("phoIdVerbose"))                                ,
 
-metToken_                         (consumes<pat::METCollection>                    (iConfig.getParameter<edm::InputTag>("mets")))                                       ,
+	electronToken_                    (consumes<edm::View<pat::Electron> >             (iConfig.getParameter<edm::InputTag>("electrons")))                                  ,
+	eleHEEPIdMapToken_                (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleHEEPIdMap")))                               ,
+	eleHEEPId51MapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleHEEPId51Map")))                             ,
+	eleVetoIdMapToken_                (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleVetoIdMap")))                               ,
+	eleLooseIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleLooseIdMap")))                              ,
+	eleMediumIdMapToken_              (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleMediumIdMap")))                             ,
+	eleTightIdMapToken_               (consumes<edm::ValueMap<bool> >                  (iConfig.getParameter<edm::InputTag>("eleTightIdMap")))                              ,
+	tauToken_                         (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("taus")))                                       ,
+	tauEleTauToken_                   (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("tausEleTau")))                                 ,
+	tauMuTauToken_                    (consumes<pat::TauCollection>                    (iConfig.getParameter<edm::InputTag>("tausMuTau")))                                  ,
+
+	metToken_                         (consumes<pat::METCollection>                    (iConfig.getParameter<edm::InputTag>("mets")))                                       ,
 	metSigToken_	      	    (consumes<double>(edm::InputTag("METSignificance","METSignificance"))),
 	metCovToken_	      	    (consumes<math::Error<2>::type>(edm::InputTag("METSignificance","METCovariance"))),
 
@@ -326,7 +329,6 @@ metToken_                         (consumes<pat::METCollection>                 
             std::vector<edm::EDGetTokenT< GenEventInfoProduct > > geneTokens;
             geneTokens.push_back( geneventToken_ );
             std::vector<edm::EDGetTokenT< LHEEventProduct > > lheTokens;
-            lheTokens.push_back( lheeventToken_ );
             bool doPDF = runFlags["doLHEEvent"];
             nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, lheTokens, doPDF, nBranches_, _hCounter );
         }
