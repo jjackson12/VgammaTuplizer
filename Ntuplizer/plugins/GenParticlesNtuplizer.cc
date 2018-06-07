@@ -1,9 +1,11 @@
 #include "../interface/GenParticlesNtuplizer.h"
 
-//===================================================================================================================
-GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, NtupleBranches* nBranches )
-: CandidateNtuplizer( nBranches )
-, genParticlesToken_( tokens[0] )
+//===================================================================================================================        
+GenParticlesNtuplizer::GenParticlesNtuplizer( std::vector<edm::EDGetTokenT<reco::GenParticleCollection>> tokens, 
+					      NtupleBranches* nBranches ) 
+
+   : CandidateNtuplizer( nBranches )
+   , genParticlesToken_( tokens[0] )
 {
     
 }

@@ -79,47 +79,39 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
         HBHENoiseIsoFilterResultToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("noiseFilterSelection_HBHENoiseIsoFilter")))
 
 {
-    
-    
-    /*=======================================================================================*/
-    edm::Service<TFileService> fs;
-    
-    _hCounter = fs->make<TH1D>("hCounter", "Events counter", 5,0,5);
-    
-    TTree* tree = fs->make<TTree>( "tree", "tree" );
-    
-    std::map< std::string, bool > runFlags;
-    runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
-    runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
-    runFlags["doGenJets"] = iConfig.getParameter<bool>("doGenJets");
-    runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
-    runFlags["doLHEEvent"] = iConfig.getParameter<bool>("doLHEEvent");
-    runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
-    runFlags["doPhotons"] = iConfig.getParameter<bool>("doPhotons");
-    runFlags["doElectrons"] = iConfig.getParameter<bool>("doElectrons");
-    runFlags["doElectronIdVars"] = iConfig.getParameter<bool>("doElectronIdVars");
-    runFlags["doElectronIsoVars"] = iConfig.getParameter<bool>("doElectronIsoVars");
-    runFlags["doMuons"] = iConfig.getParameter<bool>("doMuons");
-    runFlags["doMuonIdVars"] = iConfig.getParameter<bool>("doMuonIdVars");
-    runFlags["doMuonIsoVars"] = iConfig.getParameter<bool>("doMuonIsoVars");
-    runFlags["doTaus"] = iConfig.getParameter<bool>("doTaus");
-    runFlags["doAK8Jets"] = iConfig.getParameter<bool>("doAK8Jets");
-    runFlags["doAK4Jets"] = iConfig.getParameter<bool>("doAK4Jets");
-    runFlags["doJetIdVars"] = iConfig.getParameter<bool>("doJetIdVars");
-    runFlags["doVertices"] = iConfig.getParameter<bool>("doVertices");
-    runFlags["doTriggerDecisions"] = iConfig.getParameter<bool>("doTriggerDecisions");
-    runFlags["doTriggerObjects"] = iConfig.getParameter<bool>("doTriggerObjects");
-    runFlags["doHltFilters"] = iConfig.getParameter<bool>("doHltFilters");
-    runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
-    runFlags["doBoostedTaus"] = iConfig.getParameter<bool>("doBoostedTaus");
-    runFlags["doPrunedSubjets"] = iConfig.getParameter<bool>("doPrunedSubjets");
-    runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
-    runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
-    runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
+
+
+  /*=======================================================================================*/
+  edm::Service<TFileService> fs;
+     _hCounter = fs->make<TH1D>("hCounter", "Events counter", 5,0,5);
+  TTree* tree = fs->make<TTree>( "tree", "tree" );
+  
+  std::map< std::string, bool > runFlags;
+  runFlags["runOnMC"] = iConfig.getParameter<bool>("runOnMC");
+  runFlags["doGenParticles"] = iConfig.getParameter<bool>("doGenParticles");
+  runFlags["doGenJets"] = iConfig.getParameter<bool>("doGenJets");
+  runFlags["doGenEvent"] = iConfig.getParameter<bool>("doGenEvent");
+  runFlags["doPileUp"] = iConfig.getParameter<bool>("doPileUp");
+  runFlags["doElectrons"] = iConfig.getParameter<bool>("doElectrons");
+  runFlags["doPhotons"] = iConfig.getParameter<bool>("doPhotons");
+  runFlags["doMuons"] = iConfig.getParameter<bool>("doMuons");
+  runFlags["doTaus"] = iConfig.getParameter<bool>("doTaus");
+  runFlags["doAK8Jets"] = iConfig.getParameter<bool>("doAK8Jets");
+  runFlags["doAK4Jets"] = iConfig.getParameter<bool>("doAK4Jets");
+  runFlags["doVertices"] = iConfig.getParameter<bool>("doVertices");
+  runFlags["doTriggerDecisions"] = iConfig.getParameter<bool>("doTriggerDecisions");
+  runFlags["doTriggerObjects"] = iConfig.getParameter<bool>("doTriggerObjects");
+  runFlags["doHltFilters"] = iConfig.getParameter<bool>("doHltFilters");
+  runFlags["doMissingEt"] = iConfig.getParameter<bool>("doMissingEt");
+  runFlags["doBoostedTaus"] = iConfig.getParameter<bool>("doBoostedTaus");
+  runFlags["doPrunedSubjets"] = iConfig.getParameter<bool>("doPrunedSubjets");
+  runFlags["doTrimming"] = iConfig.getParameter<bool>("doTrimming");
+  runFlags["doPuppi"] = iConfig.getParameter<bool>("doPuppi");
+  runFlags["doHbbTag"] = iConfig.getParameter<bool>("doHbbTag");
   runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
   runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doPuppiRecluster"] = iConfig.getParameter<edm::InputTag>("puppijets").label()!="";
-
+  runFlags["doMultipleTauMVAversions"] = iConfig.getParameter<bool>("doMultipleTauMVAversions");
 
   if(runFlags["doElectrons"]){
     electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
@@ -237,11 +229,11 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 					    vtxToken_	       ,
 					    metSigToken_       ,
 					    metCovToken_       ,
-                                               jecAK4Labels       ,
-                                               corrFormulas       ,
+					    jecAK4Labels       ,
+                                            corrFormulas       ,
 					    nBranches_         ,
 					    runFlags  );
-    }
+  }
     
   
   /*=======================================================================================*/  
@@ -318,12 +310,12 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						     HBHENoiseFilterLooseResultToken_,
 						     HBHENoiseFilterTightResultToken_,
 						     HBHENoiseIsoFilterResultToken_,
-                                                        nBranches_,
-                                                        iConfig,
-                                                        runFlags );
-    }
-    
-    if (runFlags["doTaus"]) {
+						     nBranches_,
+                                                     iConfig,
+                                                     runFlags );
+  }
+
+  if (runFlags["doTaus"]) {
      nTuplizers_["taus"] = new TausNtuplizer( tauToken_      ,  
                                               tauBoostedTauToken_,  
 					      rhoToken_      ,  

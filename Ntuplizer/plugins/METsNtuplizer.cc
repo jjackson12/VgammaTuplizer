@@ -27,13 +27,14 @@ METsNtuplizer::METsNtuplizer( 	edm::EDGetTokenT<pat::METCollection>     mettoken
 , jetInputToken_     ( jettoken     )
 , muonInputToken_    ( muontoken    )	    
 , rhoToken_	     ( rhotoken     )	    
-, verticeToken_	     ( vtxtoken     )														    
+, verticeToken_	     ( vtxtoken     )	
 , metSigToken_       ( metSigtoken  )
-, metCovToken_  	(metCovtoken)										    
-, jetCorrLabel_	     ( jecAK4labels )								    
-, corrFormulas_	     ( corrformulas )						    
+, metCovToken_       ( metCovtoken  )
+, jetCorrLabel_	     ( jecAK4labels )
+, corrFormulas_	     ( corrformulas )	
 , doMETSVFIT_        ( runFlags["doMETSVFIT"]  )					    
 , doMVAMET_        ( runFlags["doMVAMET"]  )					    
+
 
 {
         if( jetCorrLabel_.size() != 0 ){
@@ -137,15 +138,15 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
    double corrEx    = 0;
    double corrEy    = 0;
    double corrSumEt = 0;
-   
+
    for (const pat::Jet &jet : *jets_) {
-	   
+	     	   
      double emEnergyFraction = jet.chargedEmEnergyFraction() + jet.neutralEmEnergyFraction();
      if ( skipEM_ && emEnergyFraction > skipEMfractionThreshold_ ) continue;
      
      reco::Candidate::LorentzVector rawJetP4 = jet.correctedP4(0); 
      double corr = getJEC(rawJetP4, jet, jetCorrEtaMax_, jetCorrLabel_);    
-         
+              
      if ( skipMuons_ ) {
        const std::vector<reco::CandidatePtr> & cands = jet.daughterPtrVector();
        for ( std::vector<reco::CandidatePtr>::const_iterator cand = cands.begin();
@@ -183,20 +184,23 @@ void METsNtuplizer::addTypeICorr( edm::Event const & event ){
 
 //===================================================================================================================
 void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+
+
+
+  // PFMET
 	
   event.getByToken(metInputToken_, METs_ );
 
   if( doCorrOnTheFly_ ) addTypeICorr(event);
 
   for (const pat::MET &met : *METs_) {
-  	  
     //const float rawPt	= met.shiftedPt(pat::MET::NoShift, pat::MET::Raw);
     //const float rawPhi  = met.shiftedPhi(pat::MET::NoShift, pat::MET::Raw);
     //const float rawSumEt= met.shiftedSumEt(pat::MET::NoShift, pat::MET::Raw);
     const float rawPt	 = met.uncorPt();//met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     const float rawPhi   = met.uncorPhi();//met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
     const float rawSumEt = met.uncorSumEt();//met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
-    
+        
     TVector2 rawMET_;
     rawMET_.SetMagPhi (rawPt, rawPhi );
 
@@ -225,9 +229,15 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     nBranches_->MET_phi.push_back(corrmet.Phi());
     nBranches_->MET_sumEt.push_back(sumEtcorr);
     nBranches_->MET_corrPx.push_back(TypeICorrMap_["corrEx"]);
-    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	  
+    nBranches_->MET_corrPy.push_back(TypeICorrMap_["corrEy"]); 	 
     
-   
+    nBranches_->MET_JetEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnUp) / met.et() );
+    nBranches_->MET_JetEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetEnDown) / met.et() );
+    nBranches_->MET_JetResUp.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResUp) / met.et() );
+    nBranches_->MET_JetResDown.push_back( met.shiftedPt(pat::MET::METUncertainty::JetResDown) / met.et() );
+    nBranches_->MET_UnclusteredEnUp.push_back( met.shiftedPt(pat::MET::METUncertainty::UnclusteredEnUp) / met.et() );
+    nBranches_->MET_UnclusteredEnDown.push_back( met.shiftedPt(pat::MET::METUncertainty::UnclusteredEnDown) / met.et() );
+    
   } 
 
 
@@ -301,18 +311,18 @@ void METsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   //event.getByLabel ("METSignificance", "METSignificance", significanceHandle);
   //event.getByLabel ("METSignificance", "METCovariance", covHandle);
  
-  nBranches_->MET_significance.push_back( (*significanceHandle));
-  nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
-  nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
-  nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
+    nBranches_->MET_significance.push_back( (*significanceHandle));
+    nBranches_->MET_cov00.push_back(    (*covHandle)(0,0));
+    nBranches_->MET_cov10.push_back(    (*covHandle)(1,0));
+    nBranches_->MET_cov11.push_back(    (*covHandle)(1,1));
   //FROM LOW MASS ANALYSIS
   // covMET[0][0] = (*covHandle)(0,0);
   // covMET[1][0] = (*covHandle)(1,0);
   // covMET[0][1] = covMET[1][0]; // (1,0) is the only one saved
   // covMET[1][1] = (*covHandle)(1,1);
   
-  } 
-		
+  }
+
 
 }
 

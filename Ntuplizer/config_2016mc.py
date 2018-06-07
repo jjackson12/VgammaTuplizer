@@ -549,9 +549,9 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #		 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff']
 my_id_modules_el = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
-                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
 
 #add them to the VID producer
+for idmod in my_id_modules:
 for idmod in my_id_modules_el:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
@@ -592,6 +592,13 @@ jetsAK8PuppiPruned = ""
 jetsAK8PuppiSoftdrop = ""  
 
 METS = "slimmedMETs"
+<<<<<<< HEAD:Ntuplizer/config_2016mc.py
+=======
+METS_EGclean = "slimmedMETsEGClean"
+METS_MEGclean = "slimmedMETsMuEGClean"
+METS_uncorr = "slimmedMETsUncorrected"
+
+>>>>>>> 47332c4960fe35ece8cabd6e55ef4bbe15dab461:Ntuplizer/config_data.py
 if config["DOMETRECLUSTERING"]: jetsAK4 = "selectedPatJets"
 if config["USENOHF"]: METS = "slimmedMETsNoHF"  
 
@@ -601,7 +608,22 @@ if config["DOMETSVFIT"]:
   print "Using event pfMET covariance for SVfit"
   process.load("RecoMET.METProducers.METSignificance_cfi")
   process.load("RecoMET.METProducers.METSignificanceParams_cfi")
+<<<<<<< HEAD:Ntuplizer/config_2016mc.py
   process.METSequence = cms.Sequence (process.METSignificance)
+=======
+  pattask.add(process.METSignificance)
+
+if config["DOMVAMET"]:
+  from RecoMET.METPUSubtraction.jet_recorrections import recorrectJets
+  recorrectJets(process, isData=True)
+  
+  from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
+  runMVAMET( process, jetCollectionPF="patJetsReapplyJEC")
+  process.MVAMET.srcLeptons  = cms.VInputTag("slimmedMuons", "slimmedElectrons", "slimmedTaus")
+  process.MVAMET.requireOS = cms.bool(False)
+
+##___________________ taus ______________________##
+>>>>>>> 47332c4960fe35ece8cabd6e55ef4bbe15dab461:Ntuplizer/config_data.py
 
 TAUS = ""
 MUTAUS = ""

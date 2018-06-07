@@ -54,6 +54,10 @@ public:
     edm::Handle<pat::JetCollection>		 jets_  	 ;
     edm::Handle< double >			 rho_		 ;
     edm::Handle<reco::VertexCollection> 	 vertices_	 ;
+
+    edm::Handle<double>                          significanceHandle;
+    edm::Handle<math::Error<2>::type>            covHandle;
+ 
    
     edm::Handle<double>                          significanceHandle;
     edm::Handle<math::Error<2>::type>            covHandle;
