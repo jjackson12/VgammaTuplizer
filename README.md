@@ -17,14 +17,12 @@ git init
 
 ### getting the ntuplizer codes
 ```
-cd $CMSSW_BASE/src
-export GITUSER=`git config user.github`
-git clone https://github.com/${GITUSER}/EXOVVNtuplizerRunII 
-cd EXOVVNtuplizerRunII
-git remote add UZHCMS https://github.com/UZHCMS/EXOVVNtuplizerRunII
-git fetch UZHCMS
-git checkout -b DevelopmentBranch_9_4_0 UZHCMS/94X_ntuplizer
-cd $CMSSW_BASE/src
+git clone https://github.com/jjackson12/VgammaTuplizer 
+cd VgammaTuplizer
+git remote add Wgam https://github.com/jjackson12/VgammaTuplizer
+git fetch Wgam
+git checkout -b Dev_9_4_0 Wgam/94X_dev
+cd ..
 ```
 
 
