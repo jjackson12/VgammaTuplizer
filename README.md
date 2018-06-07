@@ -23,6 +23,7 @@ git remote add Wgam https://github.com/jjackson12/VgammaTuplizer
 git fetch Wgam
 git checkout -b Dev_9_4_0 Wgam/94X_dev
 cd ..
+scram b -j8
 ```
 
 
