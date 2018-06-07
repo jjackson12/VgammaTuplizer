@@ -1,5 +1,6 @@
-###### Process initialization ##########
+####### Process initialization ##########
 
+import sys
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("Ntuple")
@@ -12,6 +13,7 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
+# TODO: Merge data and generic python config files
 from VgammaTuplizer.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
 				   
@@ -25,11 +27,13 @@ options.maxEvents = 10000
 
 #data file
 
+#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016B/SinglePhoton/MINIAOD/23Sep2016-v3/110000/C0614094-EC98-E611-A4A4-0CC47A745284.root'
+options.inputFiles='root://cmsxrootd.fnal.gov//store/data/Run2017B/SinglePhoton/MINIAOD/17Nov2017-v1/20000/00D960EC-7BD3-E711-A054-008CFAFBE880.root'
 
-#options.inputFiles = '/store/mc/RunIIFall17MiniAOD/ZZTo4L_13TeV_powheg_pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v2/60000/EA783E89-8AD9-E711-AFFE-0CC47A7C3458.root'
 
-options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2017B/SinglePhoton/MINIAOD/17Nov2017-v1/20000/00D960EC-7BD3-E711-A054-008CFAFBE880.root'
-                     
+
+
+
 options.parseArguments()
 
 process.options  = cms.untracked.PSet( 
@@ -55,7 +59,7 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=config["DOAK8PUPPIRECLUSTERING"]
+reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
 if reclusterPuppi:
   print "RECLUSTERING PUPPI with latest tune from CMSSW_8_0_20"
 
@@ -73,7 +77,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 5
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -409,6 +413,7 @@ bTagParameters = dict(
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
     svSource = cms.InputTag('slimmedSecondaryVertices'),
+    #phSource = cms.InputTag('slimmedPhotons'),
     elSource = cms.InputTag('slimmedElectrons'),
     muSource = cms.InputTag('slimmedMuons'),
     btagDiscriminators = bTagDiscriminators
@@ -638,7 +643,7 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
 #                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
       
-my_id_modules = [
+my_id_modules_el = [
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff',
@@ -647,8 +652,18 @@ my_id_modules = [
            
 
 #add them to the VID producer
-for idmod in my_id_modules:
+for idmod in my_id_modules_el:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection,task=pattask)
+
+switchOnVIDPhotonIdProducer(process,dataFormat)
+process.egmPhotonIDSequence = cms.Sequence(process.egmPhotonIDSequence)
+
+my_id_modules_ph = ['RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Spring16_nonTrig_V1_cff'  ,
+                    'RecoEgamma.PhotonIdentification.Identification.cutBasedPhotonID_Spring15_25ns_V1_cff'    ]
+
+for idmod in my_id_modules_ph:
+    setupAllVIDIdsInModule(process,idmod,setupVIDPhotonSelection,task=pattask)
+
 
 ####### Event filters ###########
 
@@ -835,6 +850,8 @@ jerAK4PuppiFile_sf = "JER/%s_MC_SF_AK4PFPuppi.txt"%(JERprefix)
                                                                                            
 ################## Ntuplizer ###################
 process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
+    doPhotons     = cms.bool(config["DOPHOTONS"]),
+    doJetIdVars   = cms.bool(config["DOJETIDVARS"]),
     runOnMC	      = cms.bool(config["RUNONMC"]),
     doGenParticles    = cms.bool(config["DOGENPARTICLES"]),
     doGenJets	      = cms.bool(config["DOGENJETS"]),
@@ -859,6 +876,13 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     doMVAMET        = cms.bool(config["DOMVAMET"]),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
+    photons = cms.InputTag("slimmedPhotons"),
+    phoIdVerbose = cms.bool(False),
+    phoLooseIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-loose"),
+    phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-medium"),
+    phoTightIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Spring15-25ns-V1-standalone-tight"),
+    phoMvaValuesMap     = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring16NonTrigV1Values"),
+    phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRun2Spring16NonTrigV1Categories"),
     electrons = cms.InputTag("slimmedElectrons"),
     ebRecHits = cms.InputTag("reducedEgamma","reducedEBRecHits"),
 
@@ -905,6 +929,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK4forMetCorr = cms.vstring( jecLevelsForMET ),
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
+    fixedGridRho = cms.InputTag("fixedGridRhoAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),

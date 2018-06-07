@@ -11,12 +11,13 @@ config["RUNONReReco"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = False # not (config["RUNONMC"])
-config["JSONFILE"] = "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
+config["JSONFILE"] = /afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
 
 #--------- basic sequences ----------#
+config["DOPHOTONS"] = True
 config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENJETS"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
