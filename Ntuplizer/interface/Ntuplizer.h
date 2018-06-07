@@ -83,27 +83,36 @@ private:
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;
 
   edm::EDGetToken                                   		    photonToken_	;
-  edm::EDGetTokenT<pat::MuonCollection>     		            muonToken_  	;	
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoTightIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<float> >                   phoMvaValuesMapToken_;
   edm::EDGetTokenT<edm::ValueMap<int> >                     phoMvaCategoriesMapToken_;
   bool                                                      phoVerboseIdFlag_;
+ 
+
+  edm::EDGetTokenT<pat::MuonCollection>     		            muonToken_  	;	
   edm::EDGetTokenT<edm::View<pat::Electron> >		            electronToken_	;
-  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
-  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPId51MapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleTightIdMapToken_ ;
-  edm::EDGetTokenT<pat::TauCollection> 	    		            tauToken_		;
-  edm::EDGetTokenT<pat::TauCollection> 	    		            tauEleTauToken_	;
-  edm::EDGetTokenT<pat::TauCollection> 	    		            tauMuTauToken_	;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHLTIdMapToken_  ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleHEEPIdMapToken_  ;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMVAMediumIdMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMVATightIdMapToken_ ;
+  edm::EDGetTokenT<edm::ValueMap<float> >                   mvaValuesMapToken_;
+  edm::EDGetTokenT<edm::ValueMap<int> >                     mvaCategoriesMapToken_;
+  edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_;
+  edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
+  edm::EDGetTokenT<pat::TauCollection> 	    		    tauBoostedTauToken_	;
 
-  edm::EDGetTokenT<pat::METCollection> 	    		            metToken_		;
-  edm::EDGetTokenT<double>                                  metSigToken_    ;
-  edm::EDGetTokenT<math::Error<2>::type>                    metCovToken_ ;
+
+  edm::EDGetTokenT<pat::METCollection> 	    		    metToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		    metpuppiToken_		;
+  edm::EDGetTokenT<pat::METCollection> 	    		    metmvaToken_		;
+  edm::EDGetTokenT<double> 	    		            metSigToken_		;
+  edm::EDGetTokenT<math::Error<2>::type> 	     	    metCovToken_		;
   edm::EDGetTokenT<pat::JetCollection>                      jetForMetCorrToken_ ;
   
   edm::EDGetTokenT<edm::TriggerResults>                     triggerToken_       ;
@@ -113,7 +122,6 @@ private:
   edm::EDGetTokenT<edm::TriggerResults>                     noiseFilterToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterLooseResultToken_;
   edm::EDGetTokenT<bool>                                    HBHENoiseFilterTightResultToken_;
-  edm::EDGetTokenT<bool> HBHENoiseIsoFilterResultToken_; 
-  
+  edm::EDGetTokenT<bool>                                    HBHENoiseIsoFilterResultToken_;  
 
 };

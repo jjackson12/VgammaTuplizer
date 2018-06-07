@@ -860,6 +860,8 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     # summary
     noiseFilterSelection_metFilters = cms.string('Flag_METFilters'),
 
+    packedpfcandidates = cms.InputTag('packedPFCandidates')
+
 )
 
 ####### Final path ##########
