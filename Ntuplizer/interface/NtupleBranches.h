@@ -51,14 +51,15 @@ public:
   /** genParticles */
   int                             genParticle_N;
   std::vector<float>              genParticle_pt       ;
-//  std::vector<float>              genParticle_px       ;
-//  std::vector<float>              genParticle_py       ;
-//  std::vector<float>              genParticle_pz       ;
-//  std::vector<float>              genParticle_e        ;
+  std::vector<float>              genParticle_px       ;
+  std::vector<float>              genParticle_py       ;
+  std::vector<float>              genParticle_pz       ;
+  std::vector<float>              genParticle_e        ;
   std::vector<float>              genParticle_eta      ;
   std::vector<float>              genParticle_phi      ;
   std::vector<float>              genParticle_mass     ;
   std::vector<int  >              genParticle_pdgId    ;
+  std::vector<int  >               genParticle_origin           ;
   std::vector<int  >              genParticle_isPrompt ;
   std::vector<int  >              genParticle_isDirectPromptTauDecayProduct;
   std::vector<int  >              genParticle_fromHardProcessFinalState;
@@ -668,15 +669,15 @@ public:
   std::map<std::string,bool> HLT_isFired;
 	 
   /** HLT trigger objects */
-  //  std::vector<float>  		    triggerObject_pt	      ;
+  std::vector<float>  		    triggerObject_pt	      ;
   std::vector<float>  		    triggerObject_eta	      ;
   std::vector<float>  		    triggerObject_phi	      ;
-  //  std::vector<float>  		    triggerObject_mass	      ;
+    std::vector<float>  		    triggerObject_mass	      ;
   std::vector<std::string>  		    triggerObject_lastname    ;
-  //  std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
+    std::vector< std::vector<float> > triggerObject_filterIDs   ; // as defined in http://cmslxr.fnal.gov/lxr/source/DataFormats/HLTReco/interface/TriggerTypeDefs.h
   //  std::vector< std::vector<std::string> > triggerObject_filterLabels;
   std::map<std::string, std::vector<std::string> > triggerObject_filterLabels;
-  //  std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
+    std::vector< std::vector<int> >   triggerObject_firedTrigger; // as defined in plugins/TriggersNtuplizer.cc
 
 
   /** HLT filter decisions */

@@ -22,12 +22,6 @@ public:
   
 private:
    edm::EDGetTokenT< GenEventInfoProduct > geneventToken_; 
-  ~GenEventNtuplizer( void );
-  
-  void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
-  
-private:
-   edm::EDGetTokenT< GenEventInfoProduct > geneventToken_; 
      
    edm::Handle< GenEventInfoProduct >  geneventInfo_;
   

@@ -12,7 +12,6 @@
 #include "../interface/GenParticlesNtuplizer.h"
 #include "../interface/TriggersNtuplizer.h"
 #include "../interface/VerticesNtuplizer.h"
-
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
@@ -111,7 +110,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   runFlags["doMETSVFIT"] = iConfig.getParameter<bool>("doMETSVFIT");
   runFlags["doMVAMET"] = iConfig.getParameter<bool>("doMVAMET");
   runFlags["doPuppiRecluster"] = iConfig.getParameter<edm::InputTag>("puppijets").label()!="";
-  runFlags["doMultipleTauMVAversions"] = iConfig.getParameter<bool>("doMultipleTauMVAversions");
+  //runFlags["doMultipleTauMVAversions"] = iConfig.getParameter<bool>("doMultipleTauMVAversions");
 
   if(runFlags["doElectrons"]){
     electronToken_	      	    =consumes<edm::View<pat::Electron> >(iConfig.getParameter<edm::InputTag>("electrons"));
@@ -126,7 +125,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
   }
 
   std::string jecpath = iConfig.getParameter<std::string>("jecpath");
-  jecpath = "EXOVVNtuplizerRunII/Ntuplizer/data/" + jecpath;
+  jecpath = "VgammaTuplizer/Ntuplizer/data/" + jecpath;
   //jecpath = std::string("data/") + jecpath;
  
   nBranches_ = new NtupleBranches( runFlags, tree );
@@ -348,6 +347,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
       geneTokens.push_back( geneventToken_ );
       std::vector<edm::EDGetTokenT<  LHEEventProduct > > lheTokens;
       lheTokens.push_back( lheEventProductToken_);
+      //TODO: Put this back:
       nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ , lheTokens);
     }
   }

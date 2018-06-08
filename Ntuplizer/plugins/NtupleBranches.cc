@@ -1,5 +1,5 @@
 #include "../interface/NtupleBranches.h"
-
+//
 //===================================================================================================================        
 NtupleBranches::NtupleBranches( std::map< std::string, bool >& runFlags, TTree* tree )
    : tree_( tree )
@@ -223,6 +223,300 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     // tree_->Branch( "mu_chargedHadIsoBoost"    , &mu_chargedHadIsoBoost     );  
     tree_->Branch( "mu_normChi2"  	      , &mu_normChi2	    	   );
     tree_->Branch( "mu_trackerHits"	      , &mu_trackerHits     	   );
+    tree_->Branch( "mu_matchedStations"	      , &mu_matchedStations 	   );
+    tree_->Branch( "mu_pixelHits" 	      , &mu_pixelHits	    	   );
+    tree_->Branch( "mu_globalHits"	      , &mu_globalHits        	   );
+    tree_->Branch( "mu_SemileptonicPFIso"     , &mu_SemileptonicPFIso	   );
+    tree_->Branch( "mu_SemileptonicCorrPFIso" , &mu_SemileptonicCorrPFIso  );
+  } //doMuons
+  
+  if ( runFlags["doTaus"] ){
+    /** taus */
+    tree_->Branch( "tau_N"  		     	 , &tau_N		       );
+    tree_->Branch( "tau_pdgId"               	 , &tau_pdgId		       );
+    tree_->Branch( "tau_charge"		     	 , &tau_charge  	       );
+    tree_->Branch( "tau_e" 		     	 , &tau_e		       );
+    tree_->Branch( "tau_eta"		     	 , &tau_eta		       );
+    tree_->Branch( "tau_phi"		     	 , &tau_phi		       );
+    tree_->Branch( "tau_mass"		     	 , &tau_mass		       );
+    tree_->Branch( "tau_pt"		     	 , &tau_pt		       );
+    tree_->Branch( "tau_d0"                  	 , &tau_d0		       );
+    tree_->Branch( "tau_dz"                  	 , &tau_dz		       );
+    
+    // YT added
+//    tree_->Branch( "tau_associated_pdgId"    	 , &tau_associated_pdgId       );
+//    tree_->Branch( "tau_associated_pt"    	 , &tau_associated_pt       );
+//    tree_->Branch( "tau_associated_eta"    	 , &tau_associated_eta       );
+//    tree_->Branch( "tau_associated_phi"    	 , &tau_associated_phi       );
+//    tree_->Branch( "tau_associated_dr"    	 , &tau_associated_dr       );
+
+//    tree_->Branch( "tau_n_total"    	 , &tau_n_total       );
+    tree_->Branch( "tau_n_ch"    	 , &tau_n_ch       );
+    tree_->Branch( "tau_n_nh"    	 , &tau_n_nh       );
+    //    tree_->Branch( "tau_n_h_f"    	 , &tau_n_h_f       );
+    //    tree_->Branch( "tau_n_em_f"    	 , &tau_n_em_f       );
+    tree_->Branch( "tau_n_gamma"    	 , &tau_n_gamma       );
+    //    tree_->Branch( "tau_n_e"    	 , &tau_n_e       );
+    //    tree_->Branch( "tau_n_mu"    	 , &tau_n_mu       );
+
+    // tree_->Branch( "tau_pfRhoCorrRelIso03"   	 , &tau_pfRhoCorrRelIso03      );
+    // tree_->Branch( "tau_pfRhoCorrRelIso04"   	 , &tau_pfRhoCorrRelIso04      );
+    // tree_->Branch( "tau_pfDeltaCorrRelIso"   	 , &tau_pfDeltaCorrRelIso      );
+    // tree_->Branch( "tau_pfRelIso"  	     	 , &tau_pfRelIso	       );
+    // tree_->Branch( "tau_photonIso" 	     	 , &tau_photonIso	       );
+    // tree_->Branch( "tau_neutralHadIso"	     	 , &tau_neutralHadIso	       );
+    // tree_->Branch( "tau_chargedHadIso"	     	 , &tau_chargedHadIso	       );
+    tree_->Branch( "tau_photonPtSumOutsideSignalCone"      , &tau_photonPtSumOutsideSignalCone     );  
+    // tree_->Branch( "tau_trackIso"	     	 , &tau_trackIso	       );
+    // tree_->Branch( "tau_pfRhoCorrRelIso03Boost"  , &tau_pfRhoCorrRelIso03Boost );
+    // tree_->Branch( "tau_pfRhoCorrRelIso04Boost"  , &tau_pfRhoCorrRelIso04Boost );
+    // tree_->Branch( "tau_pfDeltaCorrRelIsoBoost"  , &tau_pfDeltaCorrRelIsoBoost );
+    // tree_->Branch( "tau_pfRelIsoBoost"  	 , &tau_pfRelIsoBoost	       );
+    // tree_->Branch( "tau_photonIsoBoost" 	 , &tau_photonIsoBoost         );
+    // tree_->Branch( "tau_neutralHadIsoBoost"      , &tau_neutralHadIsoBoost     );
+    // tree_->Branch( "tau_chargedHadIsoBoost"      , &tau_chargedHadIsoBoost     );  
+    tree_->Branch( "tau_TauType"		 , &tau_TauType		       );
+    tree_->Branch( "tau_decayMode"		 , &tau_decayMode	       ); // YT added
+    tree_->Branch( "tau_chargedPionPt"		 , &tau_chargedPionPt	       ); // YT added
+    tree_->Branch( "tau_neutralPionPt"		 , &tau_neutralPionPt	       ); // YT added
+
+    // YT added
+    tree_->Branch( "tau_nPhoton"                 , &tau_nPhoton                );
+    tree_->Branch( "tau_ptWeightedDetaStrip"     , &tau_ptWeightedDetaStrip    );
+    tree_->Branch( "tau_ptWeightedDphiStrip"     , &tau_ptWeightedDphiStrip    );
+    tree_->Branch( "tau_ptWeightedDrSignal"      , &tau_ptWeightedDrSignal     );
+    tree_->Branch( "tau_ptWeightedDrIsolation"   , &tau_ptWeightedDrIsolation  );
+    tree_->Branch( "tau_leadingTrackChi2"        , &tau_leadingTrackChi2       );
+    tree_->Branch( "tau_leadingTrackPt"          , &tau_leadingTrackPt         );
+    tree_->Branch( "tau_eRatio"                  , &tau_eRatio                 );
+    tree_->Branch( "tau_dxy_Sig"                 , &tau_dxy_Sig                );
+    tree_->Branch( "tau_ip3d"                    , &tau_ip3d                   );
+    tree_->Branch( "tau_ip3d_Sig"                , &tau_ip3d_Sig               );
+    tree_->Branch( "tau_hasSecondaryVertex"      , &tau_hasSecondaryVertex     );
+    //    tree_->Branch( "tau_decayDistMag_x"          , &tau_decayDistMag_x         );
+    //    tree_->Branch( "tau_decayDistMag_y"          , &tau_decayDistMag_y         );
+    //    tree_->Branch( "tau_decayDistMag_z"          , &tau_decayDistMag_z         );
+    tree_->Branch( "tau_decayDistMag"            , &tau_decayDistMag           );
+    tree_->Branch( "tau_flightLenthSig"          , &tau_flightLenthSig         );
+    // YT added end
+  
+    if ( runFlags["doBoostedTaus"] ){
+      /** tau discriminants */
+      tree_->Branch( "tau_decayModeFindingNewDMs"	              , &tau_decayModeFindingNewDMs			 );
+      tree_->Branch( "tau_decayModeFinding"  			      , &tau_decayModeFinding				 );
+      tree_->Branch( "tau_byLooseCombinedIsolationDeltaBetaCorr3Hits" , &tau_byLooseCombinedIsolationDeltaBetaCorr3Hits  );
+      tree_->Branch( "tau_byMediumCombinedIsolationDeltaBetaCorr3Hits", &tau_byMediumCombinedIsolationDeltaBetaCorr3Hits );
+      tree_->Branch( "tau_byTightCombinedIsolationDeltaBetaCorr3Hits" , &tau_byTightCombinedIsolationDeltaBetaCorr3Hits  );
+      tree_->Branch( "tau_byCombinedIsolationDeltaBetaCorrRaw3Hits"   , &tau_byCombinedIsolationDeltaBetaCorrRaw3Hits	 );
+      tree_->Branch( "tau_chargedIsoPtSum"			      , &tau_chargedIsoPtSum			         );
+      tree_->Branch( "tau_neutralIsoPtSum"			      , &tau_neutralIsoPtSum			         );
+      tree_->Branch( "tau_puCorrPtSum"				      , &tau_puCorrPtSum 				 );
+     
+
+      tree_->Branch( "tau_chargedIsoPtSumdR03"                       , &tau_chargedIsoPtSumdR03);
+      //      tree_->Branch( "tau_footprintCorrectiondR03"                    , &tau_footprintCorrectiondR03);
+      tree_->Branch( "tau_neutralIsoPtSumdR03"                        , &tau_neutralIsoPtSumdR03);
+      //      tree_->Branch( "tau_neutralIsoPtSumWeight"                      , &tau_neutralIsoPtSumWeight);
+      //      tree_->Branch( "tau_neutralIsoPtSumWeightdR03"                  , &tau_neutralIsoPtSumWeightdR03);
+      tree_->Branch( "tau_photonPtSumOutsideSignalConedR03"           , &tau_photonPtSumOutsideSignalConedR03);
+
+      tree_->Branch( "tau_byIsolationMVArun2v1DBdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1DBdR03oldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1DBnewDMwLTraw"          , &tau_byIsolationMVArun2v1DBnewDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwLTraw);
+      //      tree_->Branch( "tau_byIsolationMVArun2v1DBoldDMwoLTraw"          , &tau_byIsolationMVArun2v1DBoldDMwoLTraw);
+      //      tree_->Branch( "tau_byIsolationMVArun2v1PWdR03oldDMwLTraw"      , &tau_byIsolationMVArun2v1PWdR03oldDMwLTraw);
+      tree_->Branch( "tau_byIsolationMVArun2v1PWnewDMwLTraw"          , &tau_byIsolationMVArun2v1PWnewDMwLTraw);
+      //      tree_->Branch( "tau_byIsolationMVArun2v1PWoldDMwLTraw"          , &tau_byIsolationMVArun2v1PWoldDMwLTraw);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byLooseIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byLooseIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byLooseIsolationMVArun2v1DBoldDMwLT);
+      //      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT"   , &tau_byLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byLooseIsolationMVArun2v1PWnewDMwLT);
+      //      tree_->Branch( "tau_byLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byLooseIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBnewDMwLT"        , &tau_byMediumIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1DBoldDMwLT"        , &tau_byMediumIsolationMVArun2v1DBoldDMwLT);
+      //      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byMediumIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWnewDMwLT"        , &tau_byMediumIsolationMVArun2v1PWnewDMwLT);
+      //      tree_->Branch( "tau_byMediumIsolationMVArun2v1PWoldDMwLT"        , &tau_byMediumIsolationMVArun2v1PWoldDMwLT);
+
+
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBnewDMwLT"         , &tau_byTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1DBoldDMwLT"         , &tau_byTightIsolationMVArun2v1DBoldDMwLT);
+      //      tree_->Branch( "tau_byTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byTightIsolationMVArun2v1PWnewDMwLT);
+      //      tree_->Branch( "tau_byTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byTightIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1DBdR03oldDMwLT);
+
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1DBoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1DBoldDMwLT);
+      tree_->Branch( "tau_byVVLooseIsolationMVArun2v1DBoldDMwLT"       , &tau_byVVLooseIsolationMVArun2v1DBoldDMwLT);
+      
+      //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVLooseIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWnewDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWnewDMwLT);
+      //      tree_->Branch( "tau_byVLooseIsolationMVArun2v1PWoldDMwLT"        , &tau_byVLooseIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVTightIsolationMVArun2v1DBoldDMwLT);
+
+      //      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT"     , &tau_byVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWnewDMwLT"         , &tau_byVTightIsolationMVArun2v1PWnewDMwLT);
+      //      tree_->Branch( "tau_byVTightIsolationMVArun2v1PWoldDMwLT"         , &tau_byVTightIsolationMVArun2v1PWoldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1DBdR03oldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBnewDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1DBoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1DBoldDMwLT);
+      //      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT"    , &tau_byVVTightIsolationMVArun2v1PWdR03oldDMwLT);
+      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWnewDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWnewDMwLT);
+
+      //      tree_->Branch( "tau_byVVTightIsolationMVArun2v1PWoldDMwLT"        , &tau_byVVTightIsolationMVArun2v1PWoldDMwLT);
+
+      // add multimple variables to save multiple MVA versions
+      // if ( runFlags["doMultipleTauMVAversions"] ){
+	tree_->Branch("tau_byIsolationMVArun2v2DBoldDMwLTraw", &tau_byIsolationMVArun2v2DBoldDMwLTraw);
+	tree_->Branch("tau_byVVLooseIsolationMVArun2v2DBoldDMwLT", &tau_byVVLooseIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byVLooseIsolationMVArun2v2DBoldDMwLT", &tau_byVLooseIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byLooseIsolationMVArun2v2DBoldDMwLT", &tau_byLooseIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byMediumIsolationMVArun2v2DBoldDMwLT", &tau_byMediumIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byTightIsolationMVArun2v2DBoldDMwLT", &tau_byTightIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byVTightIsolationMVArun2v2DBoldDMwLT", &tau_byVTightIsolationMVArun2v2DBoldDMwLT);
+	tree_->Branch("tau_byVVTightIsolationMVArun2v2DBoldDMwLT", &tau_byVVTightIsolationMVArun2v2DBoldDMwLT);
+      
+	// }
+
+      tree_->Branch( "tau_againstElectronMVA6raw"                     , &tau_againstElectronMVA6raw);
+      tree_->Branch( "tau_againstElectronMVA6category"                , &tau_againstElectronMVA6category);
+      tree_->Branch( "tau_againstElectronVLooseMVA6"                  , &tau_againstElectronVLooseMVA6);
+      tree_->Branch( "tau_againstElectronLooseMVA6"                   , &tau_againstElectronLooseMVA6);
+      tree_->Branch( "tau_againstElectronMediumMVA6"                  , &tau_againstElectronMediumMVA6);
+      tree_->Branch( "tau_againstElectronTightMVA6"                   , &tau_againstElectronTightMVA6);
+      tree_->Branch( "tau_againstElectronVTightMVA6"                  , &tau_againstElectronVTightMVA6);
+      
+
+      tree_->Branch( "tau_againstMuonLoose3"                          , &tau_againstMuonLoose3);
+      tree_->Branch( "tau_againstMuonTight3"                          , &tau_againstMuonTight3); 
+      
+      tree_->Branch( "tau_byPhotonPtSumOutsideSignalCone"             , &tau_byPhotonPtSumOutsideSignalCone);
+      //      tree_->Branch( "tau_footprintCorrection"                        , &tau_footprintCorrection);
+
+
+    } //doTausBoosted
+  } //doTaus
+      
+
+ 
+
+  if (runFlags["doAK4Jets"] || runFlags["doAK8Jets"]) {
+    /** energy density */
+    tree_->Branch( "rho", &rho );
+  }
+
+  if (runFlags["doAK4Jets"]) {
+    /** AK4 jets */
+
+    tree_->Branch( "jetAK4_N"		    , &jetAK4_N 	 );
+    tree_->Branch( "jetAK4_pt"		    , &jetAK4_pt	 );
+    tree_->Branch( "jetAK4_eta"		    , &jetAK4_eta	 );
+    tree_->Branch( "jetAK4_mass"	    , &jetAK4_mass	 );
+    tree_->Branch( "jetAK4_phi"		    , &jetAK4_phi	 );
+    tree_->Branch( "jetAK4_e"		    , &jetAK4_e 	 );
+    tree_->Branch( "jetAK4_jec"		    , &jetAK4_jec 	 );
+    tree_->Branch( "jetAK4_jecUp"	    , &jetAK4_jecUp 	 );
+    tree_->Branch( "jetAK4_jecDown"	    , &jetAK4_jecDown 	 );
+    tree_->Branch( "jetAK4_IDLoose"	    , &jetAK4_IDLoose	 );
+    tree_->Branch( "jetAK4_IDTight"	    , &jetAK4_IDTight	 );
+    tree_->Branch( "jetAK4_IDTightWithoutLepVeto"	    , &jetAK4_IDTightWithoutLepVeto	 );
+    tree_->Branch( "jetAK4_PUIDdiscriminat" , &jetAK4_PUIDdiscriminat);
+    tree_->Branch( "jetAK4_PUIDloose"	    , &jetAK4_PUIDloose	 );
+    tree_->Branch( "jetAK4_PUIDmedium"	    , &jetAK4_PUIDmedium );
+    tree_->Branch( "jetAK4_PUIDtight"	    , &jetAK4_PUIDtight	 );
+    tree_->Branch( "jetAK4_muf" 	    , &jetAK4_muf	 );
+    tree_->Branch( "jetAK4_phf" 	    , &jetAK4_phf	 );
+    tree_->Branch( "jetAK4_emf" 	    , &jetAK4_emf	 );
+    tree_->Branch( "jetAK4_nhf" 	    , &jetAK4_nhf	 );
+    tree_->Branch( "jetAK4_chf" 	    , &jetAK4_chf	 );
+    tree_->Branch( "jetAK4_area" 	    , &jetAK4_area	 );
+    tree_->Branch( "jetAK4_cm"     	    , &jetAK4_cm	 );
+    tree_->Branch( "jetAK4_nm"     	    , &jetAK4_nm	 );
+    tree_->Branch( "jetAK4_che"     	    , &jetAK4_che	 );
+    tree_->Branch( "jetAK4_ne"     	    , &jetAK4_ne	 );
+    tree_->Branch( "jetAK4_hf_hf"  	    , &jetAK4_hf_hf      );
+    tree_->Branch( "jetAK4_hf_emf"  	    , &jetAK4_hf_emf     );
+    tree_->Branch( "jetAK4_hof"  	    , &jetAK4_hof        );
+    tree_->Branch( "jetAK4_chm"  	    , &jetAK4_chm        );
+    tree_->Branch( "jetAK4_neHadMult"  	    , &jetAK4_neHadMult  );
+    tree_->Branch( "jetAK4_phoMult"  	    , &jetAK4_phoMult    );
+    tree_->Branch( "jetAK4_nemf"  	    , &jetAK4_nemf       );
+    tree_->Branch( "jetAK4_cemf"  	    , &jetAK4_cemf       );
+    tree_->Branch( "jetAK4_charge" 	    , &jetAK4_charge     );
+    tree_->Branch( "jetAK4_csv" 	    , &jetAK4_csv        );
+    tree_->Branch( "jetAK4_deep_csv_b"      , &jetAK4_deep_csv_b );
+    tree_->Branch( "jetAK4_deep_csv_bb"     , &jetAK4_deep_csv_bb);
+    tree_->Branch( "jetAK4_vtxMass"	    , &jetAK4_vtxMass    );
+    tree_->Branch( "jetAK4_vtxNtracks"      , &jetAK4_vtxNtracks );
+    tree_->Branch( "jetAK4_vtx3DVal"	    , &jetAK4_vtx3DVal   );
+    tree_->Branch( "jetAK4_vtx3DSig"	    , &jetAK4_vtx3DSig   );
+    tree_->Branch( "jetAK4_etaAxis"	    , &jetAK4_etaAxis   );
+    tree_->Branch( "jetAK4_phiAxis"	    , &jetAK4_phiAxis   );
+    tree_->Branch( "jetAK4_phiT"	    , &jetAK4_phiT   );
+    
+    tree_->Branch( "jetAK4_qg_axis1"	    , &jetAK4_qg_axis1   );
+    tree_->Branch( "jetAK4_qg_axis2"	    , &jetAK4_qg_axis2   );
+    tree_->Branch( "jetAK4_qg_charged"      , &jetAK4_qg_charged );
+    tree_->Branch( "jetAK4_qg_ptD"          , &jetAK4_qg_ptD     );
+    tree_->Branch( "jetAK4_qg_pt_dr"        , &jetAK4_qg_pt_dr   );
+
+
+    if ( runFlags["runOnMC"] ){
+      tree_->Branch( "jetAK4_partonFlavour" , &jetAK4_partonFlavour);
+      tree_->Branch( "jetAK4_hadronFlavour" , &jetAK4_hadronFlavour);
+      tree_->Branch( "jetAK4_genParton_pdgID" , &jetAK4_genParton_pdgID);
+      tree_->Branch( "jetAK4_nbHadrons"       , &jetAK4_nbHadrons);
+      tree_->Branch( "jetAK4_ncHadrons"       , &jetAK4_ncHadrons);
+      tree_->Branch( "jetAK4_jer_sf"          , &jetAK4_jer_sf);
+      tree_->Branch( "jetAK4_jer_sf_up"          , &jetAK4_jer_sf_up);
+      tree_->Branch( "jetAK4_jer_sf_down"          , &jetAK4_jer_sf_down);
+      tree_->Branch( "jetAK4_jer_sigma_pt"          , &jetAK4_jer_sigma_pt);
+    }
+
+  } //doAK4Jets
+        
+  if (runFlags["doAK8Jets"]) {
+    /** AK8 jets */
+
+    tree_->Branch( "jetAK8_N"		     , &jetAK8_N 		 );
+    tree_->Branch( "jetAK8_pt"		     , &jetAK8_pt		 );
+    tree_->Branch( "jetAK8_eta"		     , &jetAK8_eta		 );
+    tree_->Branch( "jetAK8_mass"	     , &jetAK8_mass		 );
+    tree_->Branch( "jetAK8_phi"		     , &jetAK8_phi		 );
+    tree_->Branch( "jetAK8_e"		     , &jetAK8_e 		 );
+    tree_->Branch( "jetAK8_jec"		     , &jetAK8_jec 		 );
+    tree_->Branch( "jetAK8_jecUp"	     , &jetAK8_jecUp 	         );
+    tree_->Branch( "jetAK8_jecDown"	     , &jetAK8_jecDown 	         );
+    tree_->Branch( "jetAK8_IDLoose"	     , &jetAK8_IDLoose		 );
+    tree_->Branch( "jetAK8_IDTight"	     , &jetAK8_IDTight           );
+    tree_->Branch( "jetAK8_muf" 	     , &jetAK8_muf		 );
+    tree_->Branch( "jetAK8_phf" 	     , &jetAK8_phf		 );
+    tree_->Branch( "jetAK8_emf" 	     , &jetAK8_emf		 );
+    tree_->Branch( "jetAK8_nhf" 	     , &jetAK8_nhf		 );
+    tree_->Branch( "jetAK8_chf" 	     , &jetAK8_chf		 );
+    tree_->Branch( "jetAK8_area" 	     , &jetAK8_area		 );
+    tree_->Branch( "jetAK8_cm"     	     , &jetAK8_cm		 );
+    tree_->Branch( "jetAK8_nm"     	     , &jetAK8_nm		 );
+    tree_->Branch( "jetAK8_che"     	     , &jetAK8_che		 );
+    tree_->Branch( "jetAK8_ne"     	     , &jetAK8_ne		 );
+    tree_->Branch( "jetAK8_hf_hf"  	     , &jetAK8_hf_hf             );
+    tree_->Branch( "jetAK8_hf_emf"  	     , &jetAK8_hf_emf            );
+    tree_->Branch( "jetAK8_hof"  	     , &jetAK8_hof               );
+    tree_->Branch( "jetAK8_chm"  	     , &jetAK8_chm               );
+    tree_->Branch( "jetAK8_neHadMult"  	     , &jetAK8_neHadMult         );
+    tree_->Branch( "jetAK8_phoMult"  	     , &jetAK8_phoMult           );
+    tree_->Branch( "jetAK8_nemf"  	     , &jetAK8_nemf              );
+    tree_->Branch( "jetAK8_cemf"  	     , &jetAK8_cemf              );
+    tree_->Branch( "jetAK8_charge" 	     , &jetAK8_charge    	 );
+    if ( runFlags["runOnMC"] ){
+      tree_->Branch( "jetAK8_partonFlavour" , &jetAK8_partonFlavour);
+      tree_->Branch( "jetAK8_hadronFlavour" , &jetAK8_hadronFlavour);
       tree_->Branch( "jetAK8_genParton_pdgID" , &jetAK8_genParton_pdgID);
       tree_->Branch( "jetAK8_nbHadrons"       , &jetAK8_nbHadrons);
       tree_->Branch( "jetAK8_ncHadrons"       , &jetAK8_ncHadrons);
@@ -272,7 +566,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     }
 
 
-
+//TODO: Syntax error here
       // /*----------------------puppi_softdrop AK8 subjets---------------------------*/
       tree_->Branch( "jetAK8_subjet_puppi_softdrop_N"            , &jetAK8_subjet_puppi_softdrop_N  	   );
       tree_->Branch( "jetAK8_subjet_puppi_softdrop_pt"           , &jetAK8_subjet_puppi_softdrop_pt      	   );

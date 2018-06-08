@@ -82,7 +82,6 @@ private:
 
   edm::EDGetTokenT<reco::JetFlavourMatchingCollection> 	    flavourToken_	;
 
-<<<<<<< HEAD
   edm::EDGetToken                                   		    photonToken_	;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    phoMediumIdMapToken_;
@@ -94,10 +93,6 @@ private:
 
   edm::EDGetTokenT<pat::MuonCollection>     		            muonToken_  	;	
   edm::EDGetTokenT<edm::View<pat::Electron> >		            electronToken_	;
-=======
-  edm::EDGetTokenT<pat::MuonCollection>     		    muonToken_  	;	
-  edm::EDGetTokenT<edm::View<pat::Electron> >		    electronToken_	;
->>>>>>> 47332c4960fe35ece8cabd6e55ef4bbe15dab461
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleVetoIdMapToken_  ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleLooseIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMediumIdMapToken_;

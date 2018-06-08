@@ -59,10 +59,7 @@ public:
     edm::Handle<math::Error<2>::type>            covHandle;
  
    
-    edm::Handle<double>                          significanceHandle;
-    edm::Handle<math::Error<2>::type>            covHandle;
- 
-   
+    
     std::map<std::string,double>		 TypeICorrMap_   ;
     
     TFormula* corrPx_;

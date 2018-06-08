@@ -266,6 +266,18 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     DetId detid = ele.superCluster()->seed()->seed();
     const EcalRecHit * rh = NULL;
     double seedE(0.);
+    if (detid.subdetId() == EcalBarrel) {
+        auto rh_i =  _ebRecHits->find(detid);
+        if( rh_i != _ebRecHits->end()) rh =  &(*rh_i);
+        else rh = NULL;
+    }
+    if(rh==NULL) seedE = -1.;
+    else {seedE = rh->energy();}
+    nBranches_->el_seedEnergy.push_back(seedE);
+    
+
+    reco::GsfElectron::PflowIsolationVariables pfIso = ele.pfIsolationVariables();
+    nBranches_->el_relIsoWithDBeta	    .push_back((pfIso.sumChargedHadronPt + std::max(0.0 , pfIso.sumNeutralHadronEt + pfIso.sumPhotonEt - 0.5 * pfIso.sumPUPt ))/ele.pt());
    
     if( ele.ecalEnergy() == 0 ){
     	    nBranches_->el_ooEmooP.push_back(1e30);
@@ -401,29 +413,6 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
        hOverE_		        < 0.298 &&
        ooEmooP_  	        < 0.241 &&
        fabs(d0_) 		< 0.05 && 
-  //Barrel cuts 
-  if(fabs(eta) <= 1.479){
-  
-    if(
-       passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.0115 &&
-       fabs(dEtaInSeed_)        < 0.00749 &&
-       fabs(dPhiIn_)	        < 0.228 &&
-       hOverE_		        < 0.356 &&
-       ooEmooP_  	        < 0.299 &&
-       fabs(d0_) 		< 0.05 && 
-       fabs(dz_) 		< 0.1 &&
-       expectedMissingInnerHits_ <= 2.
-       ) isVetoElectron = true;
-
-    if(
-       passConversionVeto_ && 
-       full5x5_sigmaIetaIeta_    < 0.011 &&
-       fabs(dEtaInSeed_)        < 0.00477 &&
-       fabs(dPhiIn_)	        < 0.222 &&
-       hOverE_		        < 0.298 &&
-       ooEmooP_  	        < 0.241 &&
-       fabs(d0_) 		< 0.05 && 
        fabs(dz_) 		< 0.1 &&				   
        expectedMissingInnerHits_ <= 1.
        ) isLooseElectron = true;
@@ -534,7 +523,6 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
     	       // iso < isoCut &&
 	       fabs(dxy) < 0.02 )
     	  {
-    	  {
     	     if (ele.hadronicOverEm() < (1./ele.superCluster()->energy()+0.05)) isHeepElectron = true;
     	  }
 	  
@@ -552,8 +540,6 @@ bool ElectronsNtuplizer::eleIDpassedBoosted(std::string id, const pat::Electron 
     	      ele.dr03TkSumPt() < 5. && 
 	      ele.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS) <= 1 &&
     	      // iso < isoCut &&
-	      fabs(dxy) < 0.05 )
-    	  {
 	      fabs(dxy) < 0.05 )
     	  {
     	     if (ele.hadronicOverEm() < (5./ele.superCluster()->energy()+0.05)) isHeepElectron = true;
