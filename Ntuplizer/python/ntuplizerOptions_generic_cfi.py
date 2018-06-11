@@ -54,3 +54,6 @@ config["DOMETRECLUSTERING"] = False
 config["CORRJETSONTHEFLY"] = False
 config["CORRMETONTHEFLY"] = False
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
+
+#--------- TAU ----------#
+config["DOMULTIPLETAUMVAVERSIONS"] = False
