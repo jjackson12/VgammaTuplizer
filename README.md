@@ -10,21 +10,6 @@ Setting up CMSSW (for september reprocessing):
 cmsrel CMSSW_9_4_0
 cd CMSSW_9_4_0/src
 cmsenv
-git init
-```
-
-
-
-### getting the ntuplizer codes
-```
-cd $CMSSW_BASE/src
-git clone https://github.com/jjackson12/VgammaTuplizer 
-cd VgammaTuplizer
-git remote add Wgam https://github.com/jjackson12/VgammaTuplizer
-git fetch Wgam
-git checkout -b Dev_9_4_0 Wgam/94X_dev
-cd ..
-scram b -j8
 ```
 
 
@@ -51,6 +36,23 @@ cd $CMSSW_BASE/src
 scram b distclean
 scramv1 b -j 16
 ```
+
+
+
+
+### getting the ntuplizer codes
+```
+cd $CMSSW_BASE/src
+git clone https://github.com/jjackson12/VgammaTuplizer 
+cd VgammaTuplizer
+git remote add Wgam https://github.com/jjackson12/VgammaTuplizer
+git fetch Wgam
+git checkout -b Dev_9_4_0 Wgam/94X_dev
+cd ..
+scram b -j8
+```
+
+
 
 
 ### running for data and MC! just set the proper flag in python/ntuplizerOptions_generic_cfi.py
