@@ -26,11 +26,11 @@ def main():
   global nfiles
 
   parser = OptionParser(usage="usage: %prog [options] filelist")
-  parser.add_option("-d", "--data", dest="data", default=False, action="store_true",
+  parser.add_option("-d", "--data", dest="data", default=True, action="store_true",
                     help="data sets are collision data and not MC [default: %default]")
   parser.add_option("-t", "--template", dest="template", default="submitJobsOnT3batch.cfg", action="store",
                     help="template file for config [default: %default]")
-  parser.add_option("-p", "--pnfs", dest="pnfs", default="/pnfs/psi.ch/cms/trivcat/store", action="store",
+  parser.add_option("-p", "--pnfs", dest="pnfs", default="root://cmsxrootd.fnal.gov//store", action="store",
                     help="/pnfs base location for data sets (assumes next subdirectory is either mc or data) [default: %default]")
   parser.add_option("-n", "--nfiles", dest="nfiles", default="10", action="store",
                     help="number of files per job [default: %default]")
@@ -90,7 +90,7 @@ def createConfig(sample, templateCfg, pnfs):
       line = line.replace("CMSSW_BASE", cmsswBase)
       if sample.isData:
         # change this if the config names should ever change
-        line = line.replace("config_MC.py", "config_data.py")
+        line = line.replace("config_MC.py", "config_generic_cfi.py")
       cfgFile.write(line)
   cfgFile.close()
 
@@ -102,7 +102,7 @@ def findSampleLocation(sample, pnfs):
   else:
     pnfs = pnfs+"/mc"
   fullPath = "%s/%s/" %(pnfs, subDir)
-  # print fullPath
+  print fullPath
   for subdir, dirs, files in os.walk(fullPath):
     for file in files:
       if (file.find(".root") >= 0):

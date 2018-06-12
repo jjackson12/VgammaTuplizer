@@ -10,8 +10,8 @@ config["RUNONPromptReco"] = False
 config["RUNONReReco"] = True
 #-----------------------------------------#
 
-config["USEJSON"] = False # not (config["RUNONMC"])
-config["JSONFILE"] = "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"# "JSON/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt"
+config["USEJSON"] = True # not (config["RUNONMC"])
+config["JSONFILE"] =  "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
@@ -23,9 +23,9 @@ config["DOGENJETS"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
 config["DOJETIDVARS"] = True
-config["DOELECTRONS"] = True
-config["DOMUONS"] = True
-config["DOTAUS"] = True
+config["DOELECTRONS"] = False
+config["DOMUONS"] = False
+config["DOTAUS"] = False
 config["DOAK8JETS"] = True
 config["DOAK4JETS"] = True
 config["DOVERTICES"] = True
@@ -51,8 +51,8 @@ config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
 config["DOMETRECLUSTERING"] = False
 
 #--------- JEC ----------#
-config["CORRJETSONTHEFLY"] = False
-config["CORRMETONTHEFLY"] = False
+config["CORRJETSONTHEFLY"] = True
+config["CORRMETONTHEFLY"] = True
 config["GETJECFROMDBFILE"] = False # If not yet in global tag, but db file available
 
 #--------- TAU ----------#

@@ -23,7 +23,7 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 10000
+options.maxEvents = 2000
 
 #data file
 
@@ -36,8 +36,8 @@ options.inputFiles='root://cmsxrootd.fnal.gov//store/data/Run2017B/SinglePhoton/
 
 options.parseArguments()
 
-process.options  = cms.untracked.PSet( 
-                     wantSummary = cms.untracked.bool(True),
+process.options  = cms.untracked.PSet(
+                     wantSummary = cms.untracked.bool(False),
                      SkipEvent = cms.untracked.vstring('ProductNotFound'),
                      allowUnscheduled = cms.untracked.bool(True)
                      )
@@ -77,7 +77,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 5
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
