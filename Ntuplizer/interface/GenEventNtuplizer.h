@@ -15,7 +15,7 @@
 class GenEventNtuplizer : public CandidateNtuplizer {
 
 public:
-  GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches ,std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe);
+  GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches ,std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe,TH1D* _hCounter );
   ~GenEventNtuplizer( void );
   
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
@@ -27,6 +27,7 @@ private:
   
    edm::EDGetTokenT<LHEEventProduct > lheEventProductToken_; 
    edm::Handle<LHEEventProduct> lheEventProduct_;
+   TH1D* _hCounterLoc; 
 };
 
 #endif // GenEventNtuplizer_H#ifndef GenEventNtuplizer_H

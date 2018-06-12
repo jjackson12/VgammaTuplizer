@@ -1,10 +1,10 @@
 #include "../interface/GenEventNtuplizer.h"
 
 //===================================================================================================================
-GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe )
+GenEventNtuplizer::GenEventNtuplizer( std::vector< edm::EDGetTokenT< GenEventInfoProduct > > tokens, NtupleBranches* nBranches,  std::vector< edm::EDGetTokenT< LHEEventProduct > > tokens_lhe,TH1D* _hCounter  )
    : CandidateNtuplizer( nBranches )
    , geneventToken_( tokens[0] )
-   , lheEventProductToken_( tokens_lhe[0])
+   , lheEventProductToken_( tokens_lhe[0]), _hCounterLoc(_hCounter)
 {
 
 }
@@ -17,6 +17,11 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 
 //===================================================================================================================
 void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
+  double wght = 1;
+    if (geneventInfo_->weight() < 0){
+        wght = -1;
+    }
+    _hCounterLoc->Fill(1.,wght);
 
   event.getByToken(geneventToken_, geneventInfo_);  
   

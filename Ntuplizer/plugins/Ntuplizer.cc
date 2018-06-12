@@ -348,7 +348,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
       std::vector<edm::EDGetTokenT<  LHEEventProduct > > lheTokens;
       lheTokens.push_back( lheEventProductToken_);
       //TODO: Put this back:
-      nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ , lheTokens);
+      nTuplizers_["genEvent"] = new GenEventNtuplizer( geneTokens, nBranches_ , lheTokens, _hCounter);
     }
   }
 }

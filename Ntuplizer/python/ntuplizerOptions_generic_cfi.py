@@ -11,7 +11,7 @@ config["RUNONReReco"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = True # not (config["RUNONMC"])
-config["JSONFILE"] =  "/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
+config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
