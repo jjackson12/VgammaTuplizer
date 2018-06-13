@@ -5,12 +5,12 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = True
+config["RUNONReReco"] = False
 #-----------------------------------------#
 
-config["USEJSON"] = True # not (config["RUNONMC"])
+config["USEJSON"] = not (config["RUNONMC"])
 config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
