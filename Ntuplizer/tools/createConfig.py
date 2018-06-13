@@ -30,7 +30,7 @@ def main():
                     help="data sets are collision data and not MC [default: %default]")
   parser.add_option("-t", "--template", dest="template", default="submitJobsOnT3batch.cfg", action="store",
                     help="template file for config [default: %default]")
-  parser.add_option("-p", "--pnfs", dest="pnfs", default="root://cmsxrootd.fnal.gov//store", action="store",
+  parser.add_option("-p", "--pnfs", dest="pnfs", default="/eos/uscms/store/user/jjackso3/Wgamma", action="store",
                     help="/pnfs base location for data sets (assumes next subdirectory is either mc or data) [default: %default]")
   parser.add_option("-n", "--nfiles", dest="nfiles", default="10", action="store",
                     help="number of files per job [default: %default]")
@@ -58,7 +58,7 @@ def main():
   print "Using file list:", fileList
   print "data:", isData
   print "Using template config:", templateCfg
-  print "Using /pnfs base directory:", pnfs
+  print "Using /eos base directory:", pnfs
   print "Using %s files per job" %nfiles
   print "Using CMSSW_BASE:", cmsswBase
   print "-"*80

@@ -17,14 +17,15 @@ GenEventNtuplizer::~GenEventNtuplizer( void )
 
 //===================================================================================================================
 void GenEventNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetup& iSetup ){
-  double wght = 1;
+ 
+  event.getByToken(geneventToken_, geneventInfo_);  
+   double wght = 1;
     if (geneventInfo_->weight() < 0){
         wght = -1;
     }
     _hCounterLoc->Fill(1.,wght);
 
-  event.getByToken(geneventToken_, geneventInfo_);  
-  
+ 
   nBranches_->genWeight=geneventInfo_->weight();
   nBranches_->qScale=geneventInfo_->qScale();
   nBranches_->PDF_x.push_back((geneventInfo_->pdf()->x).first);

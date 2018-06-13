@@ -16,8 +16,9 @@ def getLocalJobsDir(localdir):
 def getJobsDirs(outdir,jobname):
    user = commands.getoutput("whoami")
    
-   path = "/pnfs/psi.ch/cms/trivcat/store/user/%s"%(user+"/"+outdir)
-   cmd = "uberftp t3se01.psi.ch 'ls %s'" %path
+   path = "/eos/uscms/store/user/%s/Wgamma/%s"%(user, outdir)
+   #TODO: I'm unsure of what this is doing
+   cmd = "uberftp cmsxrootd.fnal.gov 'ls %s'" %path
    ls_la = commands.getoutput(cmd)
    
    list_ = []
@@ -55,7 +56,7 @@ def getFileListT3(src):
 
 #-----------------------------------------------------------------------------------------
 def writeXMLfile(xmlfile,cmds):
-
+  print cmds
   print "Writing XML configuration file: "
   print "  * local job output dir = " + cmds[0].split(" ")[2]
   print "  * queue = " + cmds[0].split(" ")[6]
@@ -153,7 +154,8 @@ def checkJobsOutputFromXML(xmlfile):
       checkfile = "ls -l %s"%(inputpath) 
       status,cmd_out = commands.getstatusoutput(checkfile)
       if status: continue
-      tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125/"+inputpath)
+      #TODO: Path
+      tfile = ROOT.TFile.Open("/eos/store"+inputpath)
       if not tfile.Get("ntuplizer/tree"):
          print "WARNING: tree not found! Job %s : found 0 events" %(jobid)
 	 jobsevents[jobid] = 0
@@ -170,7 +172,7 @@ def checkJobsOutputFromXML(xmlfile):
       filelist = inputFiles.split(",")
       count = 0
       for f in filelist:
-         if f.find('xrootd') == -1: tfile = ROOT.TFile.Open("dcap://t3se01.psi.ch:22125//pnfs/psi.ch/cms/trivcat"+f)
+         if f.find('xrootd') == -1: tfile = ROOT.TFile.Open("/eos/store/user/jjackso3/Wgamma"+f)
          else: tfile = ROOT.TFile.Open(f)
 	 ttree = ROOT.TTree()
          tfile.GetObject("Events",ttree)
@@ -187,8 +189,8 @@ def checkJobsOutputFromXML(xmlfile):
 #-----------------------------------------------------------------------------------------
 def getFileListDAS(dataset,instance="prod/global",run=-1):
 
-   cmd = 'das_client.py --query="file dataset=%s instance=%s" --limit=10000' %(dataset,instance)
-   if run != -1: cmd = 'das_client.py --query="file run=%i dataset=%s instance=%s" --limit=10000' %(run,dataset,instance)
+   cmd = 'das_client.py --query="file dataset=%s instance=%s" --limit=5000' %(dataset,instance)
+   if run != -1: cmd = 'das_client.py --query="file run=%i dataset=%s instance=%s" --limit=5000' %(run,dataset,instance)
    print cmd
    cmd_out = commands.getoutput( cmd )
    tmpList = cmd_out.split(os.linesep)
@@ -269,17 +271,17 @@ if opts.copyfiles:
    checkdir = "ls -l " + newdir + "/config"
    status,cmd_out = commands.getstatusoutput(checkdir)
    if status: 
-     cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir) #No gFAL!
+     cmd = "srmmkdir srm://cmsxrootd.fnal.gov/%s"%(newdir) #No gFAL!
      print cmd
      os.system(cmd)
-     # cmd = "gfal-mkdir srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
-     cmd = "srmmkdir srm://t3se01.psi.ch/%s"%(newdir+"/config") #No gFAL!
-     # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://t3se01.psi.ch%s" %(newdir)
+     # cmd = "gfal-mkdir srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir+"/config")
+     cmd = "srmmkdir srm://cmsxrootd.fnal.gov/%s"%(newdir+"/config") #No gFAL!
+     # cmd = "env -i X509_USER_PROXY=~/.x509up_u`id -u` gfal-mkdir -p gsiftp://cmsxrootd.fnal.gov%s" %(newdir)
      print cmd
      os.system(cmd)
      
    else:
-     cmd = "uberftp t3se01.psi.ch 'ls %s'" %(newdir+"/config")
+     cmd = "uberftp cmsxrootd.fnal.gov 'ls %s'" %(newdir+"/config")
      ls_la = commands.getoutput(cmd)
 
      list_ = []
@@ -289,15 +291,15 @@ if opts.copyfiles:
        b = a.split(" ")
        status = os.path.exists(newdir + "/config/" + b[-1:][0].strip('\r'))
        if status:
-         # cmd = "gfal-rm srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
-         cmd = "srm-rm srm://t3se01.psi.ch%s"%(newdir + "/config/" + b[-1:][0].strip('\r')) #No gFAL!
+         # cmd = "gfal-rm srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir + "/config/" + b[-1:][0].strip('\r'))
+         cmd = "srm-rm srm://cmsxrootd.fnal.gov%s"%(newdir + "/config/" + b[-1:][0].strip('\r')) #No gFAL!
          os.system(cmd)
    
-   # cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(xmlfile))
+   # cmd = "lcg-cp -b -D srmv2 " + xmlfile + " srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(xmlfile))
    cmd = "xrdcp -d 1 " + xmlfile + " root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/"+os.path.basename(xmlfile)) #No gFAL!
    print cmd
    os.system(cmd)
-   # cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s -f"%(newdir+"/config/"+os.path.basename(cfg))
+   # cmd = "lcg-cp -b -D srmv2 " + cmsswdir + "/src/" + cfg + " srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s -f"%(newdir+"/config/"+os.path.basename(cfg))
    cmd = "xrdcp -d 1 " + cmsswdir + "/src/" + cfg + " root://t3dcachedb.psi.ch:1094///%s -f"%(newdir+"/config/"+os.path.basename(cfg)) #No gFAL!
    print cmd
    os.system(cmd)
@@ -307,14 +309,14 @@ if opts.copyfiles:
       if l.find("ntuplizerOptions_MC_cfi") != -1: ismc = True
    f.close()
    if ismc:
-      # cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_MC_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
+      # cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_MC_cfi.py srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
       cmd = "xrdcp -d 1 python/ntuplizerOptions_MC_cfi.py root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/ntuplizerOptions_MC_cfi.py")
    else:
-      # cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_generic_cfi.py srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_generic_cfi.py")
+      # cmd = "lcg-cp -b -D srmv2 python/ntuplizerOptions_generic_cfi.py srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir+"/config/ntuplizerOptions_generic_cfi.py")
       cmd = "xrdcp -d 1 python/ntuplizerOptions_generic_cfi.py root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/ntuplizerOptions_generic_cfi.py")
    print cmd
    os.system(cmd)
-   # cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
+   # cmd = "lcg-cp -b -D srmv2 " + opts.config[0] + " srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
    cmd = "xrdcp -d 1 " + opts.config[0] + " root://t3dcachedb.psi.ch:1094///%s"%(newdir+"/config/"+os.path.basename(opts.config[0]))
    print cmd
    os.system(cmd)
@@ -325,8 +327,8 @@ if opts.copyfiles:
     
    for j in jobsdir:
       jobid = j.rsplit("-",1)[1]
-      # inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
-      # outputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
+      # inputpath = "srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN="+j+"/"+outfile
+      # outputpath = "srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN=%s"%(newdir+"/"+prefix+"_"+jobid+".root")
       inputpath = "root://t3dcachedb.psi.ch:1094//"+j+"/"+outfile #USE XROOTD!!
       outputpath = "root://t3dcachedb.psi.ch:1094//%s"%(newdir+"/"+prefix+"_"+jobid+".root") #USE XROOTD!!
       checkfile = "ls -l %s"%(newdir+"/"+prefix+"_"+jobid+".root") 
@@ -352,12 +354,12 @@ if opts.clean:
       if not(status):
          a = j.split("-")
          jobid = a[1]
-         inputpath = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j+"/"+outfile
+         inputpath = "srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN="+j+"/"+outfile
 	 cmd = "srmrm "+inputpath
 	 print cmd
 	 os.system(cmd)
-      #jdir = "srm://t3se01.psi.ch:8443/srm/managerv2?SFN="+j
-      cmd = "uberftp t3se01.psi.ch 'rm -r %s'" %j
+      #jdir = "srm://cmsxrootd.fnal.gov:8443/srm/managerv2?SFN="+j
+      cmd = "uberftp cmsxrootd.fnal.gov 'rm -r %s'" %j
       print cmd
       os.system(cmd)
     
@@ -367,7 +369,7 @@ if opts.clean:
    os.system(cmd)
    user = commands.getoutput("whoami")
    dir = '/pnfs/psi.ch/cms/trivcat/store/user/'+user+"/"+outdir
-   cmd = "uberftp t3se01.psi.ch 'rm -r " + dir + "'"
+   cmd = "uberftp cmsxrootd.fnal.gov 'rm -r " + dir + "'"
    print cmd
    os.system(cmd)
       
