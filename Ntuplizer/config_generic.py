@@ -27,7 +27,6 @@ options.maxEvents = 2000
 
 #data file
 
-#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2016B/SinglePhoton/MINIAOD/23Sep2016-v3/110000/C0614094-EC98-E611-A4A4-0CC47A745284.root'
 options.inputFiles='root://cmsxrootd.fnal.gov//store/data/Run2017B/SinglePhoton/MINIAOD/17Nov2017-v1/20000/00D960EC-7BD3-E711-A054-008CFAFBE880.root'
 
 
@@ -647,14 +646,15 @@ process.egmGsfElectronIDSequence = cms.Sequence(process.egmGsfElectronIDs)
 #my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV51_cff',
 #                 'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV60_cff',
 #                 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
-      
+     
+#TODO: Update these
 my_id_modules_el = [
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Fall17_94X_V1_cff',
                  'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff',
                  'RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff',
                  'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V1_cff',
                  ]
-           
+         ########################
 
 #add them to the VID producer
 for idmod in my_id_modules_el:
@@ -897,12 +897,11 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     muons = cms.InputTag("slimmedMuons"),
     photons = cms.InputTag("slimmedPhotons"),
     phoIdVerbose = cms.bool(False),
-    #TODO: Import these packages and add to readme
     phoLooseIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Fall17-94X-V1-loose"),
     phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Fall17-94X-V1-medium"),
     phoTightIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Fall17-94X-V1-tight"),
+    #TODO: Double check this
     #phoMvaValuesMap     = cms.InputTag("egmPhotonIDs:mvaPhoID-RunIIFall17-v1-wp80"),
-    #TODO: Check these imports
     phoMvaValuesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRunIIFall17v1Values"),
     phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRunIIFall17v1Categories"),
     electrons = cms.InputTag("slimmedElectrons"),
@@ -921,16 +920,15 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     eleTightIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V1-tight"),
 
 
-    #TODO: --- update these --- 
-
+    #TODO: No updated version I can find
     eleHLTIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1"), 
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
                                    
     eleMVAMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-noIso-V1-wp90"),
     eleMVATightIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-noIso-V1-wp80"),
     mvaValuesMap     = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
+    #TODO: No updated version I can find
     mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
-    # -----------------------------
 
     dupCluster          = cms.InputTag("particleFlowEGammaGSFixed:dupECALClusters"),
     hitsNotReplaced     = cms.InputTag("ecalMultiAndGSGlobalRecHitEB:hitsNotReplaced"),
@@ -998,6 +996,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     noiseFilterSelection_ecalLaserCorrFilter = cms.string('Flag_ecalLaserCorrFilter'),
     noiseFilterSelection_trkPOGFilters = cms.string('Flag_trkPOGFilters'),
     
+    #TODO: I can't find an updated version of these
     #New for ICHEP 2016
     noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter = cms.string('Flag_CSCTightHaloTrkMuUnvetoFilter'),
     noiseFilterSelection_globalTightHalo2016Filter = cms.string('Flag_globalTightHalo2016Filter'),

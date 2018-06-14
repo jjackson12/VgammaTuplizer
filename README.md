@@ -74,35 +74,6 @@ If you want to use Higgs tagger the first two flags must all be set to True.
 
 ### Batch submission
 
-#### Config file creation
+Crab jobs can be run via crab config files in [crabconfigs](Ntuplizer/crabconfigs/)
 
-Config file creation can be done via the [createConfig.py](Ntuplizer/tools/createConfig.py) script. It requires a text file with a list of input data sets, see e.g. [samples/QCD_HT_RunIISpring15MiniAODv2.txt](Ntuplizer/samples/QCD_HT_RunIISpring15MiniAODv2.txt). To run:
-```
-python tools/createConfig.py samples/QCD_HT_RunIISpring15MiniAODv2.txt
-```
-When running over *data*, this requires the ```-d``` flag. The script will automatically determine if the data sets are available on the T3 storage element. Also, ```--help``` will provide more information (e.g. allows changing the default number of jobs per event). If you run the script from a different directory, you need to provide the location of the [template file](Ntuplizer/submitJobsOnT3batch.cfg).
-
-#### Job submission
-
-Submit your jobs using the [submitJobsOnT3batch.py](Ntuplizer/submitJobsOnT3batch.py) script with the generated config files like this:
-```
-python submitJobsOnT3batch.py -C myconfig.cfg
-```
-Once the jobs are done, they can be checked for completeness like this:
-```
-python submitJobsOnT3batch.py -C myconfig.cfg --check
-```
-Resubmit jobs like this:
-```
-python submitJobsOnT3batch.py -C myconfig.cfg --resubmit 1,4,7
-```
-And eventually copied to the SE (path given in the config file):
-```
-python submitJobsOnT3batch.py -C myconfig.cfg --copy
-```
-
-Finally, note that, when you run on crab, you have to enable 
-```
-config.JobType.sendExternalFolder = True
-```
-as described at https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun2#Recipes_and_implementation
+NOTE: Crab will import much of the Electron and Photon ID packages imported locally above. These are too large and Crab will crash, telling you you have too much data. This should be fixable by removing the extraneous files in the "data" directories wihin the imported packages, i.e., directories/files dated previous to 2017
