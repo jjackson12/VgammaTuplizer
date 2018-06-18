@@ -102,7 +102,7 @@ private:
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMVAMediumIdMapToken_;
   edm::EDGetTokenT<edm::ValueMap<bool> >                    eleMVATightIdMapToken_ ;
   edm::EDGetTokenT<edm::ValueMap<float> >                   mvaValuesMapToken_;
-  edm::EDGetTokenT<edm::ValueMap<int> >                     mvaCategoriesMapToken_;
+  //edm::EDGetTokenT<edm::ValueMap<int> >                     mvaCategoriesMapToken_;
   edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken_;
   edm::EDGetTokenT<pat::TauCollection> 	    		    tauToken_		;
   edm::EDGetTokenT<pat::TauCollection> 	    		    tauBoostedTauToken_	;

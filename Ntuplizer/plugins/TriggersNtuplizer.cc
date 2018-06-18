@@ -33,7 +33,7 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
 
   HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
   CSCHaloNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloFilter");
-  CSCTightHalo2015Filter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHalo2015Filter");
+  //CSCTightHalo2015Filter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHalo2015Filter");
   HCALlaserNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_hcalLaserEventFilter");
   ECALDeadCellNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter");
   GoodVtxNoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_goodVertices");
@@ -47,11 +47,11 @@ TriggersNtuplizer::TriggersNtuplizer( edm::EDGetTokenT<edm::TriggerResults> toke
   METFilters_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_metFilters");
 
   //NEW FOR ICHEP
-  CSCTightHaloTrkMuUnvetoFilter_Selector_       =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter");
-  globalTightHalo2016Filter_Selector_           =  iConfig.getParameter<std::string> ("noiseFilterSelection_globalTightHalo2016Filter");
-  HcalStripHaloFilter_Selector_                 =  iConfig.getParameter<std::string> ("noiseFilterSelection_HcalStripHaloFilter");
-  chargedHadronTrackResolutionFilter_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_chargedHadronTrackResolutionFilter");
-  muonBadTrackFilter_Selector_                  =  iConfig.getParameter<std::string> ("noiseFilterSelection_muonBadTrackFilter");
+  //CSCTightHaloTrkMuUnvetoFilter_Selector_       =  iConfig.getParameter<std::string> ("noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter");
+  //globalTightHalo2016Filter_Selector_           =  iConfig.getParameter<std::string> ("noiseFilterSelection_globalTightHalo2016Filter");
+  //HcalStripHaloFilter_Selector_                 =  iConfig.getParameter<std::string> ("noiseFilterSelection_HcalStripHaloFilter");
+  //chargedHadronTrackResolutionFilter_Selector_  =  iConfig.getParameter<std::string> ("noiseFilterSelection_chargedHadronTrackResolutionFilter");
+  //muonBadTrackFilter_Selector_                  =  iConfig.getParameter<std::string> ("noiseFilterSelection_muonBadTrackFilter");
   
   //NEW FOR MORIOND
 
@@ -70,7 +70,141 @@ TriggersNtuplizer::~TriggersNtuplizer( void )
 //===================================================================================================================
 bool TriggersNtuplizer::findTrigger( std::string trigName ){
 
-   if(  
+   if( trigName.find("AK8PFJet360_TrimMass30") != std::string::npos ||
+       trigName.find("AK8PFHT700_TrimR0p1PT0p03Mass50") != std::string::npos ||
+       trigName.find("AK8PFHT650_TrimR0p1PT0p03Mass50") != std::string::npos ||
+       trigName.find("AK8PFHT660_TrimR0p1PT0p03Mass50_BTagCSV_p20") != std::string::npos ||
+       trigName.find("AK8DiPFJet280_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
+       trigName.find("AK8DiPFJet250_200_TrimMass30_BTagCSV_p20") != std::string::npos ||
+       trigName.find("AK8PFJet450") != std::string::npos ||
+       trigName.find("PFHT650_WideJetMJJ950DEtaJJ1p5") != std::string::npos ||
+       trigName.find("PFHT650_WideJetMJJ900DEtaJJ1p5") != std::string::npos ||
+       trigName.find("PFHT400_v") != std::string::npos ||
+       trigName.find("PFHT425_v") != std::string::npos ||
+       trigName.find("PFHT475_v") != std::string::npos ||
+       trigName.find("PFHT600_v") != std::string::npos ||
+       trigName.find("PFHT650_v") != std::string::npos ||
+       trigName.find("PFHT800_v") != std::string::npos ||
+       trigName.find("PFHT900_v") != std::string::npos ||
+       trigName.find("PFJet320_v") != std::string::npos ||
+       trigName.find("PFJet400_v") != std::string::npos ||
+       trigName.find("PFJet450_v") != std::string::npos ||
+       trigName.find("PFJet500_v") != std::string::npos ||
+       trigName.find("CaloJet500_NoJetID") != std::string::npos ||
+
+       trigName.find("HLT_IsoMu20_eta2p1") != std::string::npos ||
+       trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos ||
+       trigName.find("HLT_IsoTkMu24_eta2p1") != std::string::npos ||
+       trigName.find("HLT_IsoMu24_v") != std::string::npos ||
+       trigName.find("HLT_IsoTkMu24_v") != std::string::npos ||
+       trigName.find("HLT_IsoMu27_v") != std::string::npos ||
+       trigName.find("HLT_IsoTkMu27_v") != std::string::npos ||
+       trigName.find("HLT_IsoMu27_eta2p1") != std::string::npos ||
+       trigName.find("HLT_IsoTkMu27_eta2p1") != std::string::npos ||    
+       trigName.find("HLT_Mu45_eta2p1") != std::string::npos ||
+       //trigName.find("HLT_Mu50_eta2p1") != std::string::npos ||
+
+       trigName.find("HLT_Mu50_v") != std::string::npos ||
+       trigName.find("HLT_TkMu50_v") != std::string::npos ||
+       trigName.find("HLT_Ele27_WPTight_Gsf") != std::string::npos ||
+       trigName.find("HLT_Ele27_WPLoose_Gsf") != std::string::npos ||
+       trigName.find("HLT_Ele27_WPLoose_Gsf_WHbbBoost") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WP75_Gsf") != std::string::npos ||
+       trigName.find("HLT_Ele23_CaloIdL_TrackIdL_IsoVL") != std::string::npos ||
+       trigName.find("HLT_Ele32_eta2p1_WP75_Gsf") != std::string::npos ||
+       trigName.find("HLT_Ele45_WPLoose_Gsf_v") != std::string::npos ||
+       trigName.find("HLT_Ele105_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("HLT_Ele115_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("HLT_Ele145_CaloIdVT_GsfTrkIdT") != std::string::npos ||
+       trigName.find("HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165") != std::string::npos ||
+       trigName.find("HLT_Ele22_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_DoubleMediumIsoPFTau35") != std::string::npos ||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20") != std::string::npos ||
+       trigName.find("HLT_IsoMu16_eta2p1_MET30_JetIDCleaned_LooseIsoPFTau50") != std::string::npos ||
+       trigName.find("HLT_IsoMu16_eta2p1_MET30_LooseIsoPFTau50_Trk30_eta2p1_v1") != std::string::npos ||
+       //H->tautau triggers
+       trigName.find("HLT_LooseIsoPFTau50") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu19_eta2p1_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_IsoMu19_eta2p1_LooseIsoPFTau20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu21_eta2p1_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_IsoMu24_eta2p1") != std::string::npos||
+       trigName.find("HLT_IsoMu17_eta2p1") != std::string::npos||
+       trigName.find("HLT_IsoMu18_v") != std::string::npos||
+       trigName.find("HLT_IsoMu22_v") != std::string::npos||
+       trigName.find("HLT_IsoMu27_v") != std::string::npos||
+       trigName.find("HLT_IsoMu20_v") != std::string::npos||
+       trigName.find("HLT_IsoMu22_eta2p1_v") != std::string::npos||
+       trigName.find("HLT_IsoMu24_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu18_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu20_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu22_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu22_eta2p1_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu24_v") != std::string::npos||
+       trigName.find("HLT_IsoTkMu27_v") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_v") != std::string::npos||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WPLoose_Gsf_LooseIsoPFTau20_SingleL1_v") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20") != std::string::npos||
+       trigName.find("HLT_Ele25_eta2p1") != std::string::npos||
+       trigName.find("HLT_Ele22_eta2p1_WP75_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WP75_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele23_WPLoose_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele23_WPTight_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele24_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele25_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele25_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele25_eta2p1_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele27_WPLoose_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele27_WPTight_Gsf") != std::string::npos||
+       trigName.find("HLT_Ele27_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele27_eta2p1_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele32_eta2p1_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele32_WPTight_Gsf_v") != std::string::npos||
+       trigName.find("HLT_Ele45_WPLoose_Gsf_L1JetTauSeeded") != std::string::npos||
+       trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg") != std::string::npos||
+       trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg") != std::string::npos||
+       // Double leptons
+       trigName.find("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
+       trigName.find("HLT_DoubleEle24_22_eta2p1_WPLoose_Gsf_v") != std::string::npos||
+       trigName.find("HLT_DoubleEle37_Ele27_CaloIdL_GsfTrkIdVL_v") != std::string::npos||
+       trigName.find("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v") != std::string::npos||
+       trigName.find("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v") != std::string::npos||
+       trigName.find("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v") != std::string::npos||
+       trigName.find("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v") != std::string::npos||
+       trigName.find("HLT_Mu30_TkMu11_v") != std::string::npos||
+       trigName.find("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v") != std::string::npos||
+       trigName.find("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
+       trigName.find("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v") != std::string::npos||
+       // MET triggers
+       trigName.find("HLT_PFMET110_PFMHT110_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMET120_PFMHT120_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight_v") != std::string::npos||
+       trigName.find("HLT_PFMET120_BTagCSV_p067_v") != std::string::npos||
+       trigName.find("HLT_PFMET170_NoiseCleaned_v") != std::string::npos||
+       trigName.find("HLT_PFMET170_HBHECleaned_v") != std::string::npos||
+       trigName.find("HLT_PFMET170_HBHE_BeamHaloCleaned_v") != std::string::npos||
+       //Alternative triggers
+       trigName.find("HLT_MonoCentralPFJet80_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos||
+       trigName.find("HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumIsoPFTau32_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumIsoPFTau40_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau35_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_Reg_v")!= std::string::npos || 
+       trigName.find("HLT_DoubleMediumCombinedIsoPFTau40_Trk1_eta2p1_v")!= std::string::npos || 
        trigName.find( "PFHT800"                                        ) != std::string::npos ||
        trigName.find( "PFHT900"                                        ) != std::string::npos ||
        trigName.find( "HLT_AK8PFJet360_TrimMass30_v"                   ) != std::string::npos ||

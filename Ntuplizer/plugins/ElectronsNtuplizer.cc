@@ -36,7 +36,7 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 					edm::EDGetTokenT<double>                              rhoToken     ,
                                         std::vector< edm::EDGetTokenT<edm::ValueMap<bool> > > eleIDtokens  ,
 					edm::EDGetTokenT<edm::ValueMap<float> >               mvaValuesMapToken,
-					edm::EDGetTokenT<edm::ValueMap<int> >                 mvaCategoriesMapToken,
+					//edm::EDGetTokenT<edm::ValueMap<int> >                 mvaCategoriesMapToken,
 					edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>> ebRecHitsToken, 	
 					edm::EDGetTokenT<pat::TauCollection>                  boostedtauToken  ,
 					NtupleBranches*                                       nBranches  ,
@@ -50,12 +50,11 @@ ElectronsNtuplizer::ElectronsNtuplizer( edm::EDGetTokenT<edm::View<pat::Electron
 	, electronLooseIdMapToken_ ( eleIDtokens[1] )
 	, electronMediumIdMapToken_( eleIDtokens[2] )
 	, electronTightIdMapToken_ ( eleIDtokens[3] )
-        , electronHLTIdMapToken_   ( eleIDtokens[4] )
-	, electronHEEPIdMapToken_  ( eleIDtokens[5] )
-	, electronMVAMediumIdMapToken_( eleIDtokens[6] )
-	, electronMVATightIdMapToken_ ( eleIDtokens[7] )
+	, electronHEEPIdMapToken_  ( eleIDtokens[4] )
+	, electronMVAMediumIdMapToken_( eleIDtokens[5] )
+	, electronMVATightIdMapToken_ ( eleIDtokens[6] )
 	, mvaValuesMapToken_( mvaValuesMapToken )
-	, mvaCategoriesMapToken_( mvaCategoriesMapToken )
+	//, mvaCategoriesMapToken_( mvaCategoriesMapToken )
 	, ebRecHitsToken_ ( ebRecHitsToken )
 	, boostedtauToken_		   ( boostedtauToken    )
 	, doBoostedTaus_   	   ( runFlags["doBoostedTaus"]  )
@@ -148,12 +147,12 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
    event.getByToken(electronLooseIdMapToken_ , loose_id_decisions  );
    event.getByToken(electronMediumIdMapToken_, medium_id_decisions );
    event.getByToken(electronTightIdMapToken_ , tight_id_decisions  );
-   event.getByToken(electronHLTIdMapToken_, hlt_id_decisions );
+   //event.getByToken(electronHLTIdMapToken_, hlt_id_decisions );
    event.getByToken(electronHEEPIdMapToken_  , heep_id_decisions   );
    event.getByToken(electronMVAMediumIdMapToken_, mva_medium_id_decisions );
    event.getByToken(electronMVATightIdMapToken_ , mva_tight_id_decisions  );
    event.getByToken(mvaValuesMapToken_ , mva_value);
-   event.getByToken(mvaCategoriesMapToken_ , mva_categories);
+   //event.getByToken(mvaCategoriesMapToken_ , mva_categories);
    event.getByToken(ebRecHitsToken_, _ebRecHits);
    
    
@@ -296,7 +295,7 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     bool isMediumElectron = (*medium_id_decisions)[el];
     bool isTightElectron  = (*tight_id_decisions)[el] ;
     bool isHeepElectron   = (*heep_id_decisions)[el]  ;
-    bool isHltElectron = (*hlt_id_decisions)[el];
+    //bool isHltElectron = (*hlt_id_decisions)[el];
     bool isMVAMediumElectron = (*mva_medium_id_decisions)[el];
     bool isMVATightElectron  = (*mva_tight_id_decisions)[el] ;
   
@@ -305,11 +304,11 @@ void ElectronsNtuplizer::fillBranches( edm::Event const & event, const edm::Even
     nBranches_->el_isMediumElectron   .push_back(isMediumElectron);
     nBranches_->el_isTightElectron    .push_back(isTightElectron);
     nBranches_->el_isHeepElectron     .push_back(isHeepElectron);  
-    nBranches_->el_isHltElectron      .push_back(isHltElectron);  
+    //nBranches_->el_isHltElectron      .push_back(isHltElectron);  
     nBranches_->el_isMVAMediumElectron.push_back(isMVAMediumElectron);
     nBranches_->el_isMVATightElectron .push_back(isMVATightElectron);
     nBranches_->el_MVAscore           .push_back((*mva_value)[el]);
-    nBranches_->el_MVAcategory        .push_back((*mva_categories)[el]);
+    //nBranches_->el_MVAcategory        .push_back((*mva_categories)[el]);
 
     bool isVetoElectronWithoutIPandIsolation   = eleIDpassedWithoutIPandIsolation("Veto"  ,ele,rho) ;
     bool isLooseElectronWithoutIPandIsolation  = eleIDpassedWithoutIPandIsolation("Loose" ,ele,rho) ;

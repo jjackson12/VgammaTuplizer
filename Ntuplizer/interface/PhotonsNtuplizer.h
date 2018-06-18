@@ -46,7 +46,7 @@ private:
     edm::Handle<edm::ValueMap<bool> >                        medium_id_decisions              ;
     edm::Handle<edm::ValueMap<bool> >                        tight_id_decisions               ;
     edm::Handle<edm::ValueMap<float> >                       mvaValues                        ;
-    edm::Handle<edm::ValueMap<int> >                         mvaCategories                    ;
+//    edm::Handle<edm::ValueMap<int> >                         mvaCategories                    ;
 };
 
 #endif // PhotonsNtuplizer_H

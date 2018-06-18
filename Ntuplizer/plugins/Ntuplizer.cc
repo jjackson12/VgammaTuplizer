@@ -55,7 +55,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 
 	muonToken_	      	    (consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
 	mvaValuesMapToken_          (consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("mvaValuesMap"))),
-	mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
+	//mvaCategoriesMapToken_      (consumes<edm::ValueMap<int> >(iConfig.getParameter<edm::InputTag>("mvaCategoriesMap"))),
 	ebRecHitsToken_             (consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(iConfig.getParameter<edm::InputTag>("ebRecHits"))),
 
 	tauToken_	      	    (consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
@@ -118,7 +118,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     eleLooseIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleLooseIdMap"));
     eleMediumIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMediumIdMap"));
     eleTightIdMapToken_   	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleTightIdMap"));
-    eleHLTIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHLTIdMap"));
+    //eleHLTIdMapToken_  	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHLTIdMap"));
     eleHEEPIdMapToken_    	    =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleHEEPIdMap"));
     eleMVAMediumIdMapToken_     =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVAMediumIdMap"));
     eleMVATightIdMapToken_      =consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("eleMVATightIdMap"));
@@ -279,7 +279,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
     eleIdTokens.push_back(eleLooseIdMapToken_ );
     eleIdTokens.push_back(eleMediumIdMapToken_);
     eleIdTokens.push_back(eleTightIdMapToken_ );
-    eleIdTokens.push_back(eleHLTIdMapToken_  );
+    //eleIdTokens.push_back(eleHLTIdMapToken_  );
     eleIdTokens.push_back(eleHEEPIdMapToken_  );
     eleIdTokens.push_back(eleMVAMediumIdMapToken_  );
     eleIdTokens.push_back(eleMVATightIdMapToken_  );
@@ -289,7 +289,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& iConfig):
 						       rhoToken_     , 
 						       eleIdTokens   , 
 						       mvaValuesMapToken_,
-						       mvaCategoriesMapToken_,
+						       //mvaCategoriesMapToken_,
 						       ebRecHitsToken_ ,
 						       tauBoostedTauToken_ ,
 						       nBranches_  ,

@@ -13,7 +13,6 @@ process.TFileService = cms.Service("TFileService",
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
-# TODO: Merge data and generic python config files
 from VgammaTuplizer.Ntuplizer.ntuplizerOptions_generic_cfi import config
 
 				   
@@ -76,7 +75,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 10
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -900,7 +899,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     phoLooseIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Fall17-94X-V1-loose"),
     phoMediumIdMap = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Fall17-94X-V1-medium"),
     phoTightIdMap  = cms.InputTag("egmPhotonIDs:cutBasedPhotonID-Fall17-94X-V1-tight"),
-    #TODO: Double check this
     #phoMvaValuesMap     = cms.InputTag("egmPhotonIDs:mvaPhoID-RunIIFall17-v1-wp80"),
     phoMvaValuesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRunIIFall17v1Values"),
     phoMvaCategoriesMap = cms.InputTag("photonMVAValueMapProducer:PhotonMVAEstimatorRunIIFall17v1Categories"),
@@ -921,14 +919,14 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
 
 
     #TODO: No updated version I can find
-    eleHLTIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1"), 
+    #eleHLTIdMap = cms.InputTag("egmGsfElectronIDs:cutBasedElectronHLTPreselection-Summer16-V1"), 
     eleHEEPIdMap = cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
                                    
     eleMVAMediumIdMap = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-noIso-V1-wp90"),
     eleMVATightIdMap  = cms.InputTag("egmGsfElectronIDs:mvaEleID-Fall17-noIso-V1-wp80"),
     mvaValuesMap     = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
     #TODO: No updated version I can find
-    mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
+    #mvaCategoriesMap = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Categories"),
 
     dupCluster          = cms.InputTag("particleFlowEGammaGSFixed:dupECALClusters"),
     hitsNotReplaced     = cms.InputTag("ecalMultiAndGSGlobalRecHitEB:hitsNotReplaced"),
@@ -940,7 +938,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     softdropjets = cms.InputTag(jetsAK8softdrop),
     trimmedjets = cms.InputTag(jetsAK10trimmed),
     puppijets = cms.InputTag(jetsAK8Puppi),
-    genJets = cms.InputTag("slimmedGenJets"),
+     genJets = cms.InputTag("slimmedGenJets"),
     genJetsAK8 = cms.InputTag(genAK8),
     subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag(METS),
@@ -954,7 +952,6 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK4forMetCorr = cms.vstring( jecLevelsForMET ),
     jetsForMetCorr = cms.InputTag(jetsAK4),
     rho = cms.InputTag("fixedGridRhoFastjetAll"),
-    fixedGridRho = cms.InputTag("fixedGridRhoAll"),
     genparticles = cms.InputTag("prunedGenParticles"),
     PUInfo = cms.InputTag("slimmedAddPileupInfo"),
     genEventInfo = cms.InputTag("generator"),
@@ -969,7 +966,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jecAK8PuppiPayloadNames = cms.vstring( jecLevelsAK8Puppi ),
     jecAK4chsPayloadNames = cms.vstring( jecLevelsAK4chs ),
     jecAK4chsUnc = cms.string( jecAK4chsUncFile ),
-    jecpath = cms.string(''),#VgammaTuplizer/Ntuplizer/data/'),
+    jecpath = cms.string(''),
     jerAK8chs_res_PayloadNames = cms.string( jerAK8chsFile_res ),
     jerAK4chs_res_PayloadNames = cms.string( jerAK4chsFile_res ),
     jerAK8Puppi_res_PayloadNames = cms.string(  jerAK8PuppiFile_res ),
@@ -979,15 +976,15 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     jerAK8Puppi_sf_PayloadNames = cms.string(  jerAK8PuppiFile_sf ),
     jerAK4Puppi_sf_PayloadNames = cms.string(  jerAK4PuppiFile_sf ),
 
-    
     ## Noise Filters ###################################
+    #TODO: Check url, get updated noise filters
     # defined here: https://github.com/cms-sw/cmssw/blob/CMSSW_7_4_X/PhysicsTools/PatAlgos/python/slimming/metFilterPaths_cff.py
     noiseFilterSelection_HBHENoiseFilter = cms.string('Flag_HBHENoiseFilter'),
     noiseFilterSelection_HBHENoiseFilterLoose = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Loose"),
     noiseFilterSelection_HBHENoiseFilterTight = cms.InputTag("HBHENoiseFilterResultProducer", "HBHENoiseFilterResultRun2Tight"),
     noiseFilterSelection_HBHENoiseIsoFilter = cms.InputTag("HBHENoiseFilterResultProducer", "HBHEIsoNoiseFilterResult"),    
     noiseFilterSelection_CSCTightHaloFilter = cms.string('Flag_CSCTightHaloFilter'),
-    noiseFilterSelection_CSCTightHalo2015Filter = cms.string('Flag_CSCTightHalo2015Filter'),
+    #noiseFilterSelection_CSCTightHalo2015Filter = cms.string('Flag_CSCTightHalo2015Filter'),
     noiseFilterSelection_hcalLaserEventFilter = cms.string('Flag_hcalLaserEventFilter'),
     noiseFilterSelection_EcalDeadCellTriggerPrimitiveFilter = cms.string('Flag_EcalDeadCellTriggerPrimitiveFilter'),
     noiseFilterSelection_goodVertices = cms.string('Flag_goodVertices'),
@@ -998,12 +995,12 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     
     #TODO: I can't find an updated version of these
     #New for ICHEP 2016
-    noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter = cms.string('Flag_CSCTightHaloTrkMuUnvetoFilter'),
-    noiseFilterSelection_globalTightHalo2016Filter = cms.string('Flag_globalTightHalo2016Filter'),
-    noiseFilterSelection_globalSuperTightHalo2016Filter = cms.string('Flag_globalSuperTightHalo2016Filter'),
-    noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
-    noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
-    noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
+    #noiseFilterSelection_CSCTightHaloTrkMuUnvetoFilter = cms.string('Flag_CSCTightHaloTrkMuUnvetoFilter'),
+    #noiseFilterSelection_globalTightHalo2016Filter = cms.string('Flag_globalTightHalo2016Filter'),
+    #noiseFilterSelection_globalSuperTightHalo2016Filter = cms.string('Flag_globalSuperTightHalo2016Filter'),
+    #noiseFilterSelection_HcalStripHaloFilter = cms.string('Flag_HcalStripHaloFilter'),
+    #noiseFilterSelection_chargedHadronTrackResolutionFilter = cms.string('Flag_chargedHadronTrackResolutionFilter'),
+    #noiseFilterSelection_muonBadTrackFilter = cms.string('Flag_muonBadTrackFilter'),
     
     #New for Moriond
     noiseFilterSelection_badMuonsFilter = cms.string('Flag_badMuons'),
