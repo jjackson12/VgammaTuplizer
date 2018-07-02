@@ -55,13 +55,19 @@ scram b -j8
 
 
 
-### running for data and MC! just set the proper flag in python/ntuplizerOptions_generic_cfi.py
+### running for data only! Set the proper flags in python/ntuplizerOptions_generic_cfi.py
 
 ```
 cmsRun config_generic.py 
 
 ```
 
+### for running on MC... Set the proper flags in python/ntuplizerOptions_2017MC_cfi.py
+
+```
+cmsRun config_2017MC.py 
+
+```
 
 to recluster jets and MET, or to add the Higgs-tagger the following flags can be changed:
 ```
