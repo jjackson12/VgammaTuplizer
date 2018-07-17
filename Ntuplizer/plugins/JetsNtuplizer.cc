@@ -1,5 +1,6 @@
 #include "../interface/JetsNtuplizer.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+#include <iostream>
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "JetMETCorrections/Modules/interface/JetResolution.h"
 #include <CondFormats/JetMETObjects/interface/JetResolutionObject.h>
@@ -18,7 +19,7 @@ JetsNtuplizer::JetsNtuplizer( std::vector<edm::EDGetTokenT<pat::JetCollection>> 
   , verticeToken_     	    ( verticeToken )
   , doAK4Jets_ (runFlags["doAK4Jets"])
   , doAK8Jets_ (runFlags["doAK8Jets"])
-  , doPuppiRecluster_ (runFlags["doPuppiRecluster"])
+  , doPuppi_ (runFlags["doPuppi"])
   , runOnMC_   (runFlags["runOnMC"])
    //, flavourToken_			( flavourToken 	) //For subjet flavour matching!! Not done yet.
     
@@ -117,7 +118,7 @@ bool JetsNtuplizer::looseJetID( const pat::Jet& j ) {
 }
 
 //===================================================================================================================
-bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
+bool JetsNtuplizer::tightLepVetoJetID( const pat::Jet& j ) {
 
   //In sync with: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetID#Recommendations_for_8_TeV_data_a
   double eta = j.eta();		
@@ -143,7 +144,7 @@ bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
 
 
 
-bool JetsNtuplizer::tightJetIDWithoutLepVeto( const pat::Jet& j ) {
+bool JetsNtuplizer::tightJetID( const pat::Jet& j ) {
 
   // Change to 13 TeV definition
   // https://twiki.cern.ch/twiki/bin/view/CMS/JetID#Recommendations_for_13_TeV_data
@@ -234,10 +235,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
   bool doPruning  = event.getByToken(prunedjetInputToken_, prunedjets_ );
   bool doSoftDrop = event.getByToken(softdropjetInputToken_, softdropjets_ );
   bool doTrimming  = event.getByToken(trimmedjetInputToken_, trimmedjets_ );
-  bool doPuppi  = doPuppiRecluster_;
+  bool doPuppi  = doPuppi_;
   if (doPuppi) doPuppi=event.getByToken(puppijetInputToken_, puppijets_ );
   bool isMC = runOnMC_;
-
   /****************************************************************/
   if (doAK4Jets_) {
   
@@ -283,8 +283,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
      if (corr*uncorrJet.pt() < 17.) continue;    
   
      bool IDLoose = looseJetID(j);
+     bool IDTightLepVeto = tightLepVetoJetID(j);
      bool IDTight = tightJetID(j);
-     bool IDTightWithoutLepVeto = tightJetIDWithoutLepVeto(j);
 
      nBranches_->jetAK4_N++;
 
@@ -299,8 +299,8 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 
      //std:: cout<< "corr " << corr << " corrUp " << corrUp << "corr " << corrDown<< std::endl ;
      nBranches_->jetAK4_IDLoose   .push_back(IDLoose);
+     nBranches_->jetAK4_IDTightLepVeto   .push_back(IDTightLepVeto);
      nBranches_->jetAK4_IDTight   .push_back(IDTight);
-     nBranches_->jetAK4_IDTightWithoutLepVeto   .push_back(IDTightWithoutLepVeto);
      nBranches_->jetAK4_PUIDdiscriminat.push_back(j.userFloat("pileupJetId:fullDiscriminant")); 
      int fullId=j.userInt("pileupJetId:fullId");
      nBranches_->jetAK4_PUIDloose .push_back(fullId & (1 << 2)); 
@@ -522,8 +522,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       if( corr*uncorrJet.pt() <= 170.1 ) continue;
       
 
-      bool IDLoose = looseJetID(fj);
-      bool IDTight = tightJetID(fj);
+     bool IDLoose = looseJetID(fj);
+     bool IDTightLepVeto = tightLepVetoJetID(fj);
+     bool IDTight = tightJetID(fj);
 
       nBranches_->jetAK8_N++;	       
       nBranches_->jetAK8_pt     	    .push_back(corr*uncorrJet.pt());                   
@@ -536,6 +537,7 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_jecDown    	    .push_back(corrDown);
       nBranches_->jetAK8_IDLoose      	    .push_back(IDLoose);
       nBranches_->jetAK8_IDTight      	    .push_back(IDTight);
+      nBranches_->jetAK8_IDTightLepVeto     .push_back(IDTightLepVeto);
       nBranches_->jetAK8_muf     	    .push_back(fj.muonEnergyFraction());
       nBranches_->jetAK8_phf     	    .push_back(fj.photonEnergyFraction());
       nBranches_->jetAK8_emf     	    .push_back(fj.chargedEmEnergyFraction());
@@ -561,9 +563,9 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       nBranches_->jetAK8_deep_csv_bb        .push_back(fj.bDiscriminator("pfDeepCSVJetTags:probbb"));
 
 
-      nBranches_->jetAK8_tau1               .push_back(fj.userFloat("NjettinessAK8Puppi:tau1"));	  
-      nBranches_->jetAK8_tau2               .push_back(fj.userFloat("NjettinessAK8Puppi:tau2"));
-      nBranches_->jetAK8_tau3               .push_back(fj.userFloat("NjettinessAK8Puppi:tau3")); 
+      nBranches_->jetAK8_puppi_tau1               .push_back(fj.userFloat("NjettinessAK8Puppi:tau1"));	  
+      nBranches_->jetAK8_puppi_tau2               .push_back(fj.userFloat("NjettinessAK8Puppi:tau2"));
+      nBranches_->jetAK8_puppi_tau3               .push_back(fj.userFloat("NjettinessAK8Puppi:tau3")); 
       //nBranches_->jetAK8_tau4             .push_back(fj.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau4")); 
       nBranches_->jetAK8_softdrop_mass      .push_back(fj.userFloat("ak8PFJetsPuppiSoftDropMass"));
       
@@ -577,30 +579,38 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
       TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
       auto const & sdSubjetsPuppi = fj.subjets("SoftDropPuppi");
       for ( auto const & it : sdSubjetsPuppi ) {
+        //std::cout << "looping over softdrop puppi subjets for puppi_softdrop_mass; M_sj = " << std::to_string(it->correctedP4(0).mass()) << std::endl;
         puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(),it->correctedP4(0).eta(),it->correctedP4(0).phi(),it->correctedP4(0).mass());
         puppi_softdrop+=puppi_softdrop_subjet;
       }
 
-      // nBranches_->jetAK8_puppi_softdrop_mass.push_back(puppi_softdrop.M());
+
   
       
-      // double puppi_softdropcorr = 1;
-      // if( doCorrOnTheFly_ ){
-      //   // Using puppi corrections for softdrop puppi jets. Approximation!
-      //   jecAK8Puppi_->setJetEta( puppi_softdrop.Eta()     );
-      //   jecAK8Puppi_->setJetPt ( puppi_softdrop.Pt()      );
-      //   jecAK8Puppi_->setJetE  ( puppi_softdrop.E()       );
-      //   jecAK8Puppi_->setJetA  ( fj.jetArea() );
-      //   jecAK8Puppi_->setRho   ( nBranches_->rho          );
-      //   jecAK8Puppi_->setNPV   ( vertices_->size()        );
-      //   puppi_softdropcorr = jecAK8Puppi_->getCorrection();
-      // 	// nBranches_->jetAK8_softdrop_massCorr.push_back(puppi_softdropcorr*fj.userFloat("ak8PFJetsPuppiSoftDropMass"));
-      //   //nBranches_->jetAK8_softdrop_jec.push_back(puppi_softdropcorr);
-      // }
-      // else{
-      //   //nBranches_->jetAK8_softdrop_massCorr.push_back(-99);
-      // 	// nBranches_->jetAK8_softdrop_jec.push_back(-99);
-      // }
+       double puppi_softdropcorr = 1;
+       if( doCorrOnTheFly_ ){
+         // Using puppi corrections for softdrop puppi jets. Approximation!
+         jecAK8Puppi_->setJetEta( puppi_softdrop.Eta()     );
+         jecAK8Puppi_->setJetPt ( puppi_softdrop.Pt()      );
+         jecAK8Puppi_->setJetE  ( puppi_softdrop.E()       );
+         jecAK8Puppi_->setJetA  ( fj.jetArea() );
+         jecAK8Puppi_->setRho   ( nBranches_->rho          );
+         jecAK8Puppi_->setNPV   ( vertices_->size()        );
+         puppi_softdropcorr = jecAK8Puppi_->getCorrection();
+       	 //nBranches_->jetAK8_softdrop_massCorr.push_back(puppi_softdropcorr*fj.userFloat("ak8PFJetsPuppiSoftDropMass"));
+         nBranches_->jetAK8_puppi_softdrop_jec.push_back(puppi_softdropcorr);
+         nBranches_->jetAK8_puppi_softdrop_pt.push_back(corr*puppi_softdrop.Pt());
+         nBranches_->jetAK8_puppi_softdrop_eta.push_back(corr*puppi_softdrop.Eta());
+         nBranches_->jetAK8_puppi_softdrop_phi.push_back(corr*puppi_softdrop.Phi());
+         nBranches_->jetAK8_puppi_softdrop_e.push_back(corr*puppi_softdrop.E());
+         nBranches_->jetAK8_puppi_softdrop_mass.push_back(puppi_softdrop.M());
+         nBranches_->jetAK8_puppi_softdrop_massCorr.push_back(puppi_softdropcorr*puppi_softdrop.M());
+         //std::cout << "correction for jet puppi pt = " << std::to_string(corr) << std::endl;
+       }
+       else{
+         nBranches_->jetAK8_softdrop_massCorr.push_back(-99);
+       	 nBranches_->jetAK8_softdrop_jec.push_back(-99);
+       }
       
       vPuppiSoftDropSubjetpt.clear();
       vPuppiSoftDropSubjeteta.clear();
@@ -719,6 +729,45 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
 	float jer_sf = resolution_ak8_sf.getScaleFactor(parameters_ak8);
 	float jer_sf_up = resolution_ak8_sf.getScaleFactor(parameters_ak8, Variation::UP);
 	float jer_sf_down = resolution_ak8_sf.getScaleFactor(parameters_ak8, Variation::DOWN);
+      nBranches_->jetAK8_IDLoose      	    .push_back(IDLoose);
+      nBranches_->jetAK8_IDTight      	    .push_back(IDTight);
+      nBranches_->jetAK8_IDTightLepVeto     .push_back(IDTightLepVeto);
+      nBranches_->jetAK8_muf     	    .push_back(fj.muonEnergyFraction());
+      nBranches_->jetAK8_phf     	    .push_back(fj.photonEnergyFraction());
+      nBranches_->jetAK8_emf     	    .push_back(fj.chargedEmEnergyFraction());
+      nBranches_->jetAK8_nhf     	    .push_back(fj.neutralHadronEnergyFraction());
+      nBranches_->jetAK8_chf     	    .push_back(fj.chargedHadronEnergyFraction());
+      nBranches_->jetAK8_area               .push_back(fj.jetArea());
+      nBranches_->jetAK8_cm     	    .push_back(fj.chargedMultiplicity());
+      nBranches_->jetAK8_nm     	    .push_back(fj.neutralMultiplicity());     				       
+      nBranches_->jetAK8_che     	    .push_back(fj.chargedHadronEnergy()+fj.electronEnergy()+fj.muonEnergy());
+      nBranches_->jetAK8_ne     	    .push_back(fj.neutralHadronEnergy()+fj.photonEnergy());      
+      nBranches_->jetAK8_hf_hf  	    .push_back(fj.HFHadronEnergyFraction());
+      nBranches_->jetAK8_hf_emf  	    .push_back(fj.HFEMEnergyFraction());
+      nBranches_->jetAK8_hof     	    .push_back(fj.hoEnergyFraction());      
+      nBranches_->jetAK8_chm     	    .push_back(fj.chargedHadronMultiplicity());
+      nBranches_->jetAK8_neHadMult          .push_back(fj.neutralHadronMultiplicity());
+      nBranches_->jetAK8_phoMult            .push_back(fj.photonMultiplicity());      
+      nBranches_->jetAK8_nemf    	    .push_back(fj.neutralEmEnergyFraction());
+      nBranches_->jetAK8_cemf    	    .push_back(fj.chargedEmEnergyFraction());      
+      nBranches_->jetAK8_charge 	    .push_back(fj.charge());					 
+      nBranches_->jetAK8_Hbbtag             .push_back(fj.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags"));       
+      nBranches_->jetAK8_csv                .push_back(fj.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags"));
+      nBranches_->jetAK8_deep_csv_b         .push_back(fj.bDiscriminator("pfDeepCSVJetTags:probb") );
+      nBranches_->jetAK8_deep_csv_bb        .push_back(fj.bDiscriminator("pfDeepCSVJetTags:probbb"));
+
+
+      nBranches_->jetAK8_puppi_tau1               .push_back(fj.userFloat("NjettinessAK8Puppi:tau1"));	  
+      nBranches_->jetAK8_puppi_tau2               .push_back(fj.userFloat("NjettinessAK8Puppi:tau2"));
+      nBranches_->jetAK8_puppi_tau3               .push_back(fj.userFloat("NjettinessAK8Puppi:tau3")); 
+      //nBranches_->jetAK8_tau4             .push_back(fj.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau4")); 
+      nBranches_->jetAK8_softdrop_mass      .push_back(fj.userFloat("ak8PFJetsPuppiSoftDropMass"));
+      
+      nBranches_->jetAK8_chs_tau1	          .push_back(fj.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1"));	 
+      nBranches_->jetAK8_chs_tau2	          .push_back(fj.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau2"));
+      nBranches_->jetAK8_chs_tau3	          .push_back(fj.userFloat("ak8PFJetsCHSValueMap:NjettinessAK8CHSTau3")); 
+      nBranches_->jetAK8_chs_pruned_mass    .push_back(fj.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass"));
+      nBranches_->jetAK8_chs_softdrop_mass  .push_back(fj.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"));
 	nBranches_->jetAK8_jer_sf.push_back(jer_sf);
 	nBranches_->jetAK8_jer_sf_up.push_back(jer_sf_up);
 	nBranches_->jetAK8_jer_sf_down.push_back(jer_sf_down);
@@ -921,6 +970,57 @@ void JetsNtuplizer::fillBranches( edm::Event const & event, const edm::EventSetu
     } // ak8 jet loop
   } //doAK8Jets
 
+  if (doPuppi) {
+    nBranches_->jetAK8_puppi_N = 0;
+     
+
+    // JME::JetResolution resolution_ak8 = JME::JetResolution(jerAK8chsName_res_);
+    // JME::JetResolutionScaleFactor resolution_ak8_sf = JME::JetResolutionScaleFactor(jerAK8chsName_sf_);
+    JME::JetResolution resolution_ak8 = JME::JetResolution(jerAK8PuppiName_res_);
+    JME::JetResolutionScaleFactor resolution_ak8_sf = JME::JetResolutionScaleFactor(jerAK8PuppiName_sf_);
+    
+    ///AK8 are PUPPI JETs, AK4 are CHS
+    for (const pat::Jet &pj : *puppijets_) {
+	  
+      reco::Candidate::LorentzVector uncorrJet;
+      double corr = 1;
+      double corrUp = 1;
+      double corrDown = 1;
+      if( doCorrOnTheFly_ ){
+    
+         uncorrJet = pj.correctedP4(0);
+
+	 if( uncorrJet.pt() <= 170.1 ) continue;// it was crashing also with JEC applied on the fly
+
+         jecAK8Puppi_->setJetEta( uncorrJet.eta() );
+         jecAK8Puppi_->setJetPt ( uncorrJet.pt() );
+         jecAK8Puppi_->setJetE  ( uncorrJet.energy() );
+         jecAK8Puppi_->setJetA  ( pj.jetArea() );
+         jecAK8Puppi_->setRho   ( nBranches_->rho );
+         jecAK8Puppi_->setNPV   ( vertices_->size() );
+         corr = jecAK8Puppi_->getCorrection();
+          
+      }
+      else{
+
+
+	uncorrJet = pj.p4();
+	
+	if( uncorrJet.pt() <= 170.1 ) continue;
+      }
+  
+
+      nBranches_->jetAK8_puppi_N++;	       
+      nBranches_->jetAK8_puppi_pt     	    .push_back(corr*uncorrJet.pt());                   
+      nBranches_->jetAK8_puppi_eta    	    .push_back(pj.eta());
+      nBranches_->jetAK8_puppi_mass   	    .push_back(corr*uncorrJet.mass());
+      nBranches_->jetAK8_puppi_phi    	    .push_back(pj.phi());
+      nBranches_->jetAK8_puppi_e      	    .push_back(corr*uncorrJet.energy());
+      nBranches_->jetAK8_puppi_jec    	    .push_back(corr);
+      nBranches_->jetAK8_puppi_jecUp    	    .push_back(corrUp);
+      nBranches_->jetAK8_puppi_jecDown    	    .push_back(corrDown);
+      }   
+    }   
   if( doTrimming ){
 
     for (const pat::Jet &tj : *trimmedjets_) {

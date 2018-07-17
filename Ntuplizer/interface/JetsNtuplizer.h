@@ -23,7 +23,7 @@ public:
 
   bool looseJetID( const pat::Jet& j );
   bool tightJetID( const pat::Jet& j );
-  bool tightJetIDWithoutLepVeto( const pat::Jet& j );
+  bool tightLepVetoJetID( const pat::Jet& j );
 
   void fillBranches( edm::Event const & event, const edm::EventSetup& iSetup );
   void initJetCorrFactors( void );
@@ -78,7 +78,7 @@ public:
   bool doCorrOnTheFly_;
   bool doAK4Jets_;
   bool doAK8Jets_;
-  bool doPuppiRecluster_;
+  bool doPuppi_;
   bool runOnMC_;
 
 };

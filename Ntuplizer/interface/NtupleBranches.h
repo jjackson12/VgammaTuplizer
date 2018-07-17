@@ -489,7 +489,7 @@ public:
   std::vector<float>	          jetAK4_jecDown       ; 
   std::vector<bool>               jetAK4_IDLoose       ;
   std::vector<bool>               jetAK4_IDTight       ;
-  std::vector<bool>               jetAK4_IDTightWithoutLepVeto;
+  std::vector<bool>               jetAK4_IDTightLepVeto;
   std::vector<float>  	          jetAK4_PUIDdiscriminat;
   std::vector<bool >  	          jetAK4_PUIDloose     ;
   std::vector<bool >  	          jetAK4_PUIDmedium    ;
@@ -554,6 +554,7 @@ public:
   std::vector<float>          jetAK8_jecDown           ;
   std::vector<bool >  	      jetAK8_IDLoose           ;
   std::vector<bool >  	      jetAK8_IDTight           ;
+  std::vector<bool >  	      jetAK8_IDTightLepVeto           ;
   std::vector<float>  	      jetAK8_muf               ;
   std::vector<float>  	      jetAK8_phf               ;
   std::vector<float>  	      jetAK8_emf	       ;
@@ -609,6 +610,31 @@ public:
   std::vector<float>  	      jetAK8_softdrop_jec      ;
   std::vector<float>  	      jetAK8_softdrop_jecUp    ;
   std::vector<float>  	      jetAK8_softdrop_jecDown  ;  
+
+
+  /** puppi and puppi+softdrop AK8 jets */
+
+   int                 jetAK8_puppi_N      ;
+   std::vector<float>  jetAK8_puppi_pt     ;
+   std::vector<float>  jetAK8_puppi_eta    ;
+   std::vector<float>  jetAK8_puppi_mass   ;
+   std::vector<float>  jetAK8_puppi_phi    ;
+   std::vector<float>  jetAK8_puppi_e      ;
+   std::vector<float>  jetAK8_puppi_jec      ;
+   std::vector<float>  jetAK8_puppi_jecUp      ;
+   std::vector<float>  jetAK8_puppi_tau1      ;
+   std::vector<float>  jetAK8_puppi_tau2      ;
+   std::vector<float>  jetAK8_puppi_tau3      ;
+   std::vector<float>  jetAK8_puppi_jecDown      ;
+   std::vector<float>  jetAK8_puppi_softdrop_eta    ;
+   std::vector<float>  jetAK8_puppi_softdrop_pt    ;
+   std::vector<float>  jetAK8_puppi_softdrop_mass   ;
+   std::vector<float>  jetAK8_puppi_softdrop_massCorr   ;
+   std::vector<float>  jetAK8_puppi_softdrop_phi    ;
+   std::vector<float>  jetAK8_puppi_softdrop_e      ;
+   std::vector<float>  jetAK8_puppi_softdrop_jec      ;
+   std::vector<float>  jetAK8_puppi_softdrop_jecUp      ;
+   std::vector<float>  jetAK8_puppi_softdrop_jecDown      ;
 
   /** puppi_softdrop AK8 subjets */
   std::vector<int>                  jetAK8_subjet_puppi_softdrop_N      ;

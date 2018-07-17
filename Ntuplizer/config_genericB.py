@@ -9,7 +9,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
 process.TFileService = cms.Service("TFileService",
-                                    fileName = cms.string('flatTuple.root')
+                                    fileName = cms.string('flatTupleB.root')
                                    )
 
 #from EXOVVNtuplizerRunII.Ntuplizer.ntuplizerOptions_data_cfi import config
@@ -22,7 +22,8 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 1000
+options.maxEvents = 3000
+
 #data file
 
 
@@ -79,7 +80,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     limit = cms.untracked.int32(1)
 )
 
-process.MessageLogger.cerr.FwkReport.reportEvery = 100
+process.MessageLogger.cerr.FwkReport.reportEvery = 10
 
 ####### Define conditions ##########
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -732,6 +733,7 @@ genAK8 = ""
 
 if config["ADDAK8GENJETS"]:
   genAK8 = 'selectedGenJetsAK8'
+    
 if config["DOAK8RECLUSTERING"]:
   jetsAK8 = "patJetsAk8CHSJets"
 if config["UpdateJetCollection"]:
@@ -744,7 +746,7 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if reclusterPuppi:  
-  jetsAK8Puppi = "slimmedJetsAK8"#"packedJetsAk8PuppiJets"  
+  jetsAK8Puppi = "packedJetsAk8PuppiJets"  
 
 if config["DOTAUSBOOSTED"]:
 #  TAUS = "slimmedTaus"

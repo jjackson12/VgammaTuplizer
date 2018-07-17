@@ -68,7 +68,7 @@ void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
   event.getByToken(photonMediumIdMapToken_          , medium_id_decisions    );
   event.getByToken(photonTightIdMapToken_           , tight_id_decisions     );
   event.getByToken(photonMvaValuesMapToken_         , mvaValues              );
-//  event.getByToken(photonMvaCategoriesMapToken_     , mvaCategories          );
+  event.getByToken(photonMvaCategoriesMapToken_     , mvaCategories          );
 
   /*   Vertex stuff -- need this?
   // Find the first vertex in the collection that passes good quality criteria
@@ -126,7 +126,7 @@ void PhotonsNtuplizer::fillBranches( edm::Event const & event, const edm::EventS
     nBranches_->ph_passMediumId.push_back ( (int)isPassMedium );
     nBranches_->ph_passTightId.push_back ( (int)isPassTight );
     nBranches_->ph_mvaValue.push_back( (*mvaValues)[pho]);
-    //nBranches_->ph_mvaCategory.push_back( (*mvaCategories)[pho]);
+    nBranches_->ph_mvaCategory.push_back( (*mvaCategories)[pho]);
 
 
     ++npho;

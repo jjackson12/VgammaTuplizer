@@ -11,7 +11,7 @@ config["RUNONReReco"] = False
 #-----------------------------------------#
 
 config["USEJSON"] = not (config["RUNONMC"])
-config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
+config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSONv1.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False

@@ -425,7 +425,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK4_jecDown"	    , &jetAK4_jecDown 	 );
     tree_->Branch( "jetAK4_IDLoose"	    , &jetAK4_IDLoose	 );
     tree_->Branch( "jetAK4_IDTight"	    , &jetAK4_IDTight	 );
-    tree_->Branch( "jetAK4_IDTightWithoutLepVeto"	    , &jetAK4_IDTightWithoutLepVeto	 );
+    tree_->Branch( "jetAK4_IDTightLepVeto"	    , &jetAK4_IDTightLepVeto	 );
     tree_->Branch( "jetAK4_PUIDdiscriminat" , &jetAK4_PUIDdiscriminat);
     tree_->Branch( "jetAK4_PUIDloose"	    , &jetAK4_PUIDloose	 );
     tree_->Branch( "jetAK4_PUIDmedium"	    , &jetAK4_PUIDmedium );
@@ -495,6 +495,7 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
     tree_->Branch( "jetAK8_jecDown"	     , &jetAK8_jecDown 	         );
     tree_->Branch( "jetAK8_IDLoose"	     , &jetAK8_IDLoose		 );
     tree_->Branch( "jetAK8_IDTight"	     , &jetAK8_IDTight           );
+    tree_->Branch( "jetAK8_IDTightLepVeto"   , &jetAK8_IDTightLepVeto    );
     tree_->Branch( "jetAK8_muf" 	     , &jetAK8_muf		 );
     tree_->Branch( "jetAK8_phf" 	     , &jetAK8_phf		 );
     tree_->Branch( "jetAK8_emf" 	     , &jetAK8_emf		 );
@@ -564,9 +565,31 @@ void NtupleBranches::branch( std::map< std::string, bool >& runFlags ){
      tree_->Branch( "jetAK10_ecf2"	     , &jetAK10_ecf2      	 );
      tree_->Branch( "jetAK10_ecf3"	     , &jetAK10_ecf3	    	 );
     }
+      /*---------------------AK8 puppi and softdrop+puppi---------------------*/  
+      tree_->Branch( "jetAK8_puppi_softdrop_mass"         , &jetAK8_puppi_softdrop_mass    	   );
+      tree_->Branch( "jetAK8_puppi_softdrop_massCorr"         , &jetAK8_puppi_softdrop_massCorr    	   );
+      tree_->Branch( "jetAK8_puppi_softdrop_pt"           , &jetAK8_puppi_softdrop_pt      	   );
+      tree_->Branch( "jetAK8_puppi_softdrop_eta"          , &jetAK8_puppi_softdrop_eta     	   );
+      tree_->Branch( "jetAK8_puppi_softdrop_phi"          , &jetAK8_puppi_softdrop_phi     	   );
+      tree_->Branch( "jetAK8_puppi_softdrop_e"            , &jetAK8_puppi_softdrop_e       	   );
+      tree_->Branch( "jetAK8_puppi_softdrop_jec"            , &jetAK8_puppi_softdrop_jec       	   );
+
+      tree_->Branch( "jetAK8_puppi_N"            , &jetAK8_puppi_N  	   );
+      tree_->Branch( "jetAK8_puppi_pt"           , &jetAK8_puppi_pt      	   );
+      tree_->Branch( "jetAK8_puppi_eta"          , &jetAK8_puppi_eta     	   );
+      tree_->Branch( "jetAK8_puppi_mass"         , &jetAK8_puppi_mass    	   );
+      tree_->Branch( "jetAK8_puppi_phi"          , &jetAK8_puppi_phi     	   );
+      tree_->Branch( "jetAK8_puppi_e"            , &jetAK8_puppi_e       	   );
+      tree_->Branch( "jetAK8_puppi_jec"          , &jetAK8_puppi_jec       	   );
+      tree_->Branch( "jetAK8_puppi_jecUp"        , &jetAK8_puppi_jecUp       	   );
+      tree_->Branch( "jetAK8_puppi_jecDown"      , &jetAK8_puppi_jecDown       	   );
+      tree_->Branch( "jetAK8_puppi_tau1"	     , &jetAK8_puppi_tau1		 );
+      tree_->Branch( "jetAK8_puppi_tau2"	     , &jetAK8_puppi_tau2      	 );
+      tree_->Branch( "jetAK8_puppi_tau3"	     , &jetAK8_puppi_tau3	    	 );
 
 
-//TODO: Syntax error here
+
+
       // /*----------------------puppi_softdrop AK8 subjets---------------------------*/
       tree_->Branch( "jetAK8_subjet_puppi_softdrop_N"            , &jetAK8_subjet_puppi_softdrop_N  	   );
       tree_->Branch( "jetAK8_subjet_puppi_softdrop_pt"           , &jetAK8_subjet_puppi_softdrop_pt      	   );
@@ -1119,7 +1142,7 @@ void NtupleBranches::reset( void ){
   jetAK4_jecUp.clear();
   jetAK4_jecDown.clear(); 
   jetAK4_IDTight.clear();
-  jetAK4_IDTightWithoutLepVeto.clear();
+  jetAK4_IDTightLepVeto.clear();
   jetAK4_IDLoose.clear();
   jetAK4_PUIDdiscriminat.clear();
   jetAK4_PUIDloose.clear();
@@ -1184,6 +1207,7 @@ void NtupleBranches::reset( void ){
   jetAK8_jecDown.clear();
   jetAK8_IDLoose.clear();
   jetAK8_IDTight.clear();
+  jetAK8_IDTightLepVeto.clear();
   jetAK8_muf.clear();
   jetAK8_phf.clear();
   jetAK8_emf.clear();
@@ -1239,7 +1263,15 @@ void NtupleBranches::reset( void ){
   jetAK8_chs_pruned_jecUp.clear();
   jetAK8_chs_pruned_jecDown.clear();  
 
-  /** puppi_softdrop AK8 subjets */
+  /** puppi_softdrop AK8 jets and subjets */
+
+  jetAK8_puppi_softdrop_mass.clear();
+  jetAK8_puppi_softdrop_pt.clear();
+  jetAK8_puppi_softdrop_eta.clear();
+  jetAK8_puppi_softdrop_phi.clear();
+  jetAK8_puppi_softdrop_e.clear();
+  jetAK8_puppi_softdrop_massCorr.clear();
+  jetAK8_puppi_softdrop_jec.clear();
   jetAK8_subjet_puppi_softdrop_N.clear();
   jetAK8_subjet_puppi_softdrop_pt.clear();
   jetAK8_subjet_puppi_softdrop_eta.clear();
@@ -1255,6 +1287,20 @@ void NtupleBranches::reset( void ){
   jetAK8_subjet_puppi_softdrop_csv.clear();
   jetAK8_subjet_puppi_softdrop_deep_csv_b.clear();
   jetAK8_subjet_puppi_softdrop_deep_csv_bb.clear();
+ 
+  /** puppi AK8 kets  */
+
+  jetAK8_puppi_pt.clear();
+  jetAK8_puppi_eta.clear();
+  jetAK8_puppi_mass.clear();
+  jetAK8_puppi_phi.clear();
+  jetAK8_puppi_jec.clear();
+  jetAK8_puppi_jecUp.clear();
+  jetAK8_puppi_jecDown.clear();
+  jetAK8_puppi_e.clear();
+  jetAK8_puppi_tau1.clear();
+  jetAK8_puppi_tau2.clear();
+  jetAK8_puppi_tau3.clear();
 
   // /** chs and ATLAS */
   jetAK8_chs_tau1.clear();

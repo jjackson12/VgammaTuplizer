@@ -11,7 +11,7 @@ config["RUNONReReco"] = True
 #-----------------------------------------#
 
 config["USEJSON"] = True # not (config["RUNONMC"])
-config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt"
+config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSONv1.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
 config["FILTEREVENTS"] = False
@@ -41,7 +41,7 @@ config["DOMVAMET"] = False
 config["ADDAK8GENJETS"] = (True and config["RUNONMC"]) #! Add AK8 gen jet collection with pruned and softdrop mass
 config["DOAK8RECLUSTERING"] = False
 config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet collection (not in MINIAOD)
-config["DOAK8PUPPI"] = False
+config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = False #Higgs-tagger
 config["DOAK8PUPPIRECLUSTERING"] = False
