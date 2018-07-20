@@ -1,8 +1,8 @@
 from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 config = config()
 
-config.General.requestName = 'Wgamma94XSingleMuonTuples_%s_2017C'%"Jul13"
-config.General.workArea = 'crab_jobs_2017C_%s'%"Jul13"
+config.General.requestName = 'Wgamma94XSingleMuonTuples_%s_2017C'%"Jul17"
+config.General.workArea = 'crab_jobs_2017C_%s'%"Jul17"
 config.General.transferOutputs = True
 config.General.transferLogs = True
 
@@ -19,5 +19,5 @@ config.Data.unitsPerJob = 30
 config.Data.lumiMask='VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSONv1.txt'
 config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
 config.Data.publication = False
-config.Data.outputDatasetTag = 'Wgamma94XSingleMuonTuples_%s_2017C'%"Jul13"
+config.Data.outputDatasetTag = 'Wgamma94XSingleMuonTuples_%s_2017C'%"Jul17"
 config.Site.storageSite = 'T3_US_FNALLPC'

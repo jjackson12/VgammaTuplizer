@@ -5,12 +5,12 @@ config = dict()
 #--------- general ----------#
 
 #--------- Set Just one to true ----------#
-config["RUNONMC"] = False
+config["RUNONMC"] = True
 config["RUNONPromptReco"] = False
-config["RUNONReReco"] = True
+config["RUNONReReco"] = False
 #-----------------------------------------#
 
-config["USEJSON"] = True # not (config["RUNONMC"])
+config["USEJSON"] = not (config["RUNONMC"])
 config["JSONFILE"] =  "VgammaTuplizer/Ntuplizer/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSONv1.txt"
 config["BUNCHSPACING"] = 25
 config["USENOHF"] = False
@@ -22,7 +22,7 @@ config["DOGENPARTICLES"] = (True and config["RUNONMC"])
 config["DOGENJETS"] = (True and config["RUNONMC"])
 config["DOGENEVENT"] = (True and config["RUNONMC"])
 config["DOPILEUP"] = (True and config["RUNONMC"])
-config["DOJETIDVARS"] = True
+config["DOJETIDVARS"] = False
 config["DOELECTRONS"] = True
 config["DOMUONS"] = True
 config["DOTAUS"] = False
@@ -32,9 +32,9 @@ config["DOVERTICES"] = True
 config["DOTRIGGERDECISIONS"] = True
 config["DOTRIGGEROBJECTS"] = False
 config["DOHLTFILTERS"] = True
-config["DOMISSINGET"] = True
+config["DOMISSINGET"] = False
 config["DOTAUSBOOSTED"] = False
-config["DOMETSVFIT"] = True
+config["DOMETSVFIT"] = False
 config["DOMVAMET"] = False
 
 #--------- AK8 jets reclustering ----------#
@@ -44,7 +44,7 @@ config["DOAK8PRUNEDRECLUSTERING"] = False #! To add pruned jet and pruned subjet
 config["DOAK8PUPPI"] = True
 config["DOAK10TRIMMEDRECLUSTERING"] = False #ATLAS sequence
 config["DOHBBTAG"] = False #Higgs-tagger
-config["DOAK8PUPPIRECLUSTERING"] = False
+config["DOAK8PUPPIRECLUSTERING"] = True
 config["UpdateJetCollection"] = False #needed for Higgs-tagger in 80X
 
 #--------- MET reclustering ----------#

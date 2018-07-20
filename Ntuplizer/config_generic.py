@@ -22,15 +22,11 @@ import FWCore.ParameterSet.VarParsing as VarParsing
 
 options = VarParsing.VarParsing ('analysis')
 
-options.maxEvents = 1000
+options.maxEvents = -1
 #data file
 
 
-options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2017B/SinglePhoton/MINIAOD/31Mar2018-v1/100000/9AAF3896-EE36-E811-AFBE-0CC47A4C8E56.root'
-#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2017C/SinglePhoton/MINIAOD/31Mar2018-v1/00000/06862FAA-8737-E811-A32E-002590D9D976.root'
-#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2017D/SinglePhoton/MINIAOD/31Mar2018-v1/30000/129B335C-8837-E811-B01C-1866DAEB5C74.root'
-#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2017E/SinglePhoton/MINIAOD/31Mar2018-v1/00000/00105590-ED37-E811-A4E0-0242AC1C0502.root'
-#options.inputFiles = 'root://cmsxrootd.fnal.gov//store/data/Run2017F/SinglePhoton/MINIAOD/31Mar2018-v1/910000/387DFCBB-F33B-E811-BEFB-28924A3504DA.root'
+options.inputFiles = '/store/mc/RunIIFall17MiniAODv2/QCD_HT700to1000_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/4C380206-3243-E811-B2E7-0025905B85AA.root'
 
 
 
@@ -61,7 +57,7 @@ process.source = cms.Source("PoolSource",
 hltFiltersProcessName = 'RECO'
 if config["RUNONMC"] or config["JSONFILE"].find('reMiniAOD') != -1:
   hltFiltersProcessName = 'PAT'
-reclusterPuppi=(not 'MiniAODv2' in options.inputFiles[0])
+reclusterPuppi = config["DOAK8PUPPIRECLUSTERING"]
 if reclusterPuppi:
   print "RECLUSTERING PUPPI with latest tune from CMSSW_8_0_20"
 
@@ -744,8 +740,8 @@ if config["DOAK8PRUNEDRECLUSTERING"]:
 if config["DOAK10TRIMMEDRECLUSTERING"]:  
   jetsAK10trimmed = "patJetsAk10CHSJetsTrimmed"
 if reclusterPuppi:  
-  jetsAK8Puppi = "slimmedJetsAK8"#"packedJetsAk8PuppiJets"  
-
+  jetsAK8Puppi ="slimmedJetsAK8" #"packedJetsAk8PuppiJets"##  
+#TODO: Maybe it's this jetspuppi thing?
 if config["DOTAUSBOOSTED"]:
 #  TAUS = "slimmedTaus"
   TAUS = "NewTauIDsEmbedded"
@@ -941,7 +937,7 @@ process.ntuplizer = cms.EDAnalyzer("Ntuplizer",
     softdropjets = cms.InputTag(jetsAK8softdrop),
     trimmedjets = cms.InputTag(jetsAK10trimmed),
     puppijets = cms.InputTag(jetsAK8Puppi),
-     genJets = cms.InputTag("slimmedGenJets"),
+    genJets = cms.InputTag("slimmedGenJets"),
     genJetsAK8 = cms.InputTag(genAK8),
     subjetflavour = cms.InputTag("AK8byValAlgo"),
     mets = cms.InputTag(METS),

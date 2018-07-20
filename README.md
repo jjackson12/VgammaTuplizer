@@ -62,7 +62,7 @@ cmsRun config_generic.py
 
 ```
 
-### for running on MC... Set the proper flags in python/ntuplizerOptions_2017MC_cfi.py
+### for running on MC... Set the proper flags in python/ntuplizerOptions_generic_cfi.py or change import at the beginning of config_generic to point to python/ntuplizerOptions_MC2017_cfi.py
 
 ```
 cmsRun config_2017MC.py 
